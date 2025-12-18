@@ -88,6 +88,21 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/bay-vista" className="hover:text-background transition-colors" data-testid="link-footer-bay-vista">
+                  Bay Vista, Foster City
+                </Link>
+              </li>
+              <li>
+                <Link href="/treasure-isle" className="hover:text-background transition-colors" data-testid="link-footer-treasure-isle">
+                  Treasure Isle, Foster City
+                </Link>
+              </li>
+              <li>
+                <Link href="/marina-point" className="hover:text-background transition-colors" data-testid="link-footer-marina-point">
+                  Marina Point, Foster City
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="hover:text-background transition-colors" data-testid="link-footer-contact">
                   Contact Us
                 </Link>

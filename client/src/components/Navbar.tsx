@@ -23,6 +23,9 @@ const cities = [
   { slug: "rancho-san-miguel", name: "Rancho San Miguel, Walnut Creek" },
   { slug: "rancho-del-diablo", name: "Rancho del Diablo, Concord" },
   { slug: "parkside", name: "Parkside, Concord" },
+  { slug: "bay-vista", name: "Bay Vista, Foster City" },
+  { slug: "treasure-isle", name: "Treasure Isle, Foster City" },
+  { slug: "marina-point", name: "Marina Point, Foster City" },
 ];
 
 export function Navbar() {

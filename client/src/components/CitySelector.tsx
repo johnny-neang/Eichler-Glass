@@ -41,6 +41,24 @@ const cities: City[] = [
     county: "Concord",
     description: "Serving the Parkside neighborhood in Concord",
   },
+  {
+    slug: "bay-vista",
+    name: "Bay Vista",
+    county: "Foster City",
+    description: "Serving the Bay Vista neighborhood in Foster City",
+  },
+  {
+    slug: "treasure-isle",
+    name: "Treasure Isle",
+    county: "Foster City",
+    description: "Serving the Treasure Isle neighborhood in Foster City",
+  },
+  {
+    slug: "marina-point",
+    name: "Marina Point",
+    county: "Foster City",
+    description: "Serving the Marina Point neighborhood in Foster City",
+  },
 ];
 
 export function CitySelector() {

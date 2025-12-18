@@ -13,6 +13,9 @@ const cityData: Record<string, { name: string; county: string }> = {
   "rancho-san-miguel": { name: "Rancho San Miguel", county: "Walnut Creek" },
   "rancho-del-diablo": { name: "Rancho del Diablo", county: "Concord" },
   "parkside": { name: "Parkside", county: "Concord" },
+  "bay-vista": { name: "Bay Vista", county: "Foster City" },
+  "treasure-isle": { name: "Treasure Isle", county: "Foster City" },
+  "marina-point": { name: "Marina Point", county: "Foster City" },
 };
 
 export default function CityLanding() {
