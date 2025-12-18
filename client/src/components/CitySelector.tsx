@@ -79,22 +79,21 @@ export function CitySelector() {
             <Link key={city.slug} href={`/${city.slug}`}>
               <Card
                 className="group hover-elevate cursor-pointer h-full transition-all duration-200"
-                style={{ backgroundColor: '#5fb3b3' }}
                 data-testid={`card-city-${city.slug}`}
               >
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-lg bg-white/20 shrink-0">
-                      <MapPin className="h-6 w-6" style={{ color: '#C65D2E' }} />
+                    <div className="p-3 rounded-lg bg-primary/10 text-primary shrink-0">
+                      <MapPin className="h-6 w-6" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-lg mb-1 text-white transition-colors">
+                      <h3 className="font-semibold text-lg mb-1 group-hover:text-primary transition-colors">
                         {city.name}
                       </h3>
-                      <p className="text-sm text-white/80 mb-2">{city.county}</p>
-                      <p className="text-sm text-white/70">{city.description}</p>
+                      <p className="text-sm text-muted-foreground mb-2">{city.county}</p>
+                      <p className="text-sm text-muted-foreground">{city.description}</p>
                     </div>
-                    <ArrowRight className="h-5 w-5 text-white/70 group-hover:translate-x-1 transition-all shrink-0" />
+                    <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all shrink-0" />
                   </div>
                 </CardContent>
               </Card>
