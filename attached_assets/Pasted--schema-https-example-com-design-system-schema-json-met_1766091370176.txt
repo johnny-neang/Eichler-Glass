@@ -1,0 +1,806 @@
+{
+  "$schema": "https://example.com/design-system.schema.json",
+  "meta": {
+    "name": "Editorial Modernist System",
+    "version": "1.0.0",
+    "inspiration": {
+      "reference": "Editorial spread with modernist grid, oversized grotesk headline, museum-label metadata rail, and annotation highlight block.",
+      "keywords": [
+        "midcentury modern",
+        "international typographic style",
+        "editorial clarity",
+        "museum label",
+        "asymmetric grid",
+        "quiet hierarchy"
+      ]
+    },
+    "voice": {
+      "tone": [
+        "calm",
+        "confident",
+        "precise",
+        "warmly instructive"
+      ],
+      "writing_rules": [
+        "Prefer short, declarative sentences.",
+        "Avoid hype and superlatives; let structure and content carry authority.",
+        "Use factual captions; keep labels succinct.",
+        "Use whitespace as punctuation."
+      ]
+    }
+  },
+
+  "principles": {
+    "design_style": {
+      "summary": "Architectural editorial modernism. Typography leads, imagery is treated as an object on a gallery wall, color is structural and sparingly used for meaning (highlight/annotation).",
+      "pillars": [
+        "Hierarchy before decoration",
+        "Quiet confidence",
+        "Asymmetric balance on a strict grid",
+        "Material honesty (paper, ink, daylight)",
+        "Information clarity (labels and metadata)"
+      ]
+    },
+    "layout_philosophy": {
+      "rules": [
+        "Always align to the grid; asymmetry is intentional, never chaotic.",
+        "Use large type and generous margins to create calm.",
+        "Treat modules like 'cards on a canvas' with subtle elevation.",
+        "Use highlight blocks for annotation only—never as general decoration."
+      ]
+    },
+    "accessibility": {
+      "targets": {
+        "contrast": "Meet WCAG 2.2 AA minimum; prefer AAA for body text where possible.",
+        "focus": "Always visible focus states; never rely on color alone.",
+        "motion": "Respect reduced-motion; motion must be subtle and purposeful."
+      },
+      "guidelines": [
+        "Avoid low-contrast gray text on white.",
+        "Keep line lengths readable (ideally 55–80 characters for long-form).",
+        "Use clear headings and semantic landmarks."
+      ]
+    }
+  },
+
+  "foundations": {
+    "grid": {
+      "system": "12-column",
+      "container": {
+        "maxWidthPx": 1200,
+        "gutterPx": 24,
+        "marginPx": 24
+      },
+      "breakpointsPx": {
+        "xs": 360,
+        "sm": 600,
+        "md": 900,
+        "lg": 1200,
+        "xl": 1440
+      },
+      "alignment_rules": [
+        "Primary headline aligns to left content column edge.",
+        "Primary image aligns to right edge of container or spans 6–8 columns.",
+        "Metadata rail can sit on far left as a vertical element on large screens; collapses to inline metadata on mobile."
+      ]
+    },
+
+    "spacing": {
+      "scalePx": {
+        "0": 0,
+        "1": 4,
+        "2": 8,
+        "3": 12,
+        "4": 16,
+        "5": 24,
+        "6": 32,
+        "7": 48,
+        "8": 64,
+        "9": 96,
+        "10": 128
+      },
+      "rhythm": {
+        "baselinePx": 4,
+        "sectionPaddingY": {
+          "sm": 48,
+          "md": 64,
+          "lg": 96
+        },
+        "cardPadding": {
+          "sm": 16,
+          "md": 24,
+          "lg": 32
+        },
+        "rules": [
+          "Prefer increments of the baseline (4px).",
+          "Use large vertical spacing between major sections; reduce clutter by removing minor separators.",
+          "Whitespace is the primary 'decorative' element."
+        ]
+      }
+    },
+
+    "radii": {
+      "scalePx": {
+        "none": 0,
+        "sm": 6,
+        "md": 12,
+        "lg": 16,
+        "pill": 999
+      },
+      "rules": [
+        "Use rounded corners sparingly; keep them soft and modern (md 12px for cards).",
+        "Avoid overly playful radii; this system is editorial and architectural."
+      ]
+    },
+
+    "elevation": {
+      "shadows": {
+        "none": "none",
+        "sm": "0 2px 10px rgba(0,0,0,0.08)",
+        "md": "0 10px 30px rgba(0,0,0,0.12)",
+        "lg": "0 18px 50px rgba(0,0,0,0.14)"
+      },
+      "rules": [
+        "Use one primary elevation style per surface type.",
+        "Cards float subtly; shadows are soft, never harsh.",
+        "Avoid multiple nested shadows."
+      ]
+    },
+
+    "color": {
+      "modes": ["light"],
+      "palette": {
+        "paper": {
+          "base": "#FFFFFF",
+          "soft": "#F3F4F6"
+        },
+        "ink": {
+          "primary": "#111111",
+          "secondary": "#3C3C3C",
+          "muted": "#6B7280"
+        },
+        "lines": {
+          "hairline": "#E5E7EB",
+          "divider": "#D1D5DB"
+        },
+        "surface": {
+          "panel": "#EFEFEF",
+          "card": "#FFFFFF"
+        },
+        "brand": {
+          "modernistBlue": "#406BB4",
+          "annotationYellow": "#D7D106"
+        },
+        "states": {
+          "focusRing": "#406BB4",
+          "success": "#16A34A",
+          "warning": "#D97706",
+          "danger": "#DC2626",
+          "info": "#2563EB"
+        }
+      },
+      "semantic": {
+        "background": "paper.base",
+        "foreground": "ink.primary",
+        "mutedText": "ink.muted",
+        "border": "lines.hairline",
+        "divider": "lines.divider",
+        "surface": "surface.panel",
+        "card": "surface.card",
+        "primary": "brand.modernistBlue",
+        "highlight": "brand.annotationYellow"
+      },
+      "rules": [
+        "Primary experience is black on white with soft neutral panels.",
+        "Use modernist blue for structural emphasis (links, focus, key UI accents).",
+        "Use annotation yellow only for explanatory callouts—never for primary buttons.",
+        "Avoid gradients; keep color flat and purposeful."
+      ]
+    },
+
+    "typography": {
+      "fonts": {
+        "sans": {
+          "name": "Grotesk UI",
+          "fallbacks": ["Inter", "Helvetica Neue", "Helvetica", "Arial", "system-ui", "sans-serif"],
+          "usage": [
+            "UI",
+            "headlines",
+            "labels",
+            "navigation",
+            "buttons"
+          ]
+        },
+        "serif": {
+          "name": "Editorial Serif",
+          "fallbacks": ["Georgia", "Times New Roman", "Times", "serif"],
+          "usage": [
+            "long-form reading",
+            "pull quotes",
+            "philosophy/editorial sections"
+          ]
+        },
+        "mono": {
+          "name": "Mono (Optional)",
+          "fallbacks": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
+          "usage": [
+            "data",
+            "code snippets",
+            "technical metadata (rare)"
+          ]
+        }
+      },
+      "scale": {
+        "display": {
+          "sizePx": 72,
+          "lineHeight": 1.0,
+          "weight": 800,
+          "trackingEm": -0.02
+        },
+        "h1": {
+          "sizePx": 56,
+          "lineHeight": 1.05,
+          "weight": 800,
+          "trackingEm": -0.02
+        },
+        "h2": {
+          "sizePx": 36,
+          "lineHeight": 1.15,
+          "weight": 750,
+          "trackingEm": -0.015
+        },
+        "h3": {
+          "sizePx": 28,
+          "lineHeight": 1.2,
+          "weight": 700,
+          "trackingEm": -0.01
+        },
+        "h4": {
+          "sizePx": 20,
+          "lineHeight": 1.25,
+          "weight": 650,
+          "trackingEm": -0.005
+        },
+        "bodyLg": {
+          "sizePx": 18,
+          "lineHeight": 1.6,
+          "weight": 450,
+          "trackingEm": 0
+        },
+        "body": {
+          "sizePx": 16,
+          "lineHeight": 1.6,
+          "weight": 450,
+          "trackingEm": 0
+        },
+        "caption": {
+          "sizePx": 13,
+          "lineHeight": 1.4,
+          "weight": 450,
+          "trackingEm": 0.01
+        },
+        "label": {
+          "sizePx": 12,
+          "lineHeight": 1.2,
+          "weight": 600,
+          "trackingEm": 0.08,
+          "transform": "uppercase"
+        }
+      },
+      "rules": [
+        "Oversize headlines: large, bold, clean grotesk.",
+        "Small labels: uppercase with generous tracking to feel 'museum label'.",
+        "Body copy: comfortable line height; avoid dense paragraphs.",
+        "Use serif sparingly for editorial warmth; never mix serif and sans within the same paragraph."
+      ]
+    },
+
+    "iconography": {
+      "style": "Geometric, line-based, minimal",
+      "strokePx": 1.5,
+      "rules": [
+        "Icons should feel structural, not playful.",
+        "Avoid filled icons unless used for state (e.g., selected).",
+        "Prefer simple shapes that echo architectural lines."
+      ]
+    },
+
+    "motion": {
+      "durationsMs": {
+        "fast": 120,
+        "base": 200,
+        "slow": 320
+      },
+      "easing": {
+        "standard": "cubic-bezier(0.2, 0, 0, 1)",
+        "exit": "cubic-bezier(0.4, 0, 1, 1)"
+      },
+      "rules": [
+        "Motion is subtle and purposeful: reveals, emphasis, spatial transitions.",
+        "Avoid bouncy easing; keep it controlled.",
+        "Hover transitions are mostly opacity/underline/shadow shifts."
+      ],
+      "reduced_motion": {
+        "behavior": "Disable non-essential animations; keep only instantaneous state changes."
+      }
+    }
+  },
+
+  "components": {
+    "AppShell": {
+      "description": "Global layout container with calm margins and editorial rhythm.",
+      "structure": {
+        "header": "TopNav",
+        "main": "Page content",
+        "footer": "Footer"
+      },
+      "layout": {
+        "maxWidthPx": 1200,
+        "paddingX": { "sm": 16, "md": 24, "lg": 24 },
+        "paddingY": { "sm": 16, "md": 24, "lg": 32 }
+      },
+      "background": "color.semantic.background"
+    },
+
+    "TopNav": {
+      "description": "Minimal navigation; typography-led; near-invisible until needed.",
+      "heightPx": 72,
+      "background": "transparent",
+      "borderBottom": {
+        "enabled": false,
+        "color": "color.foundations.lines.hairline"
+      },
+      "content": {
+        "left": ["Wordmark"],
+        "center": ["PrimaryNavLinks"],
+        "right": ["Search", "Menu"]
+      },
+      "typography": {
+        "linkStyle": "typography.scale.label",
+        "linkColor": "color.semantic.foreground"
+      },
+      "interaction": {
+        "hover": "Underline appears; opacity to 0.8",
+        "active": "Underline persists; ink.primary",
+        "focus": "2px ring in brand.modernistBlue"
+      }
+    },
+
+    "HeroEditorial": {
+      "description": "Oversized headline + image panel; asymmetric composition on a strict grid.",
+      "layout": {
+        "minHeightVh": 70,
+        "columns": {
+          "text": { "span": { "md": 5, "lg": 5 } },
+          "image": { "span": { "md": 7, "lg": 7 } }
+        },
+        "gapPx": 24
+      },
+      "headline": {
+        "typeStyle": "typography.scale.h1",
+        "maxWidthCh": 14
+      },
+      "kicker": {
+        "typeStyle": "typography.scale.label",
+        "color": "color.semantic.mutedText"
+      },
+      "subhead": {
+        "typeStyle": "typography.scale.bodyLg",
+        "maxWidthCh": 38,
+        "color": "color.foundations.ink.secondary"
+      },
+      "cta": {
+        "component": "Button",
+        "variant": "linkPrimary"
+      },
+      "image": {
+        "component": "ImagePanel",
+        "treatment": "object-on-wall"
+      }
+    },
+
+    "Card": {
+      "description": "Primary surface module; looks like a printed page card on a neutral background.",
+      "background": "color.semantic.card",
+      "radius": "foundations.radii.scalePx.md",
+      "shadow": "foundations.elevation.shadows.md",
+      "padding": "foundations.spacing.rhythm.cardPadding.md",
+      "border": {
+        "enabled": false,
+        "color": "color.semantic.border"
+      },
+      "rules": [
+        "Cards should not be overly outlined; separation comes from whitespace and subtle elevation.",
+        "Avoid nested cards where possible."
+      ]
+    },
+
+    "ImagePanel": {
+      "description": "Large imagery presented neutrally, like a museum object photograph.",
+      "aspectRatios": ["16:9", "4:3", "3:2"],
+      "radius": "foundations.radii.scalePx.md",
+      "background": "color.foundations.surface.panel",
+      "fit": "cover",
+      "caption": {
+        "enabled": true,
+        "typeStyle": "typography.scale.caption",
+        "color": "color.foundations.ink.muted",
+        "spacingTopPx": 8
+      },
+      "rules": [
+        "Avoid heavy overlays; captions live below, not on top of imagery.",
+        "Use consistent crops; do not cut through key subject joints/edges."
+      ]
+    },
+
+    "Kicker": {
+      "description": "Small uppercase label used for section introductions and taxonomy.",
+      "typeStyle": "typography.scale.label",
+      "color": "color.foundations.ink.muted",
+      "spacingBottomPx": 12
+    },
+
+    "MetaRail": {
+      "description": "Vertical metadata treatment, echoing the reference layout's left rail.",
+      "desktop": {
+        "orientation": "vertical",
+        "placement": "far-left",
+        "typeStyle": "typography.scale.caption",
+        "color": "color.foundations.ink.muted"
+      },
+      "mobile": {
+        "orientation": "horizontal",
+        "placement": "below-title",
+        "separator": "•"
+      },
+      "rules": [
+        "Metadata should never compete with the headline.",
+        "Use muted ink; keep it factual and short."
+      ]
+    },
+
+    "AnnotationBlock": {
+      "description": "Highlighted educational note; used sparingly to signal meaning.",
+      "background": "color.foundations.brand.annotationYellow",
+      "textColor": "color.foundations.ink.primary",
+      "paddingPx": 16,
+      "radius": "foundations.radii.scalePx.sm",
+      "shadow": "foundations.elevation.shadows.sm",
+      "typeStyle": "typography.scale.caption",
+      "usage_rules": [
+        "Only for explanation or learning moments.",
+        "Never use as a primary CTA background.",
+        "Maximum one annotation block per major section."
+      ]
+    },
+
+    "Divider": {
+      "description": "Hairline separator used rarely; whitespace is preferred.",
+      "color": "color.foundations.lines.hairline",
+      "thicknessPx": 1,
+      "marginY": { "sm": 16, "md": 24, "lg": 32 }
+    },
+
+    "Link": {
+      "description": "Primary interaction pattern; minimal and typographic.",
+      "color": "color.semantic.foreground",
+      "hover": {
+        "decoration": "underline",
+        "color": "color.semantic.foreground"
+      },
+      "focus": {
+        "ring": {
+          "color": "color.semantic.primary",
+          "widthPx": 2,
+          "offsetPx": 2
+        }
+      },
+      "variants": {
+        "primary": {
+          "color": "color.semantic.primary",
+          "hoverColor": "color.semantic.primary",
+          "decoration": "underline"
+        },
+        "muted": {
+          "color": "color.foundations.ink.muted",
+          "hoverColor": "color.foundations.ink.secondary"
+        }
+      },
+      "rules": [
+        "Prefer links over filled buttons for most actions.",
+        "Underline on hover to keep the UI quiet."
+      ]
+    },
+
+    "Button": {
+      "description": "Used sparingly; text-first. Primary actions should often look like editorial links.",
+      "sizes": {
+        "sm": { "heightPx": 36, "paddingX": 12, "typeStyle": "typography.scale.caption" },
+        "md": { "heightPx": 44, "paddingX": 16, "typeStyle": "typography.scale.body" },
+        "lg": { "heightPx": 52, "paddingX": 20, "typeStyle": "typography.scale.bodyLg" }
+      },
+      "variants": {
+        "linkPrimary": {
+          "style": "text-only",
+          "color": "color.semantic.foreground",
+          "hover": "underline",
+          "focusRing": "color.semantic.primary"
+        },
+        "primary": {
+          "background": "color.semantic.primary",
+          "text": "paper.base",
+          "radius": "foundations.radii.scalePx.sm",
+          "shadow": "foundations.elevation.shadows.sm",
+          "hover": { "opacity": 0.92 },
+          "focusRing": "color.semantic.primary"
+        },
+        "secondary": {
+          "background": "color.foundations.surface.panel",
+          "text": "color.semantic.foreground",
+          "radius": "foundations.radii.scalePx.sm",
+          "hover": { "background": "color.foundations.lines.hairline" }
+        },
+        "ghost": {
+          "background": "transparent",
+          "text": "color.semantic.foreground",
+          "border": "1px solid color.semantic.border",
+          "hover": { "background": "color.foundations.surface.panel" }
+        }
+      },
+      "rules": [
+        "Do not introduce multiple button styles within one viewport.",
+        "Primary filled buttons are for single, decisive actions only.",
+        "Avoid yellow buttons to preserve annotation meaning."
+      ]
+    },
+
+    "Input": {
+      "description": "Form fields with calm neutrality; focus state provides clarity.",
+      "heightPx": 44,
+      "radius": "foundations.radii.scalePx.sm",
+      "background": "paper.base",
+      "border": {
+        "default": "1px solid color.semantic.border",
+        "hover": "1px solid color.foundations.lines.divider",
+        "focus": "1px solid color.semantic.primary"
+      },
+      "text": {
+        "typeStyle": "typography.scale.body",
+        "color": "color.semantic.foreground"
+      },
+      "placeholderColor": "color.foundations.ink.muted",
+      "focusRing": {
+        "widthPx": 2,
+        "color": "color.semantic.primary",
+        "offsetPx": 2
+      }
+    },
+
+    "Textarea": {
+      "inherits": "Input",
+      "minHeightPx": 120
+    },
+
+    "Select": {
+      "inherits": "Input",
+      "icon": "chevron-down",
+      "rules": [
+        "Avoid heavy custom styling; prioritize native accessibility."
+      ]
+    },
+
+    "Checkbox": {
+      "description": "Simple geometric check; align with minimal icon style.",
+      "sizePx": 18,
+      "radiusPx": 4,
+      "border": "1px solid color.semantic.border",
+      "checked": {
+        "background": "color.semantic.primary",
+        "iconColor": "paper.base"
+      },
+      "focusRing": "color.semantic.primary"
+    },
+
+    "Radio": {
+      "description": "Simple circle selection; consistent with checkbox sizing.",
+      "sizePx": 18,
+      "border": "1px solid color.semantic.border",
+      "selected": {
+        "dotColor": "color.semantic.primary"
+      },
+      "focusRing": "color.semantic.primary"
+    },
+
+    "Tabs": {
+      "description": "Editorial tabs; typographic with underline indicator.",
+      "typeStyle": "typography.scale.caption",
+      "inactiveColor": "color.foundations.ink.muted",
+      "activeColor": "color.semantic.foreground",
+      "indicator": {
+        "style": "underline",
+        "heightPx": 2,
+        "color": "color.semantic.foreground"
+      },
+      "spacing": {
+        "gapPx": 16,
+        "paddingY": 12
+      }
+    },
+
+    "Accordion": {
+      "description": "Structured disclosure with calm dividers.",
+      "header": {
+        "typeStyle": "typography.scale.h4",
+        "paddingY": 16
+      },
+      "body": {
+        "typeStyle": "typography.scale.body",
+        "paddingBottom": 16
+      },
+      "divider": "Divider"
+    },
+
+    "Table": {
+      "description": "Data presentation aligned to editorial tone.",
+      "header": {
+        "typeStyle": "typography.scale.label",
+        "background": "color.foundations.surface.panel",
+        "textColor": "color.semantic.foreground"
+      },
+      "cell": {
+        "typeStyle": "typography.scale.body",
+        "paddingY": 12,
+        "paddingX": 12,
+        "borderColor": "color.semantic.border"
+      },
+      "zebra": {
+        "enabled": true,
+        "evenRowBackground": "paper.base",
+        "oddRowBackground": "color.foundations.paper.soft"
+      },
+      "rules": [
+        "Prefer whitespace to heavy borders.",
+        "Use left-aligned text by default; numeric columns right-aligned."
+      ]
+    },
+
+    "Badge": {
+      "description": "Small label pill for categories; minimal color.",
+      "typeStyle": "typography.scale.caption",
+      "radius": "foundations.radii.scalePx.pill",
+      "paddingX": 10,
+      "paddingY": 4,
+      "variants": {
+        "neutral": { "background": "color.foundations.surface.panel", "text": "color.semantic.foreground" },
+        "muted": { "background": "color.foundations.paper.soft", "text": "color.foundations.ink.muted" },
+        "info": { "background": "color.foundations.paper.soft", "text": "color.semantic.primary" }
+      },
+      "rules": [
+        "Badges should not shout; keep them descriptive and short."
+      ]
+    },
+
+    "Callout": {
+      "description": "Non-yellow contextual emphasis block; used for guidance and key notes.",
+      "background": "color.foundations.surface.panel",
+      "borderLeft": {
+        "widthPx": 3,
+        "color": "color.semantic.primary"
+      },
+      "paddingPx": 16,
+      "radius": "foundations.radii.scalePx.sm",
+      "typeStyle": "typography.scale.body"
+    },
+
+    "Toast": {
+      "description": "Ephemeral feedback; minimal and unobtrusive.",
+      "radius": "foundations.radii.scalePx.md",
+      "shadow": "foundations.elevation.shadows.md",
+      "paddingPx": 16,
+      "background": "paper.base",
+      "border": "1px solid color.semantic.border",
+      "titleTypeStyle": "typography.scale.caption",
+      "bodyTypeStyle": "typography.scale.caption",
+      "variants": {
+        "success": { "accent": "color.foundations.states.success" },
+        "warning": { "accent": "color.foundations.states.warning" },
+        "danger": { "accent": "color.foundations.states.danger" },
+        "info": { "accent": "color.foundations.states.info" }
+      }
+    },
+
+    "Modal": {
+      "description": "Editorial modal: calm, centered, generous padding.",
+      "overlay": {
+        "color": "rgba(17,17,17,0.4)",
+        "blurPx": 0
+      },
+      "panel": {
+        "background": "paper.base",
+        "radius": "foundations.radii.scalePx.lg",
+        "shadow": "foundations.elevation.shadows.lg",
+        "maxWidthPx": 720,
+        "paddingPx": 32
+      },
+      "header": {
+        "titleTypeStyle": "typography.scale.h3",
+        "metaTypeStyle": "typography.scale.caption"
+      },
+      "footer": {
+        "alignment": "right",
+        "gapPx": 12
+      }
+    },
+
+    "Tooltip": {
+      "description": "Small, clear helper text; avoid decorative styling.",
+      "background": "color.foundations.ink.primary",
+      "text": "paper.base",
+      "radius": "foundations.radii.scalePx.sm",
+      "paddingX": 10,
+      "paddingY": 6,
+      "typeStyle": "typography.scale.caption"
+    },
+
+    "Pagination": {
+      "description": "Simple typographic pagination with minimal chrome.",
+      "item": {
+        "sizePx": 36,
+        "radius": "foundations.radii.scalePx.sm",
+        "defaultBackground": "transparent",
+        "hoverBackground": "color.foundations.surface.panel",
+        "activeBackground": "color.foundations.ink.primary",
+        "activeText": "paper.base"
+      }
+    },
+
+    "Footer": {
+      "description": "Quiet footer; editorial links and light metadata.",
+      "background": "paper.base",
+      "dividerTop": "Divider",
+      "paddingY": 48,
+      "columns": 3,
+      "linkStyle": "Link.variants.muted",
+      "meta": {
+        "typeStyle": "typography.scale.caption",
+        "color": "color.foundations.ink.muted"
+      }
+    }
+  },
+
+  "patterns": {
+    "EditorialSpread": {
+      "description": "Signature layout pattern inspired by the reference image: oversized headline left, object image right, metadata rail, and annotation block.",
+      "modules": ["MetaRail", "Kicker", "HeroEditorial", "AnnotationBlock", "Divider"],
+      "rules": [
+        "Headline occupies a tall left column; image occupies the right and bleeds to card edge.",
+        "Place annotation block at lower-left to create visual counterweight.",
+        "Keep background blocks outside the card as large fields of color (blue/yellow) to create depth."
+      ]
+    },
+    "ObjectShowcase": {
+      "description": "For products/homes/case studies: image-led, factual labels, minimal marketing.",
+      "modules": ["ImagePanel", "MetaRail", "Kicker", "Callout"],
+      "rules": [
+        "Use one hero image per section; avoid galleries as the default.",
+        "Captions are factual; keep them under 140 characters.",
+        "If a highlight is needed, use AnnotationBlock sparingly."
+      ]
+    }
+  },
+
+  "do_dont": {
+    "do": [
+      "Use strong typographic hierarchy with generous whitespace.",
+      "Use color as meaning (blue for structure, yellow for annotation).",
+      "Keep interactions restrained and editorial (underline, subtle elevation).",
+      "Anchor all modules to a strict grid."
+    ],
+    "dont": [
+      "Don’t use gradients, heavy patterns, or decorative textures.",
+      "Don’t overuse yellow; it dilutes the annotation concept.",
+      "Don’t stack multiple competing CTAs in a single viewport.",
+      "Don’t rely on outlines and borders when spacing can do the job."
+    ]
+  }
+}
