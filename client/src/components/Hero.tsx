@@ -31,7 +31,7 @@ export function Hero({ cityName, citySlug }: HeroProps) {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 lg:py-40">
         <div className="max-w-2xl">
           {cityName && (
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
               <MapPin className="h-4 w-4 text-primary" />
               <span className="text-white text-sm font-medium">Serving {cityName}</span>
             </div>
@@ -47,7 +47,7 @@ export function Hero({ cityName, citySlug }: HeroProps) {
 
           <div className="flex flex-wrap gap-4 mb-12">
             <Link href={citySlug ? `/${citySlug}/book` : "/book"}>
-              <Button size="lg" className="rounded-full px-8 gap-2" data-testid="button-hero-book">
+              <Button size="lg" className="px-8 gap-2" data-testid="button-hero-book">
                 Book Your Cleaning
                 <ArrowRight className="h-4 w-4" />
               </Button>
@@ -56,7 +56,7 @@ export function Hero({ cityName, citySlug }: HeroProps) {
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-full px-8 bg-white/10 border-white/30 text-white backdrop-blur-sm"
+                className="px-8 bg-white/10 border-white/30 text-white backdrop-blur-sm"
                 data-testid="button-hero-pricing"
               >
                 View Pricing

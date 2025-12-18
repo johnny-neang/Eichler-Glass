@@ -60,7 +60,7 @@ export function ServiceShowcase() {
               </div>
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                  <div className="p-2 bg-primary/10 text-primary">
                     <service.icon className="h-5 w-5" />
                   </div>
                   <h3 className="font-semibold text-lg">{service.title}</h3>

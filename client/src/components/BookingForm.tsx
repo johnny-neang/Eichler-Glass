@@ -110,14 +110,14 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
           <CardHeader>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
               <div className={`flex items-center gap-2 ${step === "details" ? "text-primary font-medium" : ""}`}>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step === "details" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+                <div className={`w-6 h-6 flex items-center justify-center text-xs ${step === "details" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                   1
                 </div>
                 Details
               </div>
               <div className="w-8 h-px bg-border" />
               <div className={`flex items-center gap-2 ${step === "confirm" ? "text-primary font-medium" : ""}`}>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${step === "confirm" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
+                <div className={`w-6 h-6 flex items-center justify-center text-xs ${step === "confirm" ? "bg-primary text-primary-foreground" : "bg-muted"}`}>
                   2
                 </div>
                 Confirm
@@ -194,7 +194,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                       {tiers.map((tier) => (
                         <label
                           key={tier.id}
-                          className={`flex items-center justify-between p-4 rounded-lg border cursor-pointer transition-colors ${
+                          className={`flex items-center justify-between p-4 border cursor-pointer transition-colors ${
                             selectedTier === tier.id
                               ? "border-primary bg-accent"
                               : "border-border hover:border-primary/50"
@@ -220,7 +220,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                       {addOns.map((addOn) => (
                         <label
                           key={addOn.id}
-                          className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                          className={`flex items-start gap-3 p-4 border cursor-pointer transition-colors ${
                             selectedAddOns.includes(addOn.id)
                               ? "border-primary bg-accent"
                               : "border-border hover:border-primary/50"
@@ -259,7 +259,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                 </>
               ) : (
                 <div className="space-y-6">
-                  <div className="p-4 rounded-lg bg-accent space-y-3">
+                  <div className="p-4 bg-accent space-y-3">
                     <div className="flex justify-between">
                       <span className="text-muted-foreground">Package</span>
                       <span className="font-medium">{selectedPackage?.name}</span>
@@ -300,7 +300,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                     </div>
                   </div>
 
-                  <div className="p-4 rounded-lg border border-border bg-card space-y-3">
+                  <div className="p-4 border border-border bg-card space-y-3">
                     <div className="flex items-center gap-2 text-sm font-medium">
                       <CreditCard className="h-4 w-4" />
                       Payment via Stripe
@@ -310,7 +310,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                     </p>
                   </div>
 
-                  <div className="flex items-start gap-3 p-4 rounded-lg bg-primary/10 text-sm">
+                  <div className="flex items-start gap-3 p-4 bg-primary/10 text-sm">
                     <Calendar className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <div>
                       <p className="font-medium">What happens next?</p>
@@ -335,7 +335,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                     Back
                   </Button>
                 )}
-                <Button type="submit" className="flex-1 rounded-full" data-testid="button-submit-booking">
+                <Button type="submit" className="flex-1" data-testid="button-submit-booking">
                   {step === "details" ? "Continue" : "Pay $50 Deposit"}
                 </Button>
               </div>

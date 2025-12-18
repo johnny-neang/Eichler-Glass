@@ -38,7 +38,7 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
           <Link href="/" className="flex items-center gap-2" data-testid="link-home">
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+            <div className="w-8 h-8 bg-primary flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">EG</span>
             </div>
             <span className="font-serif text-xl font-semibold tracking-tight">
@@ -53,7 +53,7 @@ export function Navbar() {
                   variant="ghost"
                   className={
                     location === link.href
-                      ? "text-primary border-b-2 border-primary rounded-none"
+                      ? "text-primary border-b-2 border-primary"
                       : ""
                   }
                   data-testid={`link-nav-${link.label.toLowerCase()}`}
@@ -84,7 +84,7 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Link href="/book" className="hidden sm:block">
-              <Button className="rounded-full px-6" data-testid="button-book-now">
+              <Button className="px-6" data-testid="button-book-now">
                 Book Now
               </Button>
             </Link>
@@ -132,7 +132,7 @@ export function Navbar() {
               ))}
             </div>
             <Link href="/book" className="block pt-2">
-              <Button className="w-full rounded-full" data-testid="button-mobile-book">
+              <Button className="w-full" data-testid="button-mobile-book">
                 Book Now
               </Button>
             </Link>

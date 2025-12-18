@@ -8,7 +8,7 @@ export function Footer() {
         <div className="grid md:grid-cols-4 gap-8 lg:gap-12">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+              <div className="w-8 h-8 bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-bold text-sm">EG</span>
               </div>
               <span className="font-serif text-xl font-semibold">Eichler Glass</span>

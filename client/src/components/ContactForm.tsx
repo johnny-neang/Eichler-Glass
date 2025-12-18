@@ -42,7 +42,7 @@ export function ContactForm() {
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-primary/10 text-primary shrink-0">
+                <div className="p-3 bg-primary/10 text-primary shrink-0">
                   <Phone className="h-5 w-5" />
                 </div>
                 <div>
@@ -53,7 +53,7 @@ export function ContactForm() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-primary/10 text-primary shrink-0">
+                <div className="p-3 bg-primary/10 text-primary shrink-0">
                   <Mail className="h-5 w-5" />
                 </div>
                 <div>
@@ -64,7 +64,7 @@ export function ContactForm() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-lg bg-primary/10 text-primary shrink-0">
+                <div className="p-3 bg-primary/10 text-primary shrink-0">
                   <MapPin className="h-5 w-5" />
                 </div>
                 <div>
@@ -158,7 +158,7 @@ export function ContactForm() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full rounded-full gap-2" data-testid="button-send-message">
+                <Button type="submit" className="w-full gap-2" data-testid="button-send-message">
                   <Send className="h-4 w-4" />
                   Send Message
                 </Button>

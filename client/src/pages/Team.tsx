@@ -65,7 +65,7 @@ export default function Team() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="prose prose-lg max-w-none">
               <div className="flex items-center gap-3 mb-6">
-                <div className="p-3 rounded-lg bg-primary/10">
+                <div className="p-3 bg-primary/10">
                   <MapPin className="h-6 w-6 text-primary" />
                 </div>
                 <h2 className="font-serif text-2xl md:text-3xl font-bold m-0" data-testid="text-about-heading">
@@ -82,7 +82,7 @@ export default function Team() {
               </p>
 
               <div className="flex items-center gap-3 mb-6 mt-12">
-                <div className="p-3 rounded-lg bg-primary/10">
+                <div className="p-3 bg-primary/10">
                   <Home className="h-6 w-6 text-primary" />
                 </div>
                 <h2 className="font-serif text-2xl md:text-3xl font-bold m-0">
@@ -158,7 +158,7 @@ export default function Team() {
                       </div>
                     </div>
                     <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-1 bg-background flex items-center justify-center">
-                      <div className="w-8 h-8 rounded-full bg-background border-2 border-primary flex items-center justify-center">
+                      <div className="w-8 h-8 bg-background border-2 border-primary flex items-center justify-center">
                         <ArrowRight className="h-4 w-4 text-primary" />
                       </div>
                     </div>

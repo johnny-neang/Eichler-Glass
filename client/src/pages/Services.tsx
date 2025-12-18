@@ -34,12 +34,12 @@ export default function Services() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link href="/book">
-                  <Button size="lg" className="rounded-full gap-2" data-testid="button-services-book">
+                  <Button size="lg" className="gap-2" data-testid="button-services-book">
                     Book Now <ArrowRight className="h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="/pricing">
-                  <Button size="lg" variant="outline" className="rounded-full" data-testid="button-services-pricing">
+                  <Button size="lg" variant="outline" data-testid="button-services-pricing">
                     View Pricing
                   </Button>
                 </Link>
@@ -71,14 +71,14 @@ export default function Services() {
                   ))}
                 </ul>
               </div>
-              <div className="p-8 rounded-lg bg-accent">
+              <div className="p-8 bg-accent">
                 <h3 className="font-semibold text-xl mb-4">Ready to get started?</h3>
                 <p className="text-muted-foreground mb-6">
                   Book your cleaning today with just a $50 deposit. We'll contact you 
                   within 24 hours to confirm your appointment details.
                 </p>
                 <Link href="/book">
-                  <Button className="w-full rounded-full" data-testid="button-cta-book">
+                  <Button className="w-full" data-testid="button-cta-book">
                     Book Your Cleaning
                   </Button>
                 </Link>

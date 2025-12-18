@@ -117,7 +117,7 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
               <CardFooter className="pt-4">
                 <Link href={`${bookingPath}?tier=${tier.id}`} className="w-full">
                   <Button
-                    className="w-full rounded-full"
+                    className="w-full"
                     variant={tier.popular ? "default" : "outline"}
                     data-testid={`button-select-${tier.id}`}
                   >
@@ -129,7 +129,7 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
           ))}
         </div>
 
-        <div className="mt-12 p-6 rounded-lg bg-accent text-center" data-testid="panel-deposit-info">
+        <div className="mt-12 p-6 bg-accent text-center" data-testid="panel-deposit-info">
           <p className="text-sm text-accent-foreground">
             <strong>$50 deposit</strong> required to secure your appointment. 
             We'll contact you to confirm the exact time and estimated price.
