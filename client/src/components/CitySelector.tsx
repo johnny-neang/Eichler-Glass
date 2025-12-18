@@ -12,22 +12,34 @@ interface City {
 
 const cities: City[] = [
   {
-    slug: "castro-valley",
-    name: "Castro Valley",
-    county: "Alameda County",
-    description: "Serving Castro Valley, San Leandro, and Hayward areas",
+    slug: "greenridge",
+    name: "Greenridge",
+    county: "Castro Valley",
+    description: "Serving the Greenridge neighborhood in Castro Valley",
   },
   {
-    slug: "concord",
-    name: "Concord",
-    county: "Contra Costa County",
-    description: "Serving Concord, Martinez, and Pleasant Hill areas",
+    slug: "sequoyah-hills",
+    name: "Sequoyah Hills",
+    county: "Oakland",
+    description: "Serving the Sequoyah Hills neighborhood in Oakland",
   },
   {
-    slug: "walnut-creek",
-    name: "Walnut Creek",
-    county: "Contra Costa County",
-    description: "Serving Walnut Creek, Lafayette, and Danville areas",
+    slug: "rancho-san-miguel",
+    name: "Rancho San Miguel",
+    county: "Walnut Creek",
+    description: "Serving the Rancho San Miguel neighborhood in Walnut Creek",
+  },
+  {
+    slug: "rancho-del-diablo",
+    name: "Rancho del Diablo",
+    county: "Concord",
+    description: "Serving the Rancho del Diablo neighborhood in Concord",
+  },
+  {
+    slug: "parkside",
+    name: "Parkside",
+    county: "Concord",
+    description: "Serving the Parkside neighborhood in Concord",
   },
 ];
 

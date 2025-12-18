@@ -63,18 +63,28 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Service Areas</h4>
             <ul className="space-y-2 text-sm text-background/70">
               <li>
-                <Link href="/castro-valley" className="hover:text-background transition-colors" data-testid="link-footer-castro-valley">
-                  Castro Valley
+                <Link href="/greenridge" className="hover:text-background transition-colors" data-testid="link-footer-greenridge">
+                  Greenridge, Castro Valley
                 </Link>
               </li>
               <li>
-                <Link href="/concord" className="hover:text-background transition-colors" data-testid="link-footer-concord">
-                  Concord
+                <Link href="/sequoyah-hills" className="hover:text-background transition-colors" data-testid="link-footer-sequoyah-hills">
+                  Sequoyah Hills, Oakland
                 </Link>
               </li>
               <li>
-                <Link href="/walnut-creek" className="hover:text-background transition-colors" data-testid="link-footer-walnut-creek">
-                  Walnut Creek
+                <Link href="/rancho-san-miguel" className="hover:text-background transition-colors" data-testid="link-footer-rancho-san-miguel">
+                  Rancho San Miguel, Walnut Creek
+                </Link>
+              </li>
+              <li>
+                <Link href="/rancho-del-diablo" className="hover:text-background transition-colors" data-testid="link-footer-rancho-del-diablo">
+                  Rancho del Diablo, Concord
+                </Link>
+              </li>
+              <li>
+                <Link href="/parkside" className="hover:text-background transition-colors" data-testid="link-footer-parkside">
+                  Parkside, Concord
                 </Link>
               </li>
               <li>

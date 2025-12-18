@@ -18,9 +18,11 @@ const navLinks = [
 ];
 
 const cities = [
-  { slug: "castro-valley", name: "Castro Valley" },
-  { slug: "concord", name: "Concord" },
-  { slug: "walnut-creek", name: "Walnut Creek" },
+  { slug: "greenridge", name: "Greenridge, Castro Valley" },
+  { slug: "sequoyah-hills", name: "Sequoyah Hills, Oakland" },
+  { slug: "rancho-san-miguel", name: "Rancho San Miguel, Walnut Creek" },
+  { slug: "rancho-del-diablo", name: "Rancho del Diablo, Concord" },
+  { slug: "parkside", name: "Parkside, Concord" },
 ];
 
 export function Navbar() {

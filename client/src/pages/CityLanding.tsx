@@ -8,9 +8,11 @@ import { FAQ } from "@/components/FAQ";
 import { Footer } from "@/components/Footer";
 
 const cityData: Record<string, { name: string; county: string }> = {
-  "castro-valley": { name: "Castro Valley", county: "Alameda County" },
-  "concord": { name: "Concord", county: "Contra Costa County" },
-  "walnut-creek": { name: "Walnut Creek", county: "Contra Costa County" },
+  "greenridge": { name: "Greenridge", county: "Castro Valley" },
+  "sequoyah-hills": { name: "Sequoyah Hills", county: "Oakland" },
+  "rancho-san-miguel": { name: "Rancho San Miguel", county: "Walnut Creek" },
+  "rancho-del-diablo": { name: "Rancho del Diablo", county: "Concord" },
+  "parkside": { name: "Parkside", county: "Concord" },
 };
 
 export default function CityLanding() {
