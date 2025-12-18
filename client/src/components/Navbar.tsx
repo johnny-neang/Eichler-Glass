@@ -18,14 +18,14 @@ const navLinks = [
 ];
 
 const cities = [
-  { slug: "greenridge", name: "Greenridge, Castro Valley" },
-  { slug: "sequoyah-hills", name: "Sequoyah Hills, Oakland" },
-  { slug: "rancho-san-miguel", name: "Rancho San Miguel, Walnut Creek" },
-  { slug: "rancho-del-diablo", name: "Rancho del Diablo, Concord" },
-  { slug: "parkside", name: "Parkside, Concord" },
   { slug: "bay-vista", name: "Bay Vista, Foster City" },
-  { slug: "treasure-isle", name: "Treasure Isle, Foster City" },
+  { slug: "greenridge", name: "Greenridge, Castro Valley" },
   { slug: "marina-point", name: "Marina Point, Foster City" },
+  { slug: "parkside", name: "Parkside, Concord" },
+  { slug: "rancho-del-diablo", name: "Rancho del Diablo, Concord" },
+  { slug: "rancho-san-miguel", name: "Rancho San Miguel, Walnut Creek" },
+  { slug: "sequoyah-hills", name: "Sequoyah Hills, Oakland" },
+  { slug: "treasure-isle", name: "Treasure Isle, Foster City" },
 ];
 
 export function Navbar() {
