@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -8,8 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar, CreditCard, User, MapPin, Clock, DollarSign, LogOut } from "lucide-react";
+import { Calendar, CreditCard, User, MapPin, Clock, DollarSign, LogOut, AlertCircle, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { logOut, resendVerificationEmail } from "@/lib/firebase";
 
 interface Appointment {
   id: string;
@@ -67,15 +70,29 @@ const mockPayments: Payment[] = [
   },
 ];
 
-const mockUser = {
-  name: "John Smith",
-  email: "john.smith@example.com",
-  phone: "(510) 555-0123",
-};
-
 export default function Account() {
   const { toast } = useToast();
-  const [profile, setProfile] = useState(mockUser);
+  const [, setLocation] = useLocation();
+  const { user, loading, isEmailVerified } = useAuth();
+  const [profile, setProfile] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
+  const [resending, setResending] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      setLocation("/sign-in");
+    }
+    if (user) {
+      setProfile({
+        name: user.displayName || "",
+        email: user.email || "",
+        phone: "",
+      });
+    }
+  }, [user, loading, setLocation]);
 
   const handleProfileUpdate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,15 +100,42 @@ export default function Account() {
       title: "Profile Updated",
       description: "Your profile has been updated successfully.",
     });
-    console.log("Profile updated:", profile);
   };
 
-  const handleLogout = () => {
-    toast({
-      title: "Signed Out",
-      description: "You have been signed out successfully.",
-    });
-    console.log("Logout triggered");
+  const handleLogout = async () => {
+    try {
+      await logOut();
+      toast({
+        title: "Signed Out",
+        description: "You have been signed out successfully.",
+      });
+      setLocation("/");
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Could not sign out. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleResendVerification = async () => {
+    setResending(true);
+    try {
+      await resendVerificationEmail();
+      toast({
+        title: "Email Sent",
+        description: "Verification email has been resent.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Could not resend email.",
+        variant: "destructive",
+      });
+    } finally {
+      setResending(false);
+    }
   };
 
   const getStatusBadge = (status: string) => {
@@ -113,23 +157,65 @@ export default function Account() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main className="flex-1 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  const displayName = user.displayName || user.email?.split("@")[0] || "User";
+  const initials = displayName.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1 py-8 md:py-12 bg-muted/50">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {!isEmailVerified && (
+            <Card className="mb-6 border-yellow-500/50 bg-yellow-500/10">
+              <CardContent className="p-4 flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <AlertCircle className="h-5 w-5 text-yellow-600" />
+                  <div>
+                    <p className="font-medium text-yellow-700">Email not verified</p>
+                    <p className="text-sm text-yellow-600">Please verify your email to access all features.</p>
+                  </div>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleResendVerification}
+                  disabled={resending}
+                  data-testid="button-resend-verification"
+                >
+                  {resending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Resend Email"}
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-4">
               <Avatar className="h-16 w-16">
                 <AvatarFallback className="bg-primary text-primary-foreground text-xl">
-                  {profile.name.split(" ").map((n) => n[0]).join("")}
+                  {initials}
                 </AvatarFallback>
               </Avatar>
               <div>
                 <h1 className="font-serif text-2xl font-bold" data-testid="text-account-name">
-                  {profile.name}
+                  {displayName}
                 </h1>
-                <p className="text-muted-foreground">{profile.email}</p>
+                <p className="text-muted-foreground">{user.email}</p>
               </div>
             </div>
             <Button variant="outline" className="gap-2" onClick={handleLogout} data-testid="button-logout">
@@ -194,7 +280,6 @@ export default function Account() {
                             variant="outline"
                             size="sm"
                             className="mt-2"
-                            onClick={() => console.log("Cancel appointment:", apt.id)}
                             data-testid={`button-cancel-${apt.id}`}
                           >
                             Cancel
@@ -260,9 +345,11 @@ export default function Account() {
                         id="profile-email"
                         type="email"
                         value={profile.email}
-                        onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                        disabled
+                        className="bg-muted"
                         data-testid="input-profile-email"
                       />
+                      <p className="text-xs text-muted-foreground">Email cannot be changed</p>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="profile-phone">Phone</Label>
@@ -271,6 +358,7 @@ export default function Account() {
                         type="tel"
                         value={profile.phone}
                         onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                        placeholder="(510) 555-0123"
                         data-testid="input-profile-phone"
                       />
                     </div>
