@@ -316,7 +316,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                       <p className="font-medium">What happens next?</p>
                       <p className="text-muted-foreground mt-1">
                         After your deposit, we'll contact you within 24 hours to confirm the exact date, 
-                        time, and final price for your service.
+                        time, and estimated price for your service.
                       </p>
                     </div>
                   </div>

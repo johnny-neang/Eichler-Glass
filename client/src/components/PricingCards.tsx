@@ -132,7 +132,7 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
         <div className="mt-12 p-6 rounded-lg bg-accent text-center" data-testid="panel-deposit-info">
           <p className="text-sm text-accent-foreground">
             <strong>$50 deposit</strong> required to secure your appointment. 
-            We'll contact you to confirm the exact time and final price.
+            We'll contact you to confirm the exact time and estimated price.
           </p>
         </div>
       </div>
