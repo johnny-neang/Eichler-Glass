@@ -47,7 +47,7 @@ export function ContactForm() {
                 </div>
                 <div>
                   <h3 className="font-medium mb-1">Phone</h3>
-                  <p className="text-muted-foreground">(510) 555-GLASS</p>
+                  <p className="text-muted-foreground">(510) 859-3449</p>
                   <p className="text-sm text-muted-foreground">Mon-Fri 8am-6pm, Sat 9am-4pm</p>
                 </div>
               </div>
@@ -69,8 +69,8 @@ export function ContactForm() {
                 </div>
                 <div>
                   <h3 className="font-medium mb-1">Service Area</h3>
-                  <p className="text-muted-foreground">Castro Valley, Concord, Walnut Creek</p>
-                  <p className="text-sm text-muted-foreground">And surrounding Bay Area cities</p>
+                  <p className="text-muted-foreground">Castro Valley, Oakland, Walnut Creek, Concord, Foster City</p>
+                  <p className="text-sm text-muted-foreground">And surrounding Bay Area neighborhoods</p>
                 </div>
               </div>
             </div>
@@ -131,10 +131,15 @@ export function ContactForm() {
                         <SelectValue placeholder="Select your city" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="castro-valley">Castro Valley</SelectItem>
-                        <SelectItem value="concord">Concord</SelectItem>
-                        <SelectItem value="walnut-creek">Walnut Creek</SelectItem>
-                        <SelectItem value="other">Other</SelectItem>
+                        <SelectItem value="greenridge">Greenridge, Castro Valley</SelectItem>
+                        <SelectItem value="sequoyah-hills">Sequoyah Hills, Oakland</SelectItem>
+                        <SelectItem value="rancho-san-miguel">Rancho San Miguel, Walnut Creek</SelectItem>
+                        <SelectItem value="rancho-del-diablo">Rancho del Diablo, Concord</SelectItem>
+                        <SelectItem value="parkside">Parkside, Concord</SelectItem>
+                        <SelectItem value="bay-vista">Bay Vista, Foster City</SelectItem>
+                        <SelectItem value="treasure-isle">Treasure Isle, Foster City</SelectItem>
+                        <SelectItem value="marina-point">Marina Point, Foster City</SelectItem>
+                        <SelectItem value="other-neighborhood">Other Neighborhood</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

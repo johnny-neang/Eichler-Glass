@@ -6,22 +6,22 @@ import { MapPin, Home, Sparkles, ArrowRight } from "lucide-react";
 
 const teamMembers = [
   {
-    name: "Michael Chen",
-    role: "Founder & Lead Technician",
-    initials: "MC",
-    bio: "A Greenridge resident for over 15 years, Michael founded Eichler Glass to help neighbors maintain the beauty of their midcentury homes.",
+    name: "Niño",
+    role: "Founder",
+    initials: "NI",
+    bio: "A Greenridge resident and former MP of Aero Living, Niño founded Eichler Glass to help neighbors maintain the beauty of their midcentury homes with the same care as his own.",
   },
   {
-    name: "Sarah Rodriguez",
-    role: "Operations Manager",
-    initials: "SR",
-    bio: "Sarah ensures every appointment runs smoothly and that our clients receive the exceptional service they deserve.",
+    name: "JP",
+    role: "Co-Founder & Operations Manager",
+    initials: "JP",
+    bio: "A Greenridge resident, educator and professional artist, JP assures scopes are clear, details are defined and our clients receive the exceptional service they deserve.",
   },
   {
-    name: "David Park",
-    role: "Senior Technician",
-    initials: "DP",
-    bio: "With an eye for detail and years of experience, David specializes in hard-to-reach skylights and clerestory windows.",
+    name: "Sean",
+    role: "Co-Founder & Senior Technician",
+    initials: "SE",
+    bio: "A Greenridge resident, world-traveller and die hard Warriors fan, Sean plays by the book and enforces standards are upheld and executed to expectation.",
   },
 ];
 

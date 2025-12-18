@@ -20,7 +20,7 @@ export function Footer() {
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-3 text-background/70">
                 <Phone className="h-4 w-4" />
-                <span>(510) 555-GLASS</span>
+                <span>(510) 859-3449</span>
               </div>
               <div className="flex items-center gap-3 text-background/70">
                 <Mail className="h-4 w-4" />
@@ -37,23 +37,23 @@ export function Footer() {
             <h4 className="font-semibold mb-4">Services</h4>
             <ul className="space-y-2 text-sm text-background/70">
               <li>
-                <Link href="/services/interior" className="hover:text-background transition-colors" data-testid="link-footer-interior">
-                  Interior Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link href="/services/interior-exterior" className="hover:text-background transition-colors" data-testid="link-footer-exterior">
+                <Link href="/pricing" className="hover:text-background transition-colors" data-testid="link-footer-exterior">
                   Exterior Cleaning
                 </Link>
               </li>
               <li>
-                <Link href="/services/skylight" className="hover:text-background transition-colors" data-testid="link-footer-skylight">
-                  Skylight Cleaning
+                <Link href="/pricing" className="hover:text-background transition-colors" data-testid="link-footer-interior-exterior">
+                  Interior + Exterior
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="hover:text-background transition-colors" data-testid="link-footer-full-skylight">
+                  Full + Skylight
                 </Link>
               </li>
               <li>
                 <Link href="/pricing" className="hover:text-background transition-colors" data-testid="link-footer-pricing">
-                  Pricing
+                  Add-ons & Pricing
                 </Link>
               </li>
             </ul>
