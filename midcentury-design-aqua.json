@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "name": "Midcentury Editorial Web Design System",
+    "version": "1.1.0",
+    "source": "Midcentury modern editorial UI with Aqua Blue integrated as a primary accent.",
+    "intendedUse": "Design system JSON for development and theming."
+  },
+  "designPrinciples": [
+    "Editorial first: typography and imagery lead.",
+    "Midcentury restraint paired with coastal-modern Aqua Blue.",
+    "Few colors, large planes, confident whitespace.",
+    "Hierarchy through scale, asymmetry, and color.",
+    "Aqua Blue is the dominant interactive accent."
+  ],
+  "color": {
+    "mode": "light",
+    "palette": {
+      "neutral": {
+        "white": "#FFFFFF",
+        "paper": "#F4F4F2",
+        "fog": "#E9E9E6",
+        "ink": "#0B0B0D",
+        "inkSoft": "#2A2A2E",
+        "muted": "#6F737A",
+        "stroke": "#D9D9D6"
+      },
+      "midcentury": {
+        "cobalt": "#345EA8",
+        "sunflower": "#E0D400",
+        "cream": "#F6F1E3"
+      },
+      "aqua": {
+        "primary": "#5FB3B3",
+        "soft": "#DFF1F1",
+        "deep": "#3C8F8F"
+      }
+    },
+    "usageGuidelines": {
+      "primaryAccent": "Aqua Blue (#5FB3B3) is the main accent for interaction and emphasis.",
+      "cta": "Primary CTAs use aqua.primary with white text; hover uses aqua.deep.",
+      "highlight": "Use aqua.soft for caption panels and callouts.",
+      "navigation": "Active nav and focus states use aqua.primary.",
+      "balance": "Aqua Blue should visually outweigh sunflower and complement cobalt."
+    }
+  },
+  "components": {
+    "CTAButton": {
+      "variants": {
+        "primary": {
+          "bg": "#5FB3B3",
+          "text": "#FFFFFF",
+          "hoverBg": "#3C8F8F",
+          "radius": "pill"
+        },
+        "secondary": {
+          "bg": "transparent",
+          "text": "#5FB3B3",
+          "border": "1px solid #5FB3B3",
+          "radius": "pill"
+        }
+      }
+    },
+    "CaptionPanel": {
+      "container": {
+        "bg": "#DFF1F1",
+        "radius": "md",
+        "paddingPx": 16
+      },
+      "text": {
+        "color": "#0B0B0D"
+      }
+    },
+    "NavbarOverlay": {
+      "activeLink": {
+        "color": "#5FB3B3",
+        "underline": "2px solid #5FB3B3"
+      },
+      "focusRing": "2px solid #5FB3B3"
+    }
+  },
+  "motion": {
+    "easing": "cubic-bezier(0.2, 0.8, 0.2, 1)",
+    "durationsMs": {
+      "fast": 140,
+      "base": 220,
+      "slow": 320
+    }
+  }
+}

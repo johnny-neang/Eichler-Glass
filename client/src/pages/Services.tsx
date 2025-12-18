@@ -1,0 +1,96 @@
+import { Navbar } from "@/components/Navbar";
+import { ServiceShowcase } from "@/components/ServiceShowcase";
+import { PricingCards } from "@/components/PricingCards";
+import { CitySelector } from "@/components/CitySelector";
+import { Footer } from "@/components/Footer";
+import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
+import { ArrowRight, Check } from "lucide-react";
+
+const benefits = [
+  "Specialized in Eichler and midcentury modern homes",
+  "Streak-free finish guaranteed",
+  "Fully licensed and insured",
+  "Eco-friendly cleaning solutions",
+  "Flexible scheduling options",
+  "Satisfaction guaranteed",
+];
+
+export default function Services() {
+  return (
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-1">
+        <section className="py-16 md:py-24 bg-muted/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl">
+              <h1 className="font-serif text-4xl md:text-5xl font-bold mb-6" data-testid="text-services-page-title">
+                Professional Glass Cleaning Services
+              </h1>
+              <p className="text-muted-foreground text-lg mb-8">
+                We specialize in the unique glass configurations of Eichler and midcentury 
+                modern homes. From floor-to-ceiling windows to skylights, we bring 
+                crystal-clear results every time.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/book">
+                  <Button size="lg" className="rounded-full gap-2" data-testid="button-services-book">
+                    Book Now <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/pricing">
+                  <Button size="lg" variant="outline" className="rounded-full" data-testid="button-services-pricing">
+                    View Pricing
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <ServiceShowcase />
+
+        <section className="py-16 md:py-24 bg-background">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="font-serif text-3xl md:text-4xl font-bold mb-6" data-testid="text-why-choose-title">
+                  Why Choose Eichler Glass?
+                </h2>
+                <p className="text-muted-foreground mb-8">
+                  We understand that midcentury modern homes have unique glass cleaning 
+                  requirements. Our team is trained specifically to handle the large 
+                  glass panels, skylights, and architectural features common in Eichler homes.
+                </p>
+                <ul className="space-y-3">
+                  {benefits.map((benefit, idx) => (
+                    <li key={idx} className="flex items-center gap-3">
+                      <Check className="h-5 w-5 text-primary shrink-0" />
+                      <span>{benefit}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="p-8 rounded-lg bg-accent">
+                <h3 className="font-semibold text-xl mb-4">Ready to get started?</h3>
+                <p className="text-muted-foreground mb-6">
+                  Book your cleaning today with just a $50 deposit. We'll contact you 
+                  within 24 hours to confirm your appointment details.
+                </p>
+                <Link href="/book">
+                  <Button className="w-full rounded-full" data-testid="button-cta-book">
+                    Book Your Cleaning
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <PricingCards />
+        <CitySelector />
+      </main>
+      <Footer />
+    </div>
+  );
+}
