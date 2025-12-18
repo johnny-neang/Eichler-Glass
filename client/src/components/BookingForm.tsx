@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Calendar, Clock, CreditCard, Check } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Calendar, CreditCard, Check, Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface BookingFormProps {
@@ -14,14 +15,47 @@ interface BookingFormProps {
 }
 
 const tiers = [
-  { id: "interior", name: "Interior", price: 250 },
-  { id: "interior-exterior", name: "Interior + Exterior", price: 400 },
+  { id: "exterior", name: "Exterior", price: 250 },
+  { id: "interior-exterior", name: "Interior + Exterior", price: 450 },
   { id: "full-skylight", name: "Full + Skylight", price: 650 },
+];
+
+interface AddOn {
+  id: string;
+  name: string;
+  price: string;
+  description: string;
+  note: string;
+}
+
+const addOns: AddOn[] = [
+  {
+    id: "screen-cleaning",
+    name: "Screen Cleaning",
+    price: "$8 per screen",
+    description: "Removal, light wash only, reinstall",
+    note: "No repairs or patching",
+  },
+  {
+    id: "moving-furniture",
+    name: "Moving Furniture / Obstructions",
+    price: "$50-150 flat fee",
+    description: "Heavy planters, sofas, dining tables, lamps",
+    note: "Not responsible for damage",
+  },
+  {
+    id: "two-story",
+    name: "Two-Story Home",
+    price: "$250-300 flat premium",
+    description: "Required for split-level or additions",
+    note: "Price varies by complexity",
+  },
 ];
 
 export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
   const { toast } = useToast();
   const [selectedTier, setSelectedTier] = useState(preselectedTier || "interior-exterior");
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -32,6 +66,13 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
   const [step, setStep] = useState<"details" | "confirm">("details");
 
   const selectedPackage = tiers.find((t) => t.id === selectedTier);
+  const selectedAddOnDetails = addOns.filter((a) => selectedAddOns.includes(a.id));
+
+  const toggleAddOn = (id: string) => {
+    setSelectedAddOns((prev) =>
+      prev.includes(id) ? prev.filter((a) => a !== id) : [...prev, id]
+    );
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +83,7 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
         title: "Booking Submitted!",
         description: "We'll contact you shortly to confirm your appointment.",
       });
-      console.log("Booking submitted:", { ...formData, tier: selectedTier, city: cityName });
+      console.log("Booking submitted:", { ...formData, tier: selectedTier, addOns: selectedAddOns, city: cityName });
     }
   };
 
@@ -163,6 +204,40 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                     </RadioGroup>
                   </div>
 
+                  <div className="space-y-3">
+                    <Label className="flex items-center gap-2">
+                      <Plus className="h-4 w-4" />
+                      Add-Ons (Optional)
+                    </Label>
+                    <div className="space-y-2">
+                      {addOns.map((addOn) => (
+                        <label
+                          key={addOn.id}
+                          className={`flex items-start gap-3 p-4 rounded-lg border cursor-pointer transition-colors ${
+                            selectedAddOns.includes(addOn.id)
+                              ? "border-primary bg-accent"
+                              : "border-border hover:border-primary/50"
+                          }`}
+                          data-testid={`checkbox-addon-${addOn.id}`}
+                        >
+                          <Checkbox
+                            checked={selectedAddOns.includes(addOn.id)}
+                            onCheckedChange={() => toggleAddOn(addOn.id)}
+                            className="mt-0.5"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center justify-between gap-2 flex-wrap">
+                              <span className="font-medium">{addOn.name}</span>
+                              <span className="font-semibold text-sm">{addOn.price}</span>
+                            </div>
+                            <p className="text-sm text-muted-foreground mt-1">{addOn.description}</p>
+                            <p className="text-xs text-muted-foreground mt-1 italic">{addOn.note}</p>
+                          </div>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="space-y-2">
                     <Label htmlFor="notes">Special Instructions (Optional)</Label>
                     <Textarea
@@ -183,9 +258,20 @@ export function BookingForm({ cityName, preselectedTier }: BookingFormProps) {
                       <span className="font-medium">{selectedPackage?.name}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-muted-foreground">Total Price</span>
+                      <span className="text-muted-foreground">Package Price</span>
                       <span className="font-medium">${selectedPackage?.price}</span>
                     </div>
+                    {selectedAddOnDetails.length > 0 && (
+                      <div className="border-t border-border pt-3 space-y-2">
+                        <span className="text-muted-foreground text-sm">Add-Ons:</span>
+                        {selectedAddOnDetails.map((addOn) => (
+                          <div key={addOn.id} className="flex justify-between text-sm">
+                            <span>{addOn.name}</span>
+                            <span className="font-medium">{addOn.price}</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                     <div className="flex justify-between border-t border-border pt-3">
                       <span className="text-muted-foreground">Deposit Due Today</span>
                       <span className="font-bold text-primary">$50</span>
