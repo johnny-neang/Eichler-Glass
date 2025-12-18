@@ -11,7 +11,7 @@ interface HeroProps {
 export function Hero({ cityName, citySlug }: HeroProps) {
   const title = cityName
     ? `Premium Glass Cleaning in ${cityName}`
-    : "johnny eats ass for snax";
+    : "Crystal Clear Glass for Midcentury Modern Homes";
   
   const subtitle = cityName
     ? `Expert glass cleaning services for Eichler and modern homes in ${cityName} and surrounding areas.`
