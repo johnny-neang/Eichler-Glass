@@ -37,6 +37,13 @@ const addOns: AddOn[] = [
     note: "No repairs or patching",
   },
   {
+    id: "skylights",
+    name: "Skylights",
+    price: "$15-25 per skylight",
+    description: "Interior + exterior if accessible",
+    note: "Price varies by accessibility",
+  },
+  {
     id: "moving-furniture",
     name: "Moving Furniture / Obstructions",
     price: "$50-150 flat fee",
