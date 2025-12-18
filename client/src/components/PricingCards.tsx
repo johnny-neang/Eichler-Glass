@@ -95,10 +95,10 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
               
               <CardHeader className="text-center pb-4">
                 <CardTitle className="font-serif text-2xl">{tier.name}</CardTitle>
-                <CardDescription className="text-sm">{tier.description}</CardDescription>
+                <CardDescription className="text-sm min-h-[40px]">{tier.description}</CardDescription>
               </CardHeader>
               
-              <CardContent className="flex-1">
+              <CardContent className="flex-1 flex flex-col">
                 <div className="text-center mb-6">
                   <span className="text-4xl font-bold">${tier.price}</span>
                   <span className="text-muted-foreground ml-1">/ service</span>
