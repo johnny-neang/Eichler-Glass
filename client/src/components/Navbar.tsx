@@ -62,7 +62,7 @@ export function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" data-testid="button-cities-dropdown">
-                  Cities <ChevronDown className="ml-1 h-4 w-4" />
+                  Neighborhoods <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -113,7 +113,7 @@ export function Navbar() {
               </Link>
             ))}
             <div className="pt-2 border-t border-border">
-              <p className="text-sm text-muted-foreground px-4 py-2">Service Areas</p>
+              <p className="text-sm text-muted-foreground px-4 py-2">Neighborhoods</p>
               {cities.map((city) => (
                 <Link key={city.slug} href={`/${city.slug}`}>
                   <Button
