@@ -9,6 +9,7 @@ import Pricing from "@/pages/Pricing";
 import Services from "@/pages/Services";
 import Book from "@/pages/Book";
 import Contact from "@/pages/Contact";
+import Team from "@/pages/Team";
 import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import Account from "@/pages/Account";
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/services" component={Services} />
       <Route path="/book" component={Book} />
       <Route path="/contact" component={Contact} />
+      <Route path="/team" component={Team} />
       <Route path="/sign-in" component={SignIn} />
       <Route path="/sign-up" component={SignUp} />
       <Route path="/account" component={Account} />
