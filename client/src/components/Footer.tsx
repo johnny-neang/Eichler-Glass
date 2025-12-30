@@ -40,7 +40,7 @@ export function Footer() {
             <ul className="space-y-2 text-sm text-background/70">
               <li>
                 <Link href="/pricing" className="hover:text-background transition-colors" data-testid="link-footer-exterior">
-                  Exterior Cleaning
+                  Exterior
                 </Link>
               </li>
               <li>
@@ -51,26 +51,6 @@ export function Footer() {
               <li>
                 <Link href="/pricing" className="hover:text-background transition-colors" data-testid="link-footer-full-skylight">
                   Full + Skylight
-                </Link>
-              </li>
-              <li>
-                <Link href="/book" className="hover:text-background transition-colors" data-testid="link-footer-screen-cleaning">
-                  Screen Cleaning
-                </Link>
-              </li>
-              <li>
-                <Link href="/book" className="hover:text-background transition-colors" data-testid="link-footer-moving-furniture">
-                  Moving Furniture/Obstruction
-                </Link>
-              </li>
-              <li>
-                <Link href="/book" className="hover:text-background transition-colors" data-testid="link-footer-two-story">
-                  Two-Story Homes
-                </Link>
-              </li>
-              <li>
-                <Link href="/book" className="hover:text-background transition-colors" data-testid="link-footer-skylights">
-                  Skylights
                 </Link>
               </li>
             </ul>
