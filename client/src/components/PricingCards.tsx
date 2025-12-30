@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles, Phone } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
+import { BookingIntentDialog } from "./BookingIntentDialog";
 
 interface PricingTier {
   id: string;
@@ -61,14 +62,10 @@ interface PricingCardsProps {
 }
 
 export function PricingCards({ citySlug }: PricingCardsProps) {
-  const { openBooking, isConfigured } = useCalBooking();
+  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
 
   const handleSelectPackage = (tierId: string, tierName: string) => {
-    if (isConfigured) {
-      openBooking({ tier: tierName });
-    } else {
-      window.location.href = "tel:+15108593449";
-    }
+    initiateBooking({ tier: tierName, city: citySlug });
   };
 
   return (
@@ -122,15 +119,26 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
                 </ul>
               </CardContent>
               
-              <CardFooter className="pt-4">
+              <CardFooter className="pt-4 flex flex-col gap-2">
                 <Button
-                  className="w-full gap-2"
+                  className="w-full"
                   variant={tier.popular ? "default" : "outline"}
                   onClick={() => handleSelectPackage(tier.id, tier.name)}
                   data-testid={`button-select-${tier.id}`}
                 >
-                  {isConfigured ? "Select Package" : "Call to Book"}
-                  {!isConfigured && <Phone className="h-4 w-4" />}
+                  Select Package
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="w-full gap-2"
+                  asChild
+                  data-testid={`button-call-${tier.id}`}
+                >
+                  <a href="tel:+15108593449">
+                    <Phone className="h-4 w-4" />
+                    Or call to book
+                  </a>
                 </Button>
               </CardFooter>
             </Card>
@@ -144,6 +152,14 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
           </p>
         </div>
       </div>
+
+      <BookingIntentDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onLeadCaptured={handleLeadCaptured}
+        preselectedPackage={pendingOptions.tier}
+        preselectedCity={pendingOptions.city || citySlug}
+      />
     </section>
   );
 }

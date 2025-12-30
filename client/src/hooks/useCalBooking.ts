@@ -1,9 +1,20 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { getCalApi } from "@calcom/embed-react";
 
 const CAL_LINK = import.meta.env.VITE_CAL_LINK || "eichlerglass/glass-cleaning";
 
+interface BookingOptions {
+  tier?: string;
+  city?: string;
+  name?: string;
+  email?: string;
+  leadId?: string;
+}
+
 export function useCalBooking() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [pendingOptions, setPendingOptions] = useState<{ tier?: string; city?: string }>({});
+
   useEffect(() => {
     (async function () {
       const cal = await getCalApi();
@@ -15,27 +26,56 @@ export function useCalBooking() {
     })();
   }, []);
 
-  const openBooking = useCallback(async (options?: { tier?: string; city?: string }) => {
+  const openCalModal = useCallback(async (options?: BookingOptions) => {
     const cal = await getCalApi();
     
-    const prefill: Record<string, string> = {};
+    const config: Record<string, string> = {
+      layout: "month_view",
+    };
+    
+    if (options?.name) {
+      config.name = options.name;
+    }
+    if (options?.email) {
+      config.email = options.email;
+    }
     if (options?.tier) {
-      prefill.notes = `Selected Package: ${options.tier}`;
+      config.notes = `Selected Package: ${options.tier}`;
     }
     if (options?.city) {
-      prefill.location = options.city;
+      config.location = options.city;
     }
 
     cal("modal", {
       calLink: CAL_LINK,
-      config: {
-        layout: "month_view",
-        ...prefill,
-      },
+      config,
     });
   }, []);
 
-  const isConfigured = CAL_LINK !== "eichlerglass/glass-cleaning";
+  const initiateBooking = useCallback((options?: { tier?: string; city?: string }) => {
+    setPendingOptions(options || {});
+    setDialogOpen(true);
+  }, []);
 
-  return { openBooking, isConfigured, calLink: CAL_LINK };
+  const handleLeadCaptured = useCallback((leadId: string, data: { name: string; email: string; city?: string; packageTier?: string }) => {
+    setPendingOptions({});
+    
+    openCalModal({
+      tier: data.packageTier,
+      city: data.city,
+      name: data.name,
+      email: data.email,
+      leadId,
+    });
+  }, [openCalModal]);
+
+  return { 
+    initiateBooking,
+    openCalModal,
+    dialogOpen,
+    setDialogOpen,
+    handleLeadCaptured,
+    pendingOptions,
+    calLink: CAL_LINK 
+  };
 }

@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCalBooking } from "@/hooks/useCalBooking";
+import { BookingIntentDialog } from "./BookingIntentDialog";
 import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
 
 const navLinks = [
@@ -34,14 +35,10 @@ const cities = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
-  const { openBooking, isConfigured } = useCalBooking();
+  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
 
   const handleBookClick = () => {
-    if (isConfigured) {
-      openBooking();
-    } else {
-      window.location.href = "tel:+15108593449";
-    }
+    initiateBooking();
   };
 
   return (
@@ -94,12 +91,22 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Button 
-              className="px-6 gap-2 hidden sm:flex" 
+              variant="ghost"
+              size="icon"
+              className="hidden sm:flex"
+              asChild
+              data-testid="button-call-now"
+            >
+              <a href="tel:+15108593449">
+                <Phone className="h-4 w-4" />
+              </a>
+            </Button>
+            <Button 
+              className="px-6 hidden sm:flex" 
               onClick={handleBookClick}
               data-testid="button-book-now"
             >
-              {isConfigured ? "Book Now" : "Call Now"}
-              {!isConfigured && <Phone className="h-4 w-4" />}
+              Book Now
             </Button>
             <Button
               size="icon"
@@ -145,19 +152,37 @@ export function Navbar() {
               ))}
             </div>
             <Button 
-              className="w-full gap-2" 
+              className="w-full" 
               onClick={() => {
                 setMobileOpen(false);
                 handleBookClick();
               }}
               data-testid="button-mobile-book"
             >
-              {isConfigured ? "Book Now" : "Call Now"}
-              {!isConfigured && <Phone className="h-4 w-4" />}
+              Book Now
+            </Button>
+            <Button 
+              variant="outline"
+              className="w-full gap-2" 
+              asChild
+              data-testid="button-mobile-call"
+            >
+              <a href="tel:+15108593449">
+                <Phone className="h-4 w-4" />
+                Call Now
+              </a>
             </Button>
           </div>
         </div>
       )}
+
+      <BookingIntentDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onLeadCaptured={handleLeadCaptured}
+        preselectedPackage={pendingOptions.tier}
+        preselectedCity={pendingOptions.city}
+      />
     </nav>
   );
 }

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Check, Phone } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
+import { BookingIntentDialog } from "@/components/BookingIntentDialog";
 
 const benefits = [
   "Specialized in Eichler and midcentury modern homes",
@@ -18,14 +19,10 @@ const benefits = [
 ];
 
 export default function Services() {
-  const { openBooking, isConfigured } = useCalBooking();
+  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
 
   const handleBookClick = () => {
-    if (isConfigured) {
-      openBooking();
-    } else {
-      window.location.href = "tel:+15108593449";
-    }
+    initiateBooking();
   };
 
   return (
@@ -50,8 +47,20 @@ export default function Services() {
                   onClick={handleBookClick}
                   data-testid="button-services-book"
                 >
-                  {isConfigured ? "Book Now" : "Call to Book"}
-                  {isConfigured ? <ArrowRight className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
+                  Book Now
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="gap-2" 
+                  asChild
+                  data-testid="button-services-call"
+                >
+                  <a href="tel:+15108593449">
+                    <Phone className="h-4 w-4" />
+                    Call Now
+                  </a>
                 </Button>
                 <Link href="/pricing">
                   <Button size="lg" variant="outline" data-testid="button-services-pricing">
@@ -93,12 +102,23 @@ export default function Services() {
                   within 24 hours to confirm your appointment details.
                 </p>
                 <Button 
-                  className="w-full gap-2" 
+                  className="w-full gap-2 mb-2" 
                   onClick={handleBookClick}
                   data-testid="button-cta-book"
                 >
-                  {isConfigured ? "Book Your Cleaning" : "Call to Book"}
-                  {!isConfigured && <Phone className="h-4 w-4" />}
+                  Book Your Cleaning
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+                <Button 
+                  variant="outline"
+                  className="w-full gap-2" 
+                  asChild
+                  data-testid="button-cta-call"
+                >
+                  <a href="tel:+15108593449">
+                    <Phone className="h-4 w-4" />
+                    Or call us
+                  </a>
                 </Button>
               </div>
             </div>
@@ -109,6 +129,14 @@ export default function Services() {
         <CitySelector />
       </main>
       <Footer />
+
+      <BookingIntentDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onLeadCaptured={handleLeadCaptured}
+        preselectedPackage={pendingOptions.tier}
+        preselectedCity={pendingOptions.city}
+      />
     </div>
   );
 }

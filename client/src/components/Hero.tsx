@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Sparkles, Shield, Phone } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
+import { BookingIntentDialog } from "./BookingIntentDialog";
 import heroImage from "@assets/generated_images/eichler_home_with_glass_windows.png";
 
 interface HeroProps {
@@ -10,7 +11,7 @@ interface HeroProps {
 }
 
 export function Hero({ cityName, citySlug }: HeroProps) {
-  const { openBooking, isConfigured } = useCalBooking();
+  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
   
   const title = cityName
     ? `Premium Glass Cleaning in ${cityName}`
@@ -21,11 +22,7 @@ export function Hero({ cityName, citySlug }: HeroProps) {
     : "Professional glass cleaning services for Eichler homes throughout the Bay Area. Interior, exterior, and skylight specialists.";
 
   const handleBookClick = () => {
-    if (isConfigured) {
-      openBooking({ city: cityName });
-    } else {
-      window.location.href = "tel:+15108593449";
-    }
+    initiateBooking({ city: citySlug });
   };
 
   return (
@@ -63,8 +60,20 @@ export function Hero({ cityName, citySlug }: HeroProps) {
               onClick={handleBookClick}
               data-testid="button-hero-book"
             >
-              {isConfigured ? "Book Your Cleaning" : "Call to Book"}
-              {isConfigured ? <ArrowRight className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
+              Book Your Cleaning
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="px-8 gap-2 bg-white/10 border-white/30 text-white backdrop-blur-sm"
+              asChild
+              data-testid="button-hero-call"
+            >
+              <a href="tel:+15108593449">
+                <Phone className="h-4 w-4" />
+                Call Now
+              </a>
             </Button>
             <Link href={citySlug ? `/${citySlug}/pricing` : "/pricing"}>
               <Button
@@ -94,6 +103,14 @@ export function Hero({ cityName, citySlug }: HeroProps) {
           </div>
         </div>
       </div>
+
+      <BookingIntentDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onLeadCaptured={handleLeadCaptured}
+        preselectedPackage={pendingOptions.tier}
+        preselectedCity={pendingOptions.city || citySlug}
+      />
     </section>
   );
 }

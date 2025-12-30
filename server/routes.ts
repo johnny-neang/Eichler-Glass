@@ -299,5 +299,41 @@ export async function registerRoutes(
     }
   });
 
+  const publicLeadSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Valid email is required"),
+    phone: z.string().optional(),
+    city: z.string().optional(),
+    packageTier: z.string().optional(),
+  });
+
+  app.post("/api/leads/public", async (req, res) => {
+    try {
+      const data = publicLeadSchema.parse(req.body);
+      
+      const lead = await storage.createLead({
+        contactName: data.name,
+        contactEmail: data.email,
+        contactPhone: data.phone || null,
+        serviceCity: data.city || null,
+        serviceTier: data.packageTier || null,
+        notes: data.packageTier ? `Booking intent: ${data.packageTier}` : "Booking intent",
+        source: "booking_flow",
+      });
+      
+      res.status(201).json({ 
+        success: true, 
+        leadId: lead.id,
+        message: "Lead captured successfully"
+      });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.errors[0].message });
+      }
+      console.error("Public lead error:", error);
+      res.status(500).json({ error: "Failed to capture lead" });
+    }
+  });
+
   return httpServer;
 }
