@@ -6,9 +6,10 @@ import bcrypt from "bcryptjs";
 import pkg from "pg";
 const { Pool } = pkg;
 import { storage } from "./storage";
-import { insertLeadSchema, insertDepositSchema, insertWorkOrderSchema, updateLeadSchema, updateDepositSchema, updateWorkOrderSchema } from "@shared/schema";
+import { insertLeadSchema, insertDepositSchema, insertWorkOrderSchema, insertClientSchema, updateLeadSchema, updateDepositSchema, updateWorkOrderSchema, updateClientSchema } from "@shared/schema";
 import { z } from "zod";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { EmailService } from "./emailService";
 
 declare module "express-session" {
   interface SessionData {
@@ -431,12 +432,24 @@ export async function registerRoutes(
       
       if (session.payment_status === "paid") {
         const depositId = session.metadata?.depositId;
+        const leadId = session.metadata?.leadId;
         if (depositId) {
           await storage.updateDeposit(depositId, {
             status: "captured",
             stripePaymentIntentId: session.payment_intent as string,
             depositDate: new Date(),
           });
+        }
+        
+        if (leadId) {
+          const lead = await storage.getLead(leadId);
+          if (lead?.contactEmail) {
+            EmailService.sendDepositConfirmation(
+              lead.contactEmail,
+              lead.contactName,
+              5000
+            );
+          }
         }
         
         res.json({ 
@@ -483,10 +496,297 @@ export async function registerRoutes(
         refundedBy: req.session.adminId,
       });
 
+      if (deposit.leadId) {
+        const lead = await storage.getLead(deposit.leadId);
+        if (lead?.contactEmail) {
+          EmailService.sendRefundNotification(
+            lead.contactEmail,
+            lead.contactName,
+            deposit.amount
+          );
+        }
+      }
+
       res.json({ success: true, refundId: refund.id });
     } catch (error) {
       console.error("Refund error:", error);
       res.status(500).json({ error: "Failed to process refund" });
+    }
+  });
+
+  app.get("/api/admin/clients", requireAuth, async (req, res) => {
+    try {
+      const clients = await storage.getClients();
+      res.json(clients);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch clients" });
+    }
+  });
+
+  app.get("/api/admin/clients/:id", requireAuth, async (req, res) => {
+    try {
+      const client = await storage.getClient(req.params.id);
+      if (!client) {
+        return res.status(404).json({ error: "Client not found" });
+      }
+      res.json(client);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch client" });
+    }
+  });
+
+  app.get("/api/admin/clients/:id/work-orders", requireAuth, async (req, res) => {
+    try {
+      const workOrders = await storage.getWorkOrdersByClientId(req.params.id);
+      res.json(workOrders);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to fetch client work orders" });
+    }
+  });
+
+  app.post("/api/admin/clients", requireAuth, async (req, res) => {
+    try {
+      const data = insertClientSchema.parse(req.body);
+      const client = await storage.createClient(data);
+      res.status(201).json(client);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.errors });
+      }
+      res.status(500).json({ error: "Failed to create client" });
+    }
+  });
+
+  app.patch("/api/admin/clients/:id", requireAuth, async (req, res) => {
+    try {
+      const data = updateClientSchema.parse(req.body);
+      const client = await storage.updateClient(req.params.id, data);
+      if (!client) {
+        return res.status(404).json({ error: "Client not found" });
+      }
+      res.json(client);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: error.errors });
+      }
+      res.status(500).json({ error: "Failed to update client" });
+    }
+  });
+
+  app.delete("/api/admin/clients/:id", requireAuth, async (req, res) => {
+    try {
+      const deleted = await storage.deleteClient(req.params.id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Client not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to delete client" });
+    }
+  });
+
+  app.post("/api/admin/leads/:id/convert", requireAuth, async (req, res) => {
+    try {
+      const lead = await storage.getLead(req.params.id);
+      if (!lead) {
+        return res.status(404).json({ error: "Lead not found" });
+      }
+
+      if (lead.status === "converted") {
+        return res.status(400).json({ error: "Lead already converted" });
+      }
+
+      const existingClient = await storage.getClientByLeadId(lead.id);
+      if (existingClient) {
+        return res.status(400).json({ error: "Client already exists for this lead" });
+      }
+
+      const deposit = await storage.getDepositByLeadId(lead.id);
+
+      const client = await storage.createClient({
+        leadId: lead.id,
+        name: lead.contactName,
+        email: lead.contactEmail,
+        phone: lead.contactPhone || null,
+        address: lead.address || null,
+        stripeCustomerId: lead.stripeCustomerId || null,
+        status: "active",
+      });
+
+      const { invoiceTotal, scheduledDate, timeWindow, scopeOfWork } = req.body;
+      const depositAmount = deposit?.status === "captured" ? deposit.amount : 0;
+      const remainingBalance = (invoiceTotal || 0) - depositAmount;
+
+      const workOrder = await storage.createWorkOrder({
+        leadId: lead.id,
+        clientId: client.id,
+        customerName: lead.contactName,
+        customerEmail: lead.contactEmail,
+        customerPhone: lead.contactPhone || null,
+        address: lead.address || "",
+        serviceTier: lead.serviceTier || null,
+        scheduledDate: scheduledDate ? new Date(scheduledDate) : null,
+        timeWindow: timeWindow || null,
+        scopeOfWork: scopeOfWork || null,
+        invoiceTotal: invoiceTotal || null,
+        depositApplied: depositAmount > 0,
+        depositAmount: depositAmount || null,
+        remainingBalance: remainingBalance > 0 ? remainingBalance : null,
+        status: scheduledDate ? "scheduled" : "new",
+      });
+
+      await storage.updateLead(lead.id, { status: "converted" });
+
+      EmailService.sendLeadConvertedToClient(lead.contactEmail, lead.contactName);
+
+      res.status(201).json({ 
+        success: true, 
+        client, 
+        workOrder,
+        depositApplied: depositAmount,
+        remainingBalance,
+      });
+    } catch (error) {
+      console.error("Lead conversion error:", error);
+      res.status(500).json({ error: "Failed to convert lead" });
+    }
+  });
+
+  app.post("/api/admin/work-orders/:id/complete", requireAuth, async (req, res) => {
+    try {
+      const workOrder = await storage.getWorkOrder(req.params.id);
+      if (!workOrder) {
+        return res.status(404).json({ error: "Work order not found" });
+      }
+
+      const { invoiceTotal, completionNotes } = req.body;
+      const depositAmount = workOrder.depositAmount || 0;
+      const total = invoiceTotal || workOrder.invoiceTotal || 0;
+      const remainingBalance = total - depositAmount;
+
+      const updated = await storage.updateWorkOrder(req.params.id, {
+        status: "completed",
+        invoiceTotal: total,
+        depositApplied: depositAmount > 0,
+        remainingBalance: remainingBalance > 0 ? remainingBalance : 0,
+        completionNotes: completionNotes || workOrder.completionNotes,
+      });
+
+      if (workOrder.clientId) {
+        const client = await storage.getClient(workOrder.clientId);
+        if (client) {
+          await storage.updateClient(workOrder.clientId, {
+            totalJobsCompleted: (client.totalJobsCompleted || 0) + 1,
+          });
+        }
+      }
+
+      if (workOrder.customerEmail) {
+        EmailService.sendJobCompletedNotification(
+          workOrder.customerEmail,
+          workOrder.customerName,
+          total,
+          depositAmount,
+          remainingBalance > 0 ? remainingBalance : 0
+        );
+      }
+
+      res.json({ 
+        success: true, 
+        workOrder: updated,
+        invoiceTotal: total,
+        depositApplied: depositAmount,
+        remainingBalance: remainingBalance > 0 ? remainingBalance : 0,
+      });
+    } catch (error) {
+      console.error("Work order completion error:", error);
+      res.status(500).json({ error: "Failed to complete work order" });
+    }
+  });
+
+  app.post("/api/admin/work-orders/:id/charge-balance", requireAuth, async (req, res) => {
+    try {
+      const workOrder = await storage.getWorkOrder(req.params.id);
+      if (!workOrder) {
+        return res.status(404).json({ error: "Work order not found" });
+      }
+
+      const remainingBalance = workOrder.remainingBalance || 0;
+      if (remainingBalance <= 0) {
+        return res.status(400).json({ error: "No remaining balance to charge" });
+      }
+
+      if (!workOrder.leadId) {
+        return res.status(400).json({ error: "Work order has no associated lead" });
+      }
+
+      const lead = await storage.getLead(workOrder.leadId);
+      if (!lead?.stripeCustomerId) {
+        return res.status(400).json({ error: "Customer has no payment method on file" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+
+      const paymentMethods = await stripe.paymentMethods.list({
+        customer: lead.stripeCustomerId,
+        type: "card",
+      });
+
+      if (!paymentMethods.data.length) {
+        return res.status(400).json({ error: "Customer has no saved payment method" });
+      }
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: remainingBalance,
+        currency: "usd",
+        customer: lead.stripeCustomerId,
+        payment_method: paymentMethods.data[0].id,
+        off_session: true,
+        confirm: true,
+        description: `Remaining balance - Work Order #${workOrder.id}`,
+        metadata: {
+          workOrderId: workOrder.id,
+          leadId: lead.id,
+          type: "remaining_balance",
+        },
+      });
+
+      await storage.updateWorkOrder(req.params.id, {
+        stripePaymentIntentId: paymentIntent.id,
+        stripeChargeId: paymentIntent.latest_charge as string,
+        paidAt: new Date(),
+        remainingBalance: 0,
+        status: "invoiced",
+      });
+
+      if (workOrder.clientId) {
+        const client = await storage.getClient(workOrder.clientId);
+        if (client) {
+          await storage.updateClient(workOrder.clientId, {
+            totalRevenue: (client.totalRevenue || 0) + remainingBalance,
+          });
+        }
+      }
+
+      if (workOrder.customerEmail) {
+        EmailService.sendPaymentReceived(
+          workOrder.customerEmail,
+          workOrder.customerName,
+          remainingBalance
+        );
+      }
+
+      res.json({ 
+        success: true, 
+        paymentIntentId: paymentIntent.id,
+        amount: remainingBalance,
+      });
+    } catch (error: any) {
+      console.error("Charge balance error:", error);
+      if (error.type === "StripeCardError") {
+        return res.status(400).json({ error: error.message });
+      }
+      res.status(500).json({ error: "Failed to charge remaining balance" });
     }
   });
 

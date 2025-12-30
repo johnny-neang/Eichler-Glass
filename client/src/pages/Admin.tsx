@@ -13,12 +13,12 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { 
   LayoutDashboard, Users, FileText, DollarSign, Calendar, Clock, 
-  Plus, LogOut, Mail, Phone, MapPin, Briefcase, AlertCircle
+  Plus, LogOut, Mail, Phone, MapPin, Briefcase, AlertCircle, UserCheck, ArrowRight, CheckCircle
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import type { Lead, Deposit, WorkOrder } from "@shared/schema";
+import type { Lead, Deposit, WorkOrder, Client } from "@shared/schema";
 
-type AdminTab = "dashboard" | "leads" | "deposits" | "work-orders";
+type AdminTab = "dashboard" | "leads" | "deposits" | "work-orders" | "clients";
 
 interface DashboardStats {
   totalLeads: number;
@@ -170,6 +170,9 @@ function DashboardView({ stats }: { stats: DashboardStats }) {
 function LeadsView() {
   const { toast } = useToast();
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const [convertDialogOpen, setConvertDialogOpen] = useState(false);
+  const [convertingLeadId, setConvertingLeadId] = useState<string | null>(null);
+  const [invoiceTotal, setInvoiceTotal] = useState("");
   
   const { data: leads = [], isLoading } = useQuery<Lead[]>({
     queryKey: ["/api/admin/leads"],
@@ -186,6 +189,42 @@ function LeadsView() {
       toast({ title: "Lead Updated" });
     },
   });
+
+  const convertMutation = useMutation({
+    mutationFn: async ({ id, invoiceTotal }: { id: string; invoiceTotal: number }) => {
+      const res = await apiRequest("POST", `/api/admin/leads/${id}/convert`, { invoiceTotal });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/leads"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/clients"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/work-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/dashboard/stats"] });
+      toast({ 
+        title: "Lead Converted", 
+        description: `Client and work order created. Deposit applied: $${(data.depositApplied / 100).toFixed(2)}` 
+      });
+      setConvertDialogOpen(false);
+      setConvertingLeadId(null);
+      setInvoiceTotal("");
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Conversion Failed", 
+        description: error.message || "Failed to convert lead.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleConvert = (leadId: string) => {
+    const amount = parseFloat(invoiceTotal) * 100;
+    if (amount < 100) {
+      toast({ title: "Invalid Amount", description: "Please enter a valid invoice total.", variant: "destructive" });
+      return;
+    }
+    convertMutation.mutate({ id: leadId, invoiceTotal: Math.round(amount) });
+  };
 
   if (isLoading) {
     return <div className="p-8 text-center text-muted-foreground">Loading leads...</div>;
@@ -282,6 +321,52 @@ function LeadsView() {
                       </SelectContent>
                     </Select>
                   </div>
+                  
+                  {lead.status !== "converted" && lead.status !== "lost" && (
+                    <div className="pt-4 border-t">
+                      <p className="text-sm font-medium mb-3">Convert to Client</p>
+                      <div className="space-y-3">
+                        <div>
+                          <label className="text-xs text-muted-foreground">Invoice Total</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                            <Input
+                              type="number"
+                              step="0.01"
+                              min="1"
+                              placeholder="0.00"
+                              className="pl-7"
+                              value={convertingLeadId === lead.id ? invoiceTotal : ""}
+                              onChange={(e) => {
+                                setConvertingLeadId(lead.id);
+                                setInvoiceTotal(e.target.value);
+                              }}
+                              data-testid={`input-invoice-total-${lead.id}`}
+                            />
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            Deposit will be automatically applied to this amount.
+                          </p>
+                        </div>
+                        <Button
+                          className="w-full"
+                          onClick={() => handleConvert(lead.id)}
+                          disabled={convertMutation.isPending || convertingLeadId !== lead.id || !invoiceTotal}
+                          data-testid={`button-convert-${lead.id}`}
+                        >
+                          <ArrowRight className="h-4 w-4 mr-2" />
+                          {convertMutation.isPending && convertingLeadId === lead.id ? "Converting..." : "Convert to Client & Create Work Order"}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
+                  {lead.status === "converted" && (
+                    <div className="pt-4 border-t flex items-center gap-2 text-green-600 dark:text-green-400">
+                      <CheckCircle className="h-4 w-4" />
+                      <span className="text-sm">This lead has been converted to a client.</span>
+                    </div>
+                  )}
                 </div>
               </DialogContent>
             </Dialog>
@@ -404,6 +489,7 @@ function WorkOrdersView() {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/work-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/clients"] });
       toast({ 
         title: "Payment Processed", 
         description: `Charged $${(data.amount / 100).toFixed(2)} successfully.` 
@@ -415,6 +501,28 @@ function WorkOrdersView() {
       toast({ 
         title: "Payment Failed", 
         description: error.message || "Failed to process payment.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const chargeBalanceMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const res = await apiRequest("POST", `/api/admin/work-orders/${id}/charge-balance`, {});
+      return res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/work-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/clients"] });
+      toast({ 
+        title: "Remaining Balance Charged", 
+        description: `Charged $${(data.amount / 100).toFixed(2)} successfully.` 
+      });
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Payment Failed", 
+        description: error.message || "Failed to charge remaining balance.",
         variant: "destructive",
       });
     },
@@ -530,16 +638,53 @@ function WorkOrdersView() {
                       </SelectContent>
                     </Select>
                   </div>
+                  {wo.invoiceTotal && wo.invoiceTotal > 0 && (
+                    <div className="p-3 bg-muted text-sm space-y-1">
+                      <div className="flex justify-between">
+                        <span>Invoice Total:</span>
+                        <span className="font-medium">${(wo.invoiceTotal / 100).toFixed(2)}</span>
+                      </div>
+                      {wo.depositApplied && wo.depositAmount && (
+                        <div className="flex justify-between text-muted-foreground">
+                          <span>Deposit Applied:</span>
+                          <span>-${(wo.depositAmount / 100).toFixed(2)}</span>
+                        </div>
+                      )}
+                      {wo.remainingBalance !== null && wo.remainingBalance !== undefined && (
+                        <div className="flex justify-between font-medium">
+                          <span>Remaining Balance:</span>
+                          <span className={wo.remainingBalance > 0 ? "" : "text-green-600 dark:text-green-400"}>
+                            {wo.remainingBalance > 0 ? `$${(wo.remainingBalance / 100).toFixed(2)}` : "PAID"}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {wo.paidAt ? (
-                    <div className="p-3 bg-green-500/10 text-sm">
-                      <p className="font-medium text-green-600 dark:text-green-400">
-                        Paid: ${wo.invoiceTotal ? (wo.invoiceTotal / 100).toFixed(2) : "0.00"}
-                      </p>
-                      <p className="text-muted-foreground text-xs">
-                        {new Date(wo.paidAt).toLocaleString()}
+                    <div className="p-3 bg-green-500/10 text-sm flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
+                      <div>
+                        <p className="font-medium text-green-600 dark:text-green-400">Payment Complete</p>
+                        <p className="text-muted-foreground text-xs">{new Date(wo.paidAt).toLocaleString()}</p>
+                      </div>
+                    </div>
+                  ) : wo.remainingBalance && wo.remainingBalance > 0 && wo.leadId ? (
+                    <div className="space-y-2 pt-2 border-t">
+                      <Button
+                        className="w-full"
+                        onClick={() => chargeBalanceMutation.mutate(wo.id)}
+                        disabled={chargeBalanceMutation.isPending}
+                        data-testid={`button-charge-balance-${wo.id}`}
+                      >
+                        <DollarSign className="h-4 w-4 mr-2" />
+                        {chargeBalanceMutation.isPending ? "Processing..." : `Charge Remaining Balance ($${(wo.remainingBalance / 100).toFixed(2)})`}
+                      </Button>
+                      <p className="text-xs text-muted-foreground text-center">
+                        Customer will be charged using their saved payment method.
                       </p>
                     </div>
-                  ) : wo.leadId && (
+                  ) : wo.leadId && !wo.invoiceTotal && (
                     <div className="space-y-2 pt-2 border-t">
                       <label className="text-sm font-medium block">Charge Customer</label>
                       <div className="flex gap-2">
@@ -572,6 +717,117 @@ function WorkOrdersView() {
                       </p>
                     </div>
                   )}
+                </div>
+              </DialogContent>
+            </Dialog>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+const clientStatusColors: Record<string, string> = {
+  active: "bg-green-500/10 text-green-600 dark:text-green-400",
+  inactive: "bg-gray-500/10 text-gray-600 dark:text-gray-400",
+};
+
+function ClientsView() {
+  const { data: clients = [], isLoading } = useQuery<Client[]>({
+    queryKey: ["/api/admin/clients"],
+  });
+
+  if (isLoading) {
+    return <div className="p-8 text-center text-muted-foreground">Loading clients...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
+        <h2 className="text-2xl font-semibold">Clients</h2>
+        <Badge variant="secondary">{clients.length} total</Badge>
+      </div>
+
+      {clients.length === 0 ? (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <UserCheck className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+            <p className="text-muted-foreground">No clients yet. Convert leads to create clients.</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-2">
+          {clients.map((client) => (
+            <Dialog key={client.id}>
+              <DialogTrigger asChild>
+                <Card className="cursor-pointer hover-elevate">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between gap-4 flex-wrap">
+                      <div className="flex items-center gap-4">
+                        <Avatar>
+                          <AvatarFallback className="bg-primary/10 text-primary">
+                            {client.name?.split(" ").map((n) => n[0]).join("").slice(0, 2) || "?"}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-medium">{client.name}</p>
+                          <p className="text-sm text-muted-foreground">{client.email}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right text-sm">
+                          <p className="text-muted-foreground">{client.totalJobsCompleted || 0} jobs</p>
+                          <p className="font-medium">${((client.totalRevenue || 0) / 100).toFixed(2)} revenue</p>
+                        </div>
+                        <Badge className={clientStatusColors[client.status || "active"]}>{client.status || "active"}</Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>{client.name}</DialogTitle>
+                  <DialogDescription>Client details</DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 mt-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-sm">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                      {client.email}
+                    </div>
+                    {client.phone && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Phone className="h-4 w-4 text-muted-foreground" />
+                        {client.phone}
+                      </div>
+                    )}
+                    {client.address && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                        {client.address}
+                      </div>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-2 gap-4 p-4 bg-muted">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Jobs Completed</p>
+                      <p className="text-2xl font-bold">{client.totalJobsCompleted || 0}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Total Revenue</p>
+                      <p className="text-2xl font-bold">${((client.totalRevenue || 0) / 100).toFixed(2)}</p>
+                    </div>
+                  </div>
+                  {client.notes && (
+                    <div className="p-3 bg-muted text-sm">
+                      <p className="font-medium mb-1">Notes</p>
+                      <p>{client.notes}</p>
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground">
+                    Client since {client.createdAt ? new Date(client.createdAt).toLocaleDateString() : "N/A"}
+                  </p>
                 </div>
               </DialogContent>
             </Dialog>
@@ -623,6 +879,7 @@ export default function Admin() {
   const navItems: { id: AdminTab; label: string; icon: typeof LayoutDashboard }[] = [
     { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
     { id: "leads", label: "Leads", icon: Users },
+    { id: "clients", label: "Clients", icon: UserCheck },
     { id: "deposits", label: "Deposits", icon: DollarSign },
     { id: "work-orders", label: "Work Orders", icon: Briefcase },
   ];
@@ -699,6 +956,7 @@ export default function Admin() {
         <main className="flex-1 p-6 overflow-auto">
           {activeTab === "dashboard" && stats && <DashboardView stats={stats} />}
           {activeTab === "leads" && <LeadsView />}
+          {activeTab === "clients" && <ClientsView />}
           {activeTab === "deposits" && <DepositsView />}
           {activeTab === "work-orders" && <WorkOrdersView />}
         </main>
