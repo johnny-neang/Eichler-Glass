@@ -33,7 +33,8 @@ Preferred communication style: Simple, everyday language.
   - `admin_users`: Admin portal authentication
   - `leads`: Customer lead tracking with status workflow (new → contacted → quoted → converted/lost)
   - `deposits`: $50 booking deposits with Stripe integration
-  - `work_orders`: Service scheduling and job management
+  - `work_orders`: Service scheduling and job management with balance tracking
+  - `clients`: Converted customers with job history and revenue tracking
 - **Migrations**: Drizzle Kit with migrations output to `./migrations`
 
 ### Build System
@@ -86,8 +87,18 @@ The design system enforces a midcentury editorial aesthetic:
 - Environment variable: `DATABASE_URL` for connection string
 - Session storage via `connect-pg-simple`
 
-### Email (Planned)
-- **Mailjet**: Transactional emails for deposit confirmations and appointment communications
+### Email Notifications
+- **Mailjet**: Transactional emails for workflow notifications
+- **Service Location**: `server/emailService.ts`
+- **Email Types**:
+  - Deposit confirmation (on successful payment)
+  - Deposit refund notification
+  - Lead conversion welcome email
+  - Remaining balance payment received
+  - Job completion notification
+  - Appointment confirmation
+- **Configuration**: Optional - logs to console when credentials not provided
+- Environment variables: `MJ_APIKEY_PUBLIC`, `MJ_APIKEY_PRIVATE`, `MJ_SENDER_EMAIL`
 
 ### Session Security
 - Environment variable: `SESSION_SECRET` required for secure session management
@@ -103,6 +114,7 @@ The design system enforces a midcentury editorial aesthetic:
 - **Leads Management**: View, update status (new → contacted → quoted → converted/lost), and delete leads
 - **Deposits Tracking**: Monitor payment status (pending, captured, refunded)
 - **Work Orders**: Manage service scheduling with status workflow (new → scheduled → in_progress → completed → invoiced)
+- **Clients Management**: View converted customers with job history and total revenue
 
 ### API Endpoints
 All admin endpoints require authentication via session cookie:
@@ -111,8 +123,11 @@ All admin endpoints require authentication via session cookie:
 - `GET /api/admin/auth/me` - Get current admin user
 - `GET /api/admin/dashboard/stats` - Dashboard statistics
 - `GET/POST/PATCH/DELETE /api/admin/leads` - Lead CRUD
+- `POST /api/admin/leads/:id/convert` - Convert lead to client with work order
 - `GET/POST/PATCH /api/admin/deposits` - Deposit management
 - `POST /api/admin/deposits/:id/refund` - Refund a captured deposit
 - `GET/POST/PATCH/DELETE /api/admin/work-orders` - Work order CRUD
 - `POST /api/admin/work-orders/:id/charge` - Charge customer using saved payment method
+- `POST /api/admin/work-orders/:id/charge-balance` - Charge remaining balance on work order
+- `GET/POST/PATCH/DELETE /api/admin/clients` - Client CRUD
 - `POST /api/contact` - Public contact form (creates lead)
