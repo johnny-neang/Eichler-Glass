@@ -65,7 +65,21 @@ The design system enforces a midcentury editorial aesthetic:
 
 ### Payments
 - **Stripe**: Payment processing for deposits, refunds, and additional charges
-- Server-side integration for secure payment handling
+- **stripe-replit-sync**: Handles webhook registration, data synchronization, and schema migrations
+- **Payment Flow**:
+  1. Customer clicks "Book Now" → BookingIntentDialog captures contact info
+  2. Lead is created → Redirects to Stripe checkout for $50 deposit
+  3. On success → BookingSuccess page with Cal.com scheduling option
+  4. On cancel → BookingCancel page with retry option
+- **Admin Capabilities**:
+  - Refund captured deposits (admin/deposits with Refund button)
+  - Charge customers using saved payment methods (admin/work-orders with Charge feature)
+- **Database Fields**:
+  - `leads.stripeCustomerId`: Stripe customer ID for saved payment methods
+  - `deposits.stripePaymentIntentId`: Payment intent for refunds
+  - `deposits.stripeRefundId`: Refund ID after processing
+  - `work_orders.stripePaymentIntentId`: Payment intent for final charges
+- Environment variables: `STRIPE_SECRET_KEY` (via stripe-replit-sync integration)
 
 ### Database
 - **PostgreSQL**: Primary data store
@@ -98,5 +112,7 @@ All admin endpoints require authentication via session cookie:
 - `GET /api/admin/dashboard/stats` - Dashboard statistics
 - `GET/POST/PATCH/DELETE /api/admin/leads` - Lead CRUD
 - `GET/POST/PATCH /api/admin/deposits` - Deposit management
+- `POST /api/admin/deposits/:id/refund` - Refund a captured deposit
 - `GET/POST/PATCH/DELETE /api/admin/work-orders` - Work order CRUD
+- `POST /api/admin/work-orders/:id/charge` - Charge customer using saved payment method
 - `POST /api/contact` - Public contact form (creates lead)
