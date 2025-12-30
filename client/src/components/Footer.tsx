@@ -12,7 +12,7 @@ export function Footer() {
               <img 
                 src={logoImage} 
                 alt="Eichler Glass" 
-                className="h-12 w-auto invert"
+                className="h-12 w-auto"
               />
             </div>
             <p className="text-background/70 text-sm max-w-sm mb-6">
