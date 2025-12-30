@@ -12,12 +12,16 @@ export function useCalBooking() {
   useEffect(() => {
     if (!CAL_LINK) return;
     (async function () {
-      const cal = await getCalApi();
-      cal("ui", {
-        theme: "light",
-        hideEventTypeDetails: false,
-        layout: "month_view",
-      });
+      try {
+        const cal = await getCalApi();
+        cal("ui", {
+          theme: "light",
+          hideEventTypeDetails: false,
+          layout: "month_view",
+        });
+      } catch (e) {
+        console.warn("Cal.com initialization:", e);
+      }
     })();
   }, []);
 
