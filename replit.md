@@ -1,0 +1,100 @@
+# Eichler Glass
+
+## Overview
+
+Eichler Glass is a hyper-local lead generation and booking platform for premium glass cleaning services targeting Eichler and midcentury modern homes in the Bay Area. The platform features city-localized landing pages, Cal.com scheduling integration with $50 deposit capture via Stripe, customer account management, and an admin CMS for managing leads, deposits, and work orders.
+
+## User Preferences
+
+Preferred communication style: Simple, everyday language.
+
+## System Architecture
+
+### Frontend Architecture
+- **Framework**: React with TypeScript using Vite as the build tool
+- **Routing**: Wouter for client-side routing with city-specific dynamic routes (e.g., `/:city`, `/:city/book`)
+- **State Management**: TanStack React Query for server state and data fetching
+- **UI Components**: shadcn/ui component library built on Radix UI primitives
+- **Styling**: Tailwind CSS with a custom midcentury editorial design system featuring Aqua Blue (#5FB3B3) as the primary accent color
+- **Design System**: Zero border-radius aesthetic with emphasis on typography, whitespace, and clean editorial layouts
+
+### Backend Architecture
+- **Runtime**: Node.js with Express
+- **API Pattern**: RESTful API endpoints under `/api/*` prefix
+- **Session Management**: Express sessions with PostgreSQL store (connect-pg-simple)
+- **Authentication**: 
+  - Admin authentication using session-based auth with bcrypt password hashing
+  - Customer authentication via Firebase Authentication (email/password, Google OAuth)
+
+### Database Layer
+- **ORM**: Drizzle ORM with PostgreSQL dialect
+- **Schema Location**: `shared/schema.ts` contains all table definitions
+- **Core Tables**:
+  - `admin_users`: Admin portal authentication
+  - `leads`: Customer lead tracking with status workflow (new → contacted → quoted → converted/lost)
+  - `deposits`: $50 booking deposits with Stripe integration
+  - `work_orders`: Service scheduling and job management
+- **Migrations**: Drizzle Kit with migrations output to `./migrations`
+
+### Build System
+- **Development**: Vite dev server with HMR, proxied through Express
+- **Production**: 
+  - Client: Vite build to `dist/public`
+  - Server: esbuild bundling with selective dependency bundling for optimized cold starts
+- **Path Aliases**: `@/` for client source, `@shared/` for shared code, `@assets/` for static assets
+
+### Design System Implementation
+The design system enforces a midcentury editorial aesthetic:
+- Neutral foundation with Paper (#F4F4F2) backgrounds and Ink (#0B0B0D) text
+- Aqua Blue primary accent for all interactive elements
+- Zero border-radius on all components
+- CSS custom properties for theming with light/dark mode support
+
+## External Dependencies
+
+### Authentication & Identity
+- **Firebase Authentication**: Customer-facing auth with email/password and Google OAuth support
+- Environment variables: `VITE_FIREBASE_API_KEY`, `VITE_FIREBASE_PROJECT_ID`, `VITE_FIREBASE_APP_ID`
+
+### Scheduling & Booking
+- **Cal.com**: Embedded scheduling widget via `@calcom/embed-react`
+- Environment variable: `VITE_CAL_LINK` for the booking calendar link
+- Includes $50 deposit flow integrated with Stripe
+
+### Payments
+- **Stripe**: Payment processing for deposits, refunds, and additional charges
+- Server-side integration for secure payment handling
+
+### Database
+- **PostgreSQL**: Primary data store
+- Environment variable: `DATABASE_URL` for connection string
+- Session storage via `connect-pg-simple`
+
+### Email (Planned)
+- **Mailjet**: Transactional emails for deposit confirmations and appointment communications
+
+### Session Security
+- Environment variable: `SESSION_SECRET` required for secure session management
+
+## Admin Portal
+
+### Access
+- URL: `/admin`
+- Default credentials: `admin` / `admin`
+
+### Features
+- **Dashboard**: Real-time statistics for leads, deposits, and work orders
+- **Leads Management**: View, update status (new → contacted → quoted → converted/lost), and delete leads
+- **Deposits Tracking**: Monitor payment status (pending, captured, refunded)
+- **Work Orders**: Manage service scheduling with status workflow (new → scheduled → in_progress → completed → invoiced)
+
+### API Endpoints
+All admin endpoints require authentication via session cookie:
+- `POST /api/admin/auth/login` - Admin login
+- `POST /api/admin/auth/logout` - Admin logout
+- `GET /api/admin/auth/me` - Get current admin user
+- `GET /api/admin/dashboard/stats` - Dashboard statistics
+- `GET/POST/PATCH/DELETE /api/admin/leads` - Lead CRUD
+- `GET/POST/PATCH /api/admin/deposits` - Deposit management
+- `GET/POST/PATCH/DELETE /api/admin/work-orders` - Work order CRUD
+- `POST /api/contact` - Public contact form (creates lead)
