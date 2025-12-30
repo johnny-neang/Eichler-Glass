@@ -1,7 +1,6 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 
 const CAL_LINK = import.meta.env.VITE_CAL_LINK || "";
-const CAL_NAMESPACE = "eichler-glass";
 
 interface BookingOptions {
   tier?: string;
@@ -15,8 +14,20 @@ function getCal(): CalFunction | undefined {
 }
 
 export function useCalBooking() {
+  const [isReady, setIsReady] = useState(false);
+
   useEffect(() => {
     if (!CAL_LINK) return;
+
+    const existingScript = document.querySelector('script[src="https://app.cal.com/embed/embed.js"]');
+    
+    if (existingScript) {
+      const Cal = getCal();
+      if (Cal) {
+        setIsReady(true);
+      }
+      return;
+    }
 
     const script = document.createElement("script");
     script.src = "https://app.cal.com/embed/embed.js";
@@ -24,18 +35,17 @@ export function useCalBooking() {
     script.onload = () => {
       const Cal = getCal();
       if (Cal) {
-        Cal("init", CAL_NAMESPACE, { origin: "https://app.cal.com" });
+        Cal("init", { origin: "https://app.cal.com" });
         Cal("ui", {
           theme: "light",
           hideEventTypeDetails: false,
           layout: "month_view",
         });
+        setIsReady(true);
       }
     };
     
-    if (!document.querySelector('script[src="https://app.cal.com/embed/embed.js"]')) {
-      document.head.appendChild(script);
-    }
+    document.head.appendChild(script);
 
     return () => {};
   }, []);
@@ -64,12 +74,22 @@ export function useCalBooking() {
         config,
       });
     } else {
-      window.open(`https://cal.com/${CAL_LINK}`, "_blank");
+      console.log("Cal.com not loaded yet, retrying...");
+      setTimeout(() => {
+        const CalRetry = getCal();
+        if (CalRetry) {
+          CalRetry("modal", {
+            calLink: CAL_LINK,
+            config: { layout: "month_view" },
+          });
+        }
+      }, 500);
     }
   }, []);
 
   return { 
     openCalModal,
-    calLink: CAL_LINK 
+    calLink: CAL_LINK,
+    isReady
   };
 }
