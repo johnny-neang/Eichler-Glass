@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "./ThemeToggle";
 import { Menu, X, ChevronDown, Phone } from "lucide-react";
 import {
   DropdownMenu,
@@ -48,7 +47,7 @@ export function Navbar() {
             <img 
               src={logoImage} 
               alt="Eichler Glass" 
-              className="h-10 w-auto dark:invert"
+              className="h-10 w-auto"
             />
           </Link>
 
@@ -88,7 +87,6 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             <Button 
               variant="ghost"
               size="icon"
