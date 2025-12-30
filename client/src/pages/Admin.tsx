@@ -293,8 +293,32 @@ function LeadsView() {
 }
 
 function DepositsView() {
+  const { toast } = useToast();
+  const [refundingDepositId, setRefundingDepositId] = useState<string | null>(null);
   const { data: deposits = [], isLoading } = useQuery<Deposit[]>({
     queryKey: ["/api/admin/deposits"],
+  });
+
+  const refundMutation = useMutation({
+    mutationFn: async (depositId: string) => {
+      setRefundingDepositId(depositId);
+      const res = await apiRequest("POST", `/api/admin/deposits/${depositId}/refund`, {});
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/deposits"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/dashboard/stats"] });
+      toast({ title: "Refund Processed", description: "The deposit has been refunded successfully." });
+      setRefundingDepositId(null);
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Refund Failed", 
+        description: error.message || "Failed to process refund.",
+        variant: "destructive",
+      });
+      setRefundingDepositId(null);
+    },
   });
 
   if (isLoading) {
@@ -325,11 +349,22 @@ function DepositsView() {
                     <p className="font-medium">${(deposit.amount / 100).toFixed(2)}</p>
                     <p className="text-sm text-muted-foreground">{deposit.method}</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <Badge className={depositStatusColors[deposit.status || "pending"]}>{deposit.status}</Badge>
                     <span className="text-sm text-muted-foreground">
                       {deposit.depositDate ? new Date(deposit.depositDate).toLocaleDateString() : ""}
                     </span>
+                    {deposit.status === "captured" && deposit.stripePaymentIntentId && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => refundMutation.mutate(deposit.id)}
+                        disabled={refundMutation.isPending}
+                        data-testid={`button-refund-${deposit.id}`}
+                      >
+                        {refundMutation.isPending && refundingDepositId === deposit.id ? "Processing..." : "Refund"}
+                      </Button>
+                    )}
                   </div>
                 </div>
               </CardContent>
@@ -343,6 +378,9 @@ function DepositsView() {
 
 function WorkOrdersView() {
   const { toast } = useToast();
+  const [chargeAmount, setChargeAmount] = useState("");
+  const [chargingOrderId, setChargingOrderId] = useState<string | null>(null);
+  
   const { data: workOrders = [], isLoading } = useQuery<WorkOrder[]>({
     queryKey: ["/api/admin/work-orders"],
   });
@@ -358,6 +396,42 @@ function WorkOrdersView() {
       toast({ title: "Work Order Updated" });
     },
   });
+
+  const chargeMutation = useMutation({
+    mutationFn: async ({ id, amount }: { id: string; amount: number }) => {
+      const res = await apiRequest("POST", `/api/admin/work-orders/${id}/charge`, { amount });
+      return res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/work-orders"] });
+      toast({ 
+        title: "Payment Processed", 
+        description: `Charged $${(data.amount / 100).toFixed(2)} successfully.` 
+      });
+      setChargeAmount("");
+      setChargingOrderId(null);
+    },
+    onError: (error: any) => {
+      toast({ 
+        title: "Payment Failed", 
+        description: error.message || "Failed to process payment.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleCharge = (workOrderId: string) => {
+    const amountInCents = Math.round(parseFloat(chargeAmount) * 100);
+    if (isNaN(amountInCents) || amountInCents < 100) {
+      toast({ 
+        title: "Invalid Amount", 
+        description: "Please enter an amount of at least $1.00.",
+        variant: "destructive",
+      });
+      return;
+    }
+    chargeMutation.mutate({ id: workOrderId, amount: amountInCents });
+  };
 
   if (isLoading) {
     return <div className="p-8 text-center text-muted-foreground">Loading work orders...</div>;
@@ -456,6 +530,48 @@ function WorkOrdersView() {
                       </SelectContent>
                     </Select>
                   </div>
+                  {wo.paidAt ? (
+                    <div className="p-3 bg-green-500/10 text-sm">
+                      <p className="font-medium text-green-600 dark:text-green-400">
+                        Paid: ${wo.invoiceTotal ? (wo.invoiceTotal / 100).toFixed(2) : "0.00"}
+                      </p>
+                      <p className="text-muted-foreground text-xs">
+                        {new Date(wo.paidAt).toLocaleString()}
+                      </p>
+                    </div>
+                  ) : wo.leadId && (
+                    <div className="space-y-2 pt-2 border-t">
+                      <label className="text-sm font-medium block">Charge Customer</label>
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+                          <Input
+                            type="number"
+                            step="0.01"
+                            min="1"
+                            placeholder="0.00"
+                            className="pl-7"
+                            value={chargingOrderId === wo.id ? chargeAmount : ""}
+                            onChange={(e) => {
+                              setChargingOrderId(wo.id);
+                              setChargeAmount(e.target.value);
+                            }}
+                            data-testid={`input-charge-amount-${wo.id}`}
+                          />
+                        </div>
+                        <Button
+                          onClick={() => handleCharge(wo.id)}
+                          disabled={chargeMutation.isPending || chargingOrderId !== wo.id || !chargeAmount}
+                          data-testid={`button-charge-${wo.id}`}
+                        >
+                          {chargeMutation.isPending && chargingOrderId === wo.id ? "Processing..." : "Charge"}
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Customer will be charged using their saved payment method.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </DialogContent>
             </Dialog>

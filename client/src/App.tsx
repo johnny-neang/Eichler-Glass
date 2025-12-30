@@ -14,6 +14,8 @@ import SignIn from "@/pages/SignIn";
 import SignUp from "@/pages/SignUp";
 import Account from "@/pages/Account";
 import Admin from "@/pages/Admin";
+import BookingSuccess from "@/pages/BookingSuccess";
+import BookingCancel from "@/pages/BookingCancel";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -29,6 +31,8 @@ function Router() {
       <Route path="/sign-up" component={SignUp} />
       <Route path="/account" component={Account} />
       <Route path="/admin" component={Admin} />
+      <Route path="/booking/success" component={BookingSuccess} />
+      <Route path="/booking/cancel" component={BookingCancel} />
       <Route path="/:city" component={CityLanding} />
       <Route path="/:city/book" component={Book} />
       <Route path="/:city/pricing" component={Pricing} />

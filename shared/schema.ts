@@ -27,6 +27,7 @@ export const leads = pgTable("leads", {
   serviceTier: text("service_tier"),
   notes: text("notes"),
   status: leadStatusEnum("status").default("new"),
+  stripeCustomerId: text("stripe_customer_id"),
   followUpAt: timestamp("follow_up_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
@@ -38,9 +39,13 @@ export const deposits = pgTable("deposits", {
   amount: integer("amount").notNull().default(5000),
   depositDate: timestamp("deposit_date").defaultNow(),
   method: text("method").default("stripe"),
+  stripeCheckoutSessionId: text("stripe_checkout_session_id"),
   stripePaymentIntentId: text("stripe_payment_intent_id"),
+  stripeRefundId: text("stripe_refund_id"),
   status: depositStatusEnum("status").default("pending"),
   memo: text("memo"),
+  refundedAt: timestamp("refunded_at"),
+  refundedBy: varchar("refunded_by"),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -60,6 +65,9 @@ export const workOrders = pgTable("work_orders", {
   completionNotes: text("completion_notes"),
   invoiceTotal: integer("invoice_total"),
   depositApplied: boolean("deposit_applied").default(false),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  stripeChargeId: text("stripe_charge_id"),
+  paidAt: timestamp("paid_at"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

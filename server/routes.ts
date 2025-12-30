@@ -8,6 +8,7 @@ const { Pool } = pkg;
 import { storage } from "./storage";
 import { insertLeadSchema, insertDepositSchema, insertWorkOrderSchema, updateLeadSchema, updateDepositSchema, updateWorkOrderSchema } from "@shared/schema";
 import { z } from "zod";
+import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 
 declare module "express-session" {
   interface SessionData {
@@ -332,6 +333,228 @@ export async function registerRoutes(
       }
       console.error("Public lead error:", error);
       res.status(500).json({ error: "Failed to capture lead" });
+    }
+  });
+
+  app.get("/api/stripe/publishable-key", async (req, res) => {
+    try {
+      const publishableKey = await getStripePublishableKey();
+      res.json({ publishableKey });
+    } catch (error) {
+      console.error("Error getting Stripe publishable key:", error);
+      res.status(500).json({ error: "Failed to get Stripe key" });
+    }
+  });
+
+  app.post("/api/deposits/create-checkout", async (req, res) => {
+    try {
+      const { leadId, successUrl, cancelUrl } = req.body;
+      
+      if (!leadId) {
+        return res.status(400).json({ error: "Lead ID is required" });
+      }
+
+      const lead = await storage.getLead(leadId);
+      if (!lead) {
+        return res.status(404).json({ error: "Lead not found" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+
+      let customerId = lead.stripeCustomerId;
+      if (!customerId) {
+        const customer = await stripe.customers.create({
+          email: lead.contactEmail,
+          name: lead.contactName,
+          phone: lead.contactPhone || undefined,
+          metadata: { leadId: lead.id },
+        });
+        customerId = customer.id;
+        await storage.updateLead(leadId, { stripeCustomerId: customerId });
+      }
+
+      const deposit = await storage.createDeposit({
+        leadId: lead.id,
+        amount: 5000,
+        method: "stripe",
+        status: "pending",
+        memo: `Deposit for ${lead.serviceTier || "cleaning service"}`,
+      });
+
+      const baseUrl = `https://${process.env.REPLIT_DOMAINS?.split(",")[0]}`;
+      const session = await stripe.checkout.sessions.create({
+        customer: customerId,
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: "Glass Cleaning Deposit",
+                description: `$50 deposit to hold your appointment - ${lead.serviceTier || "Standard Service"}`,
+              },
+              unit_amount: 5000,
+            },
+            quantity: 1,
+          },
+        ],
+        mode: "payment",
+        success_url: successUrl || `${baseUrl}/booking/success?session_id={CHECKOUT_SESSION_ID}&deposit_id=${deposit.id}`,
+        cancel_url: cancelUrl || `${baseUrl}/booking/cancel?deposit_id=${deposit.id}`,
+        metadata: {
+          leadId: lead.id,
+          depositId: deposit.id,
+        },
+      });
+
+      await storage.updateDeposit(deposit.id, {
+        stripeCheckoutSessionId: session.id,
+      });
+
+      res.json({ 
+        checkoutUrl: session.url,
+        sessionId: session.id,
+        depositId: deposit.id,
+      });
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.get("/api/deposits/verify/:sessionId", async (req, res) => {
+    try {
+      const { sessionId } = req.params;
+      const stripe = await getUncachableStripeClient();
+      
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      
+      if (session.payment_status === "paid") {
+        const depositId = session.metadata?.depositId;
+        if (depositId) {
+          await storage.updateDeposit(depositId, {
+            status: "captured",
+            stripePaymentIntentId: session.payment_intent as string,
+            depositDate: new Date(),
+          });
+        }
+        
+        res.json({ 
+          success: true, 
+          status: "paid",
+          depositId,
+        });
+      } else {
+        res.json({ 
+          success: false, 
+          status: session.payment_status,
+        });
+      }
+    } catch (error) {
+      console.error("Error verifying payment:", error);
+      res.status(500).json({ error: "Failed to verify payment" });
+    }
+  });
+
+  app.post("/api/admin/deposits/:id/refund", requireAuth, async (req, res) => {
+    try {
+      const deposit = await storage.getDeposit(req.params.id);
+      if (!deposit) {
+        return res.status(404).json({ error: "Deposit not found" });
+      }
+
+      if (deposit.status === "refunded") {
+        return res.status(400).json({ error: "Deposit already refunded" });
+      }
+
+      if (!deposit.stripePaymentIntentId) {
+        return res.status(400).json({ error: "No payment intent to refund" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+      const refund = await stripe.refunds.create({
+        payment_intent: deposit.stripePaymentIntentId,
+      });
+
+      await storage.updateDeposit(req.params.id, {
+        status: "refunded",
+        stripeRefundId: refund.id,
+        refundedAt: new Date(),
+        refundedBy: req.session.adminId,
+      });
+
+      res.json({ success: true, refundId: refund.id });
+    } catch (error) {
+      console.error("Refund error:", error);
+      res.status(500).json({ error: "Failed to process refund" });
+    }
+  });
+
+  app.post("/api/admin/work-orders/:id/charge", requireAuth, async (req, res) => {
+    try {
+      const { amount } = req.body;
+      
+      if (!amount || amount < 100) {
+        return res.status(400).json({ error: "Amount must be at least $1.00" });
+      }
+
+      const workOrder = await storage.getWorkOrder(req.params.id);
+      if (!workOrder) {
+        return res.status(404).json({ error: "Work order not found" });
+      }
+
+      if (!workOrder.leadId) {
+        return res.status(400).json({ error: "Work order has no associated lead" });
+      }
+
+      const lead = await storage.getLead(workOrder.leadId);
+      if (!lead?.stripeCustomerId) {
+        return res.status(400).json({ error: "Customer has no payment method on file" });
+      }
+
+      const stripe = await getUncachableStripeClient();
+
+      const paymentMethods = await stripe.paymentMethods.list({
+        customer: lead.stripeCustomerId,
+        type: "card",
+      });
+
+      if (!paymentMethods.data.length) {
+        return res.status(400).json({ error: "Customer has no saved payment method" });
+      }
+
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount,
+        currency: "usd",
+        customer: lead.stripeCustomerId,
+        payment_method: paymentMethods.data[0].id,
+        off_session: true,
+        confirm: true,
+        description: `Glass cleaning service - Work Order #${workOrder.id}`,
+        metadata: {
+          workOrderId: workOrder.id,
+          leadId: lead.id,
+        },
+      });
+
+      await storage.updateWorkOrder(req.params.id, {
+        stripePaymentIntentId: paymentIntent.id,
+        stripeChargeId: paymentIntent.latest_charge as string,
+        paidAt: new Date(),
+        invoiceTotal: amount,
+      });
+
+      res.json({ 
+        success: true, 
+        paymentIntentId: paymentIntent.id,
+        amount,
+      });
+    } catch (error: any) {
+      console.error("Charge error:", error);
+      if (error.type === "StripeCardError") {
+        return res.status(400).json({ error: error.message });
+      }
+      res.status(500).json({ error: "Failed to process charge" });
     }
   });
 
