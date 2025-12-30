@@ -1,12 +1,12 @@
 import { 
-  type AdminUser, type InsertAdminUser,
+  type AdminUser,
   type Lead, type InsertLead,
   type Deposit, type InsertDeposit,
   type WorkOrder, type InsertWorkOrder,
   adminUsers, leads, deposits, workOrders
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc } from "drizzle-orm";
+import { eq, desc, sql, and } from "drizzle-orm";
 
 export interface IStorage {
   getAdminByUsername(username: string): Promise<AdminUser | undefined>;
@@ -69,6 +69,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteLead(id: string): Promise<boolean> {
+    await db.delete(deposits).where(eq(deposits.leadId, id));
+    await db.delete(workOrders).where(eq(workOrders.leadId, id));
     const result = await db.delete(leads).where(eq(leads.id, id)).returning();
     return result.length > 0;
   }
@@ -117,17 +119,28 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getDashboardStats() {
-    const allLeads: Lead[] = await db.select().from(leads);
-    const allDeposits: Deposit[] = await db.select().from(deposits);
-    const allWorkOrders: WorkOrder[] = await db.select().from(workOrders);
+    const [leadStats] = await db.select({
+      total: sql<number>`count(*)::int`,
+      newCount: sql<number>`count(*) filter (where ${leads.status} = 'new')::int`,
+    }).from(leads);
+
+    const [depositStats] = await db.select({
+      total: sql<number>`count(*)::int`,
+      pendingCount: sql<number>`count(*) filter (where ${deposits.status} = 'pending')::int`,
+    }).from(deposits);
+
+    const [workOrderStats] = await db.select({
+      total: sql<number>`count(*)::int`,
+      scheduledCount: sql<number>`count(*) filter (where ${workOrders.status} = 'scheduled')::int`,
+    }).from(workOrders);
 
     return {
-      totalLeads: allLeads.length,
-      newLeads: allLeads.filter((l: Lead) => l.status === 'new').length,
-      totalDeposits: allDeposits.length,
-      pendingDeposits: allDeposits.filter((d: Deposit) => d.status === 'pending').length,
-      totalWorkOrders: allWorkOrders.length,
-      scheduledWorkOrders: allWorkOrders.filter((w: WorkOrder) => w.status === 'scheduled').length,
+      totalLeads: leadStats?.total || 0,
+      newLeads: leadStats?.newCount || 0,
+      totalDeposits: depositStats?.total || 0,
+      pendingDeposits: depositStats?.pendingCount || 0,
+      totalWorkOrders: workOrderStats?.total || 0,
+      scheduledWorkOrders: workOrderStats?.scheduledCount || 0,
     };
   }
 }

@@ -1,7 +1,10 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import bcrypt from "bcryptjs";
+import pkg from "pg";
+const { Pool } = pkg;
 import { storage } from "./storage";
 import { insertLeadSchema, insertDepositSchema, insertWorkOrderSchema, updateLeadSchema, updateDepositSchema, updateWorkOrderSchema } from "@shared/schema";
 import { z } from "zod";
@@ -25,8 +28,22 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   
+  if (!process.env.SESSION_SECRET) {
+    throw new Error("SESSION_SECRET environment variable is required for secure sessions");
+  }
+
+  const PgStore = connectPgSimple(session);
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+  });
+
   app.use(session({
-    secret: process.env.SESSION_SECRET || "eichler-glass-admin-secret-key",
+    store: new PgStore({
+      pool,
+      tableName: "session",
+      createTableIfMissing: true,
+    }),
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
