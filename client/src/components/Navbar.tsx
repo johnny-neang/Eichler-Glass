@@ -11,6 +11,8 @@ import {
 import { useCalBooking } from "@/hooks/useCalBooking";
 import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
 
+import EG_4_point_atomic_star from "@assets/EG 4 point atomic star.png";
+
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
@@ -45,7 +47,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 gap-4">
           <Link href="/" className="flex items-center" data-testid="link-home">
             <img 
-              src={logoImage} 
+              src={EG_4_point_atomic_star} 
               alt="Eichler Glass" 
               className="h-10 w-auto"
             />
@@ -117,7 +119,6 @@ export function Navbar() {
           </div>
         </div>
       </div>
-
       {mobileOpen && (
         <div className="md:hidden border-t border-border bg-background">
           <div className="px-4 py-4 space-y-2">
