@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Sparkles, Shield, Phone } from "lucide-react";
+import { ArrowRight, MapPin, Sparkles, Shield } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
 import { BookingIntentDialog } from "./BookingIntentDialog";
 import heroImage from "@assets/generated_images/eichler_home_with_glass_windows.png";
@@ -62,18 +62,6 @@ export function Hero({ cityName, citySlug }: HeroProps) {
             >
               Book Your Cleaning
               <ArrowRight className="h-4 w-4" />
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="px-8 gap-2 bg-white/10 border-white/30 text-white backdrop-blur-sm"
-              asChild
-              data-testid="button-hero-call"
-            >
-              <a href="tel:+15108593449">
-                <Phone className="h-4 w-4" />
-                Call Now
-              </a>
             </Button>
             <Link href={citySlug ? `/${citySlug}/pricing` : "/pricing"}>
               <Button
