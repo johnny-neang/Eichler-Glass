@@ -2,6 +2,8 @@ import { Link } from "wouter";
 import { Phone, Mail, MapPin } from "lucide-react";
 import logoImage from "@assets/EG_4_point_atomic_star_1767088978427.png";
 
+import white_ec from "@assets/white-ec.png";
+
 export function Footer() {
   return (
     <footer className="bg-foreground text-background py-12 md:py-16">
@@ -10,7 +12,7 @@ export function Footer() {
           <div className="md:col-span-2">
             <div className="mb-4">
               <img 
-                src={logoImage} 
+                src={white_ec} 
                 alt="Eichler Glass" 
                 className="h-12 w-auto"
               />
