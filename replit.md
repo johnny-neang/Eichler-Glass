@@ -61,7 +61,7 @@ The design system enforces a midcentury editorial aesthetic:
 - **Cal.com**: Embedded scheduling widget via `@calcom/embed-react`
 - Environment variable: `VITE_CAL_LINK` for the booking calendar link (format: `username/event-type`)
 - All "Book Now" and package selection buttons trigger Cal.com modal when configured
-- Fallback: Shows "Call to Book" with phone link when Cal.com is not configured
+- Fallback: Shows "Book Your Cleaning" button only when Cal.com is not configured
 - Includes $50 deposit flow integrated with Stripe
 
 ### Payments
@@ -131,3 +131,17 @@ All admin endpoints require authentication via session cookie:
 - `POST /api/admin/work-orders/:id/charge-balance` - Charge remaining balance on work order
 - `GET/POST/PATCH/DELETE /api/admin/clients` - Client CRUD
 - `POST /api/contact` - Public contact form (creates lead)
+
+## Public Pages
+
+### Legal & Policy Pages
+- **Privacy Policy** (`/privacy`) - Comprehensive privacy policy covering data collection, use, storage, security, and user rights
+- **Terms of Service** (`/terms`) - Complete terms of service including booking, pricing, payment, cancellations, liability, and dispute resolution
+- **Cancellation Policy** (`/cancellation`) - Fair cancellation policy with timeline-based deposit handling:
+  - 48+ hours before: Full refund
+  - 24-48 hours before: Deposit forfeited
+  - Less than 24 hours: Deposit + $25 late fee
+  - Includes exceptions for medical emergencies, family situations, and severe weather
+  - Rescheduling options available at various notice levels
+
+All policy pages are accessible from the footer and include contact information for questions or exceptions.

@@ -119,11 +119,6 @@ export function Footer() {
                   Marina Point, Foster City
                 </Link>
               </li>
-              <li>
-                <Link href="/contact" className="hover:text-background transition-colors" data-testid="link-footer-contact">
-                  Contact Us
-                </Link>
-              </li>
             </ul>
           </div>
         </div>

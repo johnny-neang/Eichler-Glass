@@ -16,6 +16,9 @@ import Account from "@/pages/Account";
 import Admin from "@/pages/Admin";
 import BookingSuccess from "@/pages/BookingSuccess";
 import BookingCancel from "@/pages/BookingCancel";
+import Privacy from "@/pages/Privacy";
+import Terms from "@/pages/Terms";
+import Cancellation from "@/pages/Cancellation";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -33,6 +36,9 @@ function Router() {
       <Route path="/admin" component={Admin} />
       <Route path="/booking/success" component={BookingSuccess} />
       <Route path="/booking/cancel" component={BookingCancel} />
+      <Route path="/privacy" component={Privacy} />
+      <Route path="/terms" component={Terms} />
+      <Route path="/cancellation" component={Cancellation} />
       <Route path="/:city" component={CityLanding} />
       <Route path="/:city/book" component={Book} />
       <Route path="/:city/pricing" component={Pricing} />
