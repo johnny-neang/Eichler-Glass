@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Phone, Mail, MapPin } from "lucide-react";
-import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
+import logoImage from "@assets/EG_4_point_atomic_star_1767088978427.png";
 
 export function Footer() {
   return (
