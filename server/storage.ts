@@ -117,17 +117,17 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getDashboardStats() {
-    const allLeads = await db.select().from(leads);
-    const allDeposits = await db.select().from(deposits);
-    const allWorkOrders = await db.select().from(workOrders);
+    const allLeads: Lead[] = await db.select().from(leads);
+    const allDeposits: Deposit[] = await db.select().from(deposits);
+    const allWorkOrders: WorkOrder[] = await db.select().from(workOrders);
 
     return {
       totalLeads: allLeads.length,
-      newLeads: allLeads.filter(l => l.status === 'new').length,
+      newLeads: allLeads.filter((l: Lead) => l.status === 'new').length,
       totalDeposits: allDeposits.length,
-      pendingDeposits: allDeposits.filter(d => d.status === 'pending').length,
+      pendingDeposits: allDeposits.filter((d: Deposit) => d.status === 'pending').length,
       totalWorkOrders: allWorkOrders.length,
-      scheduledWorkOrders: allWorkOrders.filter(w => w.status === 'scheduled').length,
+      scheduledWorkOrders: allWorkOrders.filter((w: WorkOrder) => w.status === 'scheduled').length,
     };
   }
 }
