@@ -1,8 +1,8 @@
-import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Sparkles } from "lucide-react";
+import { Check, Sparkles, Phone } from "lucide-react";
+import { useCalBooking } from "@/hooks/useCalBooking";
 
 interface PricingTier {
   id: string;
@@ -61,7 +61,15 @@ interface PricingCardsProps {
 }
 
 export function PricingCards({ citySlug }: PricingCardsProps) {
-  const bookingPath = citySlug ? `/${citySlug}/book` : "/book";
+  const { openBooking, isConfigured } = useCalBooking();
+
+  const handleSelectPackage = (tierId: string, tierName: string) => {
+    if (isConfigured) {
+      openBooking({ tier: tierName });
+    } else {
+      window.location.href = "tel:+15108593449";
+    }
+  };
 
   return (
     <section className="py-16 md:py-24 bg-background">
@@ -115,15 +123,15 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
               </CardContent>
               
               <CardFooter className="pt-4">
-                <Link href={`${bookingPath}?tier=${tier.id}`} className="w-full">
-                  <Button
-                    className="w-full"
-                    variant={tier.popular ? "default" : "outline"}
-                    data-testid={`button-select-${tier.id}`}
-                  >
-                    Select Package
-                  </Button>
-                </Link>
+                <Button
+                  className="w-full gap-2"
+                  variant={tier.popular ? "default" : "outline"}
+                  onClick={() => handleSelectPackage(tier.id, tier.name)}
+                  data-testid={`button-select-${tier.id}`}
+                >
+                  {isConfigured ? "Select Package" : "Call to Book"}
+                  {!isConfigured && <Phone className="h-4 w-4" />}
+                </Button>
               </CardFooter>
             </Card>
           ))}

@@ -58,7 +58,9 @@ The design system enforces a midcentury editorial aesthetic:
 
 ### Scheduling & Booking
 - **Cal.com**: Embedded scheduling widget via `@calcom/embed-react`
-- Environment variable: `VITE_CAL_LINK` for the booking calendar link
+- Environment variable: `VITE_CAL_LINK` for the booking calendar link (format: `username/event-type`)
+- All "Book Now" and package selection buttons trigger Cal.com modal when configured
+- Fallback: Shows "Call to Book" with phone link when Cal.com is not configured
 - Includes $50 deposit flow integrated with Stripe
 
 ### Payments

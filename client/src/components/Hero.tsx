@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Sparkles, Shield } from "lucide-react";
+import { ArrowRight, MapPin, Sparkles, Shield, Phone } from "lucide-react";
+import { useCalBooking } from "@/hooks/useCalBooking";
 import heroImage from "@assets/generated_images/eichler_home_with_glass_windows.png";
 
 interface HeroProps {
@@ -9,6 +10,8 @@ interface HeroProps {
 }
 
 export function Hero({ cityName, citySlug }: HeroProps) {
+  const { openBooking, isConfigured } = useCalBooking();
+  
   const title = cityName
     ? `Premium Glass Cleaning in ${cityName}`
     : "Light Restored and Architecture Preserved for Midcentury Modern Homes";
@@ -16,6 +19,14 @@ export function Hero({ cityName, citySlug }: HeroProps) {
   const subtitle = cityName
     ? `Expert glass cleaning services for Eichler and modern homes in ${cityName} and surrounding areas.`
     : "Professional glass cleaning services for Eichler homes throughout the Bay Area. Interior, exterior, and skylight specialists.";
+
+  const handleBookClick = () => {
+    if (isConfigured) {
+      openBooking({ city: cityName });
+    } else {
+      window.location.href = "tel:+15108593449";
+    }
+  };
 
   return (
     <section className="relative overflow-hidden">
@@ -46,12 +57,15 @@ export function Hero({ cityName, citySlug }: HeroProps) {
           </p>
 
           <div className="flex flex-wrap gap-4 mb-12">
-            <Link href={citySlug ? `/${citySlug}/book` : "/book"}>
-              <Button size="lg" className="px-8 gap-2" data-testid="button-hero-book">
-                Book Your Cleaning
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </Link>
+            <Button 
+              size="lg" 
+              className="px-8 gap-2" 
+              onClick={handleBookClick}
+              data-testid="button-hero-book"
+            >
+              {isConfigured ? "Book Your Cleaning" : "Call to Book"}
+              {isConfigured ? <ArrowRight className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
+            </Button>
             <Link href={citySlug ? `/${citySlug}/pricing` : "/pricing"}>
               <Button
                 size="lg"

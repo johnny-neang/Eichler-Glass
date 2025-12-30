@@ -2,13 +2,14 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "./ThemeToggle";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Phone } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useCalBooking } from "@/hooks/useCalBooking";
 import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
 
 const navLinks = [
@@ -33,6 +34,15 @@ const cities = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
+  const { openBooking, isConfigured } = useCalBooking();
+
+  const handleBookClick = () => {
+    if (isConfigured) {
+      openBooking();
+    } else {
+      window.location.href = "tel:+15108593449";
+    }
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
@@ -83,11 +93,14 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Link href="/book" className="hidden sm:block">
-              <Button className="px-6" data-testid="button-book-now">
-                Book Now
-              </Button>
-            </Link>
+            <Button 
+              className="px-6 gap-2 hidden sm:flex" 
+              onClick={handleBookClick}
+              data-testid="button-book-now"
+            >
+              {isConfigured ? "Book Now" : "Call Now"}
+              {!isConfigured && <Phone className="h-4 w-4" />}
+            </Button>
             <Button
               size="icon"
               variant="ghost"
@@ -131,11 +144,17 @@ export function Navbar() {
                 </Link>
               ))}
             </div>
-            <Link href="/book" className="block pt-2">
-              <Button className="w-full" data-testid="button-mobile-book">
-                Book Now
-              </Button>
-            </Link>
+            <Button 
+              className="w-full gap-2" 
+              onClick={() => {
+                setMobileOpen(false);
+                handleBookClick();
+              }}
+              data-testid="button-mobile-book"
+            >
+              {isConfigured ? "Book Now" : "Call Now"}
+              {!isConfigured && <Phone className="h-4 w-4" />}
+            </Button>
           </div>
         </div>
       )}

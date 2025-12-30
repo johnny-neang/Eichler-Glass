@@ -5,7 +5,8 @@ import { CitySelector } from "@/components/CitySelector";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, Phone } from "lucide-react";
+import { useCalBooking } from "@/hooks/useCalBooking";
 
 const benefits = [
   "Specialized in Eichler and midcentury modern homes",
@@ -17,6 +18,16 @@ const benefits = [
 ];
 
 export default function Services() {
+  const { openBooking, isConfigured } = useCalBooking();
+
+  const handleBookClick = () => {
+    if (isConfigured) {
+      openBooking();
+    } else {
+      window.location.href = "tel:+15108593449";
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
@@ -33,11 +44,15 @@ export default function Services() {
                 crystal-clear results every time.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link href="/book">
-                  <Button size="lg" className="gap-2" data-testid="button-services-book">
-                    Book Now <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
+                <Button 
+                  size="lg" 
+                  className="gap-2" 
+                  onClick={handleBookClick}
+                  data-testid="button-services-book"
+                >
+                  {isConfigured ? "Book Now" : "Call to Book"}
+                  {isConfigured ? <ArrowRight className="h-4 w-4" /> : <Phone className="h-4 w-4" />}
+                </Button>
                 <Link href="/pricing">
                   <Button size="lg" variant="outline" data-testid="button-services-pricing">
                     View Pricing
@@ -77,11 +92,14 @@ export default function Services() {
                   Book your cleaning today with just a $50 deposit. We'll contact you 
                   within 24 hours to confirm your appointment details.
                 </p>
-                <Link href="/book">
-                  <Button className="w-full" data-testid="button-cta-book">
-                    Book Your Cleaning
-                  </Button>
-                </Link>
+                <Button 
+                  className="w-full gap-2" 
+                  onClick={handleBookClick}
+                  data-testid="button-cta-book"
+                >
+                  {isConfigured ? "Book Your Cleaning" : "Call to Book"}
+                  {!isConfigured && <Phone className="h-4 w-4" />}
+                </Button>
               </div>
             </div>
           </div>
