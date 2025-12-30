@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCalBooking } from "@/hooks/useCalBooking";
-import { BookingIntentDialog } from "./BookingIntentDialog";
 import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
 
 const navLinks = [
@@ -35,10 +34,10 @@ const cities = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
-  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
+  const { openCalModal } = useCalBooking();
 
   const handleBookClick = () => {
-    initiateBooking();
+    openCalModal();
   };
 
   return (
@@ -175,14 +174,6 @@ export function Navbar() {
           </div>
         </div>
       )}
-
-      <BookingIntentDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onLeadCaptured={handleLeadCaptured}
-        preselectedPackage={pendingOptions.tier}
-        preselectedCity={pendingOptions.city}
-      />
     </nav>
   );
 }

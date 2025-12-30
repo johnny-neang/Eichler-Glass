@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Check, Phone } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
-import { BookingIntentDialog } from "@/components/BookingIntentDialog";
 
 const benefits = [
   "Specialized in Eichler and midcentury modern homes",
@@ -19,10 +18,10 @@ const benefits = [
 ];
 
 export default function Services() {
-  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
+  const { openCalModal } = useCalBooking();
 
   const handleBookClick = () => {
-    initiateBooking();
+    openCalModal();
   };
 
   return (
@@ -98,7 +97,7 @@ export default function Services() {
               <div className="p-8 bg-accent">
                 <h3 className="font-semibold text-xl mb-4">Ready to get started?</h3>
                 <p className="text-muted-foreground mb-6">
-                  Book your cleaning today with just a $50 deposit. We'll contact you 
+                  Book your cleaning today. We'll contact you 
                   within 24 hours to confirm your appointment details.
                 </p>
                 <Button 
@@ -129,14 +128,6 @@ export default function Services() {
         <CitySelector />
       </main>
       <Footer />
-
-      <BookingIntentDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onLeadCaptured={handleLeadCaptured}
-        preselectedPackage={pendingOptions.tier}
-        preselectedCity={pendingOptions.city}
-      />
     </div>
   );
 }
