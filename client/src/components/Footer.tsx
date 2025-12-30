@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Phone, Mail, MapPin } from "lucide-react";
+import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
 
 export function Footer() {
   return (
@@ -7,11 +8,12 @@ export function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-4 gap-8 lg:gap-12">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">EG</span>
-              </div>
-              <span className="font-serif text-xl font-semibold">Eichler Glass</span>
+            <div className="mb-4">
+              <img 
+                src={logoImage} 
+                alt="Eichler Glass" 
+                className="h-12 w-auto invert"
+              />
             </div>
             <p className="text-background/70 text-sm max-w-sm mb-6">
               Professional glass cleaning specialists for Eichler and midcentury modern homes 

@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -37,13 +38,12 @@ export function Navbar() {
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-4">
-          <Link href="/" className="flex items-center gap-2" data-testid="link-home">
-            <div className="w-8 h-8 bg-primary flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">EG</span>
-            </div>
-            <span className="font-serif text-xl font-semibold tracking-tight">
-              Eichler Glass
-            </span>
+          <Link href="/" className="flex items-center" data-testid="link-home">
+            <img 
+              src={logoImage} 
+              alt="Eichler Glass" 
+              className="h-10 w-auto dark:invert"
+            />
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
