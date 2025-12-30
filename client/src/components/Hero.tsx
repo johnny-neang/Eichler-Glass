@@ -2,7 +2,6 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Sparkles, Shield } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
-import { BookingIntentDialog } from "./BookingIntentDialog";
 import heroImage from "@assets/generated_images/eichler_home_with_glass_windows.png";
 
 interface HeroProps {
@@ -11,7 +10,7 @@ interface HeroProps {
 }
 
 export function Hero({ cityName, citySlug }: HeroProps) {
-  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
+  const { openCalModal } = useCalBooking();
   
   const title = cityName
     ? `Premium Glass Cleaning in ${cityName}`
@@ -22,7 +21,7 @@ export function Hero({ cityName, citySlug }: HeroProps) {
     : "Professional glass cleaning services for Eichler homes throughout the Bay Area. Interior, exterior, and skylight specialists.";
 
   const handleBookClick = () => {
-    initiateBooking({ city: citySlug });
+    openCalModal({ city: citySlug });
   };
 
   return (
@@ -91,14 +90,6 @@ export function Hero({ cityName, citySlug }: HeroProps) {
           </div>
         </div>
       </div>
-
-      <BookingIntentDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onLeadCaptured={handleLeadCaptured}
-        preselectedPackage={pendingOptions.tier}
-        preselectedCity={pendingOptions.city || citySlug}
-      />
     </section>
   );
 }

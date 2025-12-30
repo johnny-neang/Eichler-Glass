@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles, Phone } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
-import { BookingIntentDialog } from "./BookingIntentDialog";
 
 interface PricingTier {
   id: string;
@@ -62,10 +61,10 @@ interface PricingCardsProps {
 }
 
 export function PricingCards({ citySlug }: PricingCardsProps) {
-  const { initiateBooking, dialogOpen, setDialogOpen, handleLeadCaptured, pendingOptions } = useCalBooking();
+  const { openCalModal } = useCalBooking();
 
-  const handleSelectPackage = (tierId: string, tierName: string) => {
-    initiateBooking({ tier: tierName, city: citySlug });
+  const handleSelectPackage = (tierName: string) => {
+    openCalModal({ tier: tierName, city: citySlug });
   };
 
   return (
@@ -76,7 +75,7 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
             Simple, Transparent Pricing
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Choose the package that fits your home. $50 deposit secures your appointment.
+            Choose the package that fits your home. Book directly through our scheduling system.
           </p>
         </div>
 
@@ -123,7 +122,7 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
                 <Button
                   className="w-full"
                   variant={tier.popular ? "default" : "outline"}
-                  onClick={() => handleSelectPackage(tier.id, tier.name)}
+                  onClick={() => handleSelectPackage(tier.name)}
                   data-testid={`button-select-${tier.id}`}
                 >
                   Select Package
@@ -147,19 +146,11 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
 
         <div className="mt-12 p-6 bg-accent text-center" data-testid="panel-deposit-info">
           <p className="text-sm text-accent-foreground">
-            <strong>$50 deposit</strong> required to secure your appointment. 
-            We'll contact you to confirm the exact time and estimated price.
+            <strong>Deposits may be required</strong> to secure your appointment. 
+            Configure payment collection in your Cal.com event settings.
           </p>
         </div>
       </div>
-
-      <BookingIntentDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        onLeadCaptured={handleLeadCaptured}
-        preselectedPackage={pendingOptions.tier}
-        preselectedCity={pendingOptions.city || citySlug}
-      />
     </section>
   );
 }
