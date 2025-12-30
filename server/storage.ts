@@ -3,7 +3,8 @@ import {
   type Lead, type InsertLead,
   type Deposit, type InsertDeposit,
   type WorkOrder, type InsertWorkOrder,
-  adminUsers, leads, deposits, workOrders
+  type Client, type InsertClient,
+  adminUsers, leads, deposits, workOrders, clients
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and } from "drizzle-orm";
@@ -25,9 +26,19 @@ export interface IStorage {
   
   getWorkOrders(): Promise<WorkOrder[]>;
   getWorkOrder(id: string): Promise<WorkOrder | undefined>;
+  getWorkOrdersByClientId(clientId: string): Promise<WorkOrder[]>;
   createWorkOrder(workOrder: InsertWorkOrder): Promise<WorkOrder>;
   updateWorkOrder(id: string, data: Partial<InsertWorkOrder>): Promise<WorkOrder | undefined>;
   deleteWorkOrder(id: string): Promise<boolean>;
+  
+  getClients(): Promise<Client[]>;
+  getClient(id: string): Promise<Client | undefined>;
+  getClientByLeadId(leadId: string): Promise<Client | undefined>;
+  createClient(client: InsertClient): Promise<Client>;
+  updateClient(id: string, data: Partial<InsertClient>): Promise<Client | undefined>;
+  deleteClient(id: string): Promise<boolean>;
+  
+  getDepositByLeadId(leadId: string): Promise<Deposit | undefined>;
   
   getDashboardStats(): Promise<{
     totalLeads: number;
@@ -116,6 +127,44 @@ export class DatabaseStorage implements IStorage {
   async deleteWorkOrder(id: string): Promise<boolean> {
     const result = await db.delete(workOrders).where(eq(workOrders.id, id)).returning();
     return result.length > 0;
+  }
+
+  async getWorkOrdersByClientId(clientId: string): Promise<WorkOrder[]> {
+    return db.select().from(workOrders).where(eq(workOrders.clientId, clientId)).orderBy(desc(workOrders.createdAt));
+  }
+
+  async getClients(): Promise<Client[]> {
+    return db.select().from(clients).orderBy(desc(clients.createdAt));
+  }
+
+  async getClient(id: string): Promise<Client | undefined> {
+    const [client] = await db.select().from(clients).where(eq(clients.id, id));
+    return client;
+  }
+
+  async getClientByLeadId(leadId: string): Promise<Client | undefined> {
+    const [client] = await db.select().from(clients).where(eq(clients.leadId, leadId));
+    return client;
+  }
+
+  async createClient(client: InsertClient): Promise<Client> {
+    const [newClient] = await db.insert(clients).values(client).returning();
+    return newClient;
+  }
+
+  async updateClient(id: string, data: Partial<InsertClient>): Promise<Client | undefined> {
+    const [updated] = await db.update(clients).set({ ...data, updatedAt: new Date() }).where(eq(clients.id, id)).returning();
+    return updated;
+  }
+
+  async deleteClient(id: string): Promise<boolean> {
+    const result = await db.delete(clients).where(eq(clients.id, id)).returning();
+    return result.length > 0;
+  }
+
+  async getDepositByLeadId(leadId: string): Promise<Deposit | undefined> {
+    const [deposit] = await db.select().from(deposits).where(and(eq(deposits.leadId, leadId), eq(deposits.status, "captured"))).orderBy(desc(deposits.createdAt));
+    return deposit;
   }
 
   async getDashboardStats() {

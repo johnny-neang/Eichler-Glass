@@ -6,6 +6,7 @@ import { z } from "zod";
 export const leadStatusEnum = pgEnum("lead_status", ["new", "contacted", "quoted", "converted", "lost"]);
 export const depositStatusEnum = pgEnum("deposit_status", ["pending", "captured", "refunded"]);
 export const workOrderStatusEnum = pgEnum("work_order_status", ["new", "scheduled", "in_progress", "completed", "invoiced", "cancelled"]);
+export const clientStatusEnum = pgEnum("client_status", ["active", "inactive"]);
 
 export const adminUsers = pgTable("admin_users", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -52,6 +53,7 @@ export const deposits = pgTable("deposits", {
 export const workOrders = pgTable("work_orders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   leadId: varchar("lead_id").references(() => leads.id),
+  clientId: varchar("client_id"),
   customerName: text("customer_name").notNull(),
   customerEmail: text("customer_email"),
   customerPhone: text("customer_phone"),
@@ -65,9 +67,27 @@ export const workOrders = pgTable("work_orders", {
   completionNotes: text("completion_notes"),
   invoiceTotal: integer("invoice_total"),
   depositApplied: boolean("deposit_applied").default(false),
+  depositAmount: integer("deposit_amount"),
+  remainingBalance: integer("remaining_balance"),
   stripePaymentIntentId: text("stripe_payment_intent_id"),
   stripeChargeId: text("stripe_charge_id"),
   paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const clients = pgTable("clients", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  leadId: varchar("lead_id").references(() => leads.id),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  address: text("address"),
+  stripeCustomerId: text("stripe_customer_id"),
+  status: clientStatusEnum("status").default("active"),
+  totalJobsCompleted: integer("total_jobs_completed").default(0),
+  totalRevenue: integer("total_revenue").default(0),
+  notes: text("notes"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
@@ -95,9 +115,16 @@ export const insertWorkOrderSchema = createInsertSchema(workOrders).omit({
   updatedAt: true,
 });
 
+export const insertClientSchema = createInsertSchema(clients).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export const updateLeadSchema = insertLeadSchema.partial();
 export const updateDepositSchema = insertDepositSchema.partial();
 export const updateWorkOrderSchema = insertWorkOrderSchema.partial();
+export const updateClientSchema = insertClientSchema.partial();
 
 export type AdminUser = typeof adminUsers.$inferSelect;
 export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
@@ -110,3 +137,6 @@ export type InsertDeposit = z.infer<typeof insertDepositSchema>;
 
 export type WorkOrder = typeof workOrders.$inferSelect;
 export type InsertWorkOrder = z.infer<typeof insertWorkOrderSchema>;
+
+export type Client = typeof clients.$inferSelect;
+export type InsertClient = z.infer<typeof insertClientSchema>;
