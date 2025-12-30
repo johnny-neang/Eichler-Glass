@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Sparkles, Shield } from "lucide-react";
 import { useCalBooking } from "@/hooks/useCalBooking";
 import heroImage from "@assets/generated_images/eichler_home_with_glass_windows.png";
+import starImage from "@assets/white-ec_1767099200786.png";
 
 interface HeroProps {
   cityName?: string;
@@ -44,9 +45,19 @@ export function Hero({ cityName, citySlug }: HeroProps) {
             </div>
           )}
           
-          <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6" data-testid="text-hero-title">
-            {title}
-          </h1>
+          {!cityName ? (
+            <div className="mb-6" data-testid="text-hero-title">
+              <img 
+                src={starImage} 
+                alt="Light Restored and Architecture Preserved for Midcentury Modern Homes"
+                className="h-40 w-auto"
+              />
+            </div>
+          ) : (
+            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6" data-testid="text-hero-title">
+              {title}
+            </h1>
+          )}
           
           <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed" data-testid="text-hero-subtitle">
             {subtitle}
