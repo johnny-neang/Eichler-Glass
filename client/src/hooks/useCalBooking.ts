@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 
 const CAL_LINK = import.meta.env.VITE_CAL_LINK || "";
+const CAL_DIRECT_URL = `https://cal.com/${CAL_LINK}`;
 
 interface BookingOptions {
   tier?: string;
@@ -10,7 +11,11 @@ interface BookingOptions {
 type CalFunction = (...args: unknown[]) => void;
 
 function getCal(): CalFunction | undefined {
-  return (window as unknown as { Cal?: CalFunction }).Cal;
+  const win = window as unknown as { Cal?: CalFunction };
+  if (win.Cal && typeof win.Cal === "function") {
+    return win.Cal;
+  }
+  return undefined;
 }
 
 export function useCalBooking() {
@@ -21,29 +26,37 @@ export function useCalBooking() {
     }
     
     const Cal = getCal();
+    
     if (Cal) {
-      const config: Record<string, string> = {
-        layout: "month_view",
-      };
-      
-      if (options?.tier) {
-        config.notes = `Selected Package: ${options.tier}`;
-      }
-      if (options?.city) {
-        config.location = options.city;
-      }
+      try {
+        const config: Record<string, string> = {
+          layout: "month_view",
+        };
+        
+        if (options?.tier) {
+          config.notes = `Selected Package: ${options.tier}`;
+        }
+        if (options?.city) {
+          config.location = options.city;
+        }
 
-      Cal("modal", {
-        calLink: CAL_LINK,
-        config,
-      });
+        Cal("modal", {
+          calLink: CAL_LINK,
+          config,
+        });
+      } catch (error) {
+        console.error("Cal.com modal error, opening direct link:", error);
+        window.open(CAL_DIRECT_URL, "_blank", "noopener,noreferrer");
+      }
     } else {
-      console.error("Cal.com not loaded");
+      console.log("Cal.com embed not available, opening direct link");
+      window.open(CAL_DIRECT_URL, "_blank", "noopener,noreferrer");
     }
   }, []);
 
   return { 
     openCalModal,
-    calLink: CAL_LINK
+    calLink: CAL_LINK,
+    calDirectUrl: CAL_DIRECT_URL
   };
 }
