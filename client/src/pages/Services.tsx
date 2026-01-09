@@ -32,7 +32,7 @@ export default function Services() {
           className="relative py-24 md:py-32 min-h-[60vh] flex items-center"
           style={{ backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+          <div className="absolute inset-0 bg-black/50" />
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
               <h1 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-white" data-testid="text-services-page-title">
