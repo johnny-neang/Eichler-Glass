@@ -12,10 +12,6 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: "What's included in the $50 deposit?",
-    answer: "The $50 deposit secures your appointment date. After booking, we'll contact you within 24 hours to confirm the exact time and finalize the pricing based on your home's specific needs. The deposit is applied toward your total service cost.",
-  },
-  {
     question: "Do you specialize in Eichler homes?",
     answer: "Yes! We have extensive experience with Eichler and midcentury modern architecture. Our team understands the unique glass configurations, including floor-to-ceiling windows, post-and-beam construction, and various skylight styles common in these homes.",
   },
@@ -29,7 +25,7 @@ const faqs: FAQItem[] = [
   },
   {
     question: "What is your cancellation policy?",
-    answer: "You can cancel or reschedule up to 48 hours before your appointment for a full refund of your deposit. Cancellations within 48 hours may be subject to a partial refund depending on circumstances.",
+    answer: "You can cancel or reschedule up to 48 hours before your appointment at no charge. Cancellations within 48 hours may be subject to a fee depending on circumstances.",
   },
   {
     question: "Do you clean screens and tracks?",

@@ -1,10 +1,8 @@
 import { Navbar } from "@/components/Navbar";
 import { ServiceShowcase } from "@/components/ServiceShowcase";
-import { PricingCards } from "@/components/PricingCards";
 import { CitySelector } from "@/components/CitySelector";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Link } from "wouter";
 import { ArrowRight, Check, Phone } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
 
@@ -61,11 +59,6 @@ export default function Services() {
                     Call Now
                   </a>
                 </Button>
-                <Link href="/pricing">
-                  <Button size="lg" variant="outline" data-testid="button-services-pricing">
-                    View Pricing
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
@@ -123,8 +116,6 @@ export default function Services() {
             </div>
           </div>
         </section>
-
-        <PricingCards />
         <CitySelector />
       </main>
       <Footer />

@@ -1,6 +1,6 @@
 import { Link } from "wouter";
-import { Phone, Mail, MapPin } from "lucide-react";
-import white_ec from "@assets/white-ec.png";
+import { Phone, MapPin } from "lucide-react";
+import logoImage from "@assets/EG_White_Logo_Blue_Star_1767936307419.png";
 
 const serviceAreas = [
   { city: "Castro Valley", neighborhoods: ["Greenridge"] },
@@ -24,9 +24,9 @@ export function Footer() {
           <div>
             <div className="mb-4">
               <img 
-                src={white_ec} 
+                src={logoImage} 
                 alt="Eichler Glass" 
-                className="h-12 w-auto"
+                className="h-24 w-auto"
               />
             </div>
             <p className="text-background/70 text-sm max-w-sm mb-6">
@@ -37,10 +37,6 @@ export function Footer() {
               <div className="flex items-center gap-3 text-background/70">
                 <Phone className="h-4 w-4" />
                 <span>(510) 859-3449</span>
-              </div>
-              <div className="flex items-center gap-3 text-background/70">
-                <Mail className="h-4 w-4" />
-                <span>hello@eichlerglass.com</span>
               </div>
               <div className="flex items-center gap-3 text-background/70">
                 <MapPin className="h-4 w-4" />

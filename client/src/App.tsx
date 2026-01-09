@@ -6,7 +6,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BookingWizardProvider } from "@/components/BookingWizard";
 import Home from "@/pages/Home";
 import CityLanding from "@/pages/CityLanding";
-import Pricing from "@/pages/Pricing";
 import Services from "@/pages/Services";
 import Book from "@/pages/Book";
 import Contact from "@/pages/Contact";
@@ -21,7 +20,6 @@ function Router() {
   return (
     <Switch>
       <Route path="/" component={Home} />
-      <Route path="/pricing" component={Pricing} />
       <Route path="/services" component={Services} />
       <Route path="/book" component={Book} />
       <Route path="/contact" component={Contact} />
@@ -32,7 +30,6 @@ function Router() {
       <Route path="/admin/leads" component={AdminLeads} />
       <Route path="/:city" component={CityLanding} />
       <Route path="/:city/book" component={Book} />
-      <Route path="/:city/pricing" component={Pricing} />
       <Route component={NotFound} />
     </Switch>
   );

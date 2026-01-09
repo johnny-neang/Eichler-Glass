@@ -1,4 +1,3 @@
-import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Sparkles, Shield } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
@@ -59,34 +58,36 @@ export function Hero({ cityName, citySlug }: HeroProps) {
             </h1>
           )}
           
-          <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed" data-testid="text-hero-subtitle">
-            {subtitle}
-          </p>
+          <div className={!cityName ? "ml-12" : ""}>
+            <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed" data-testid="text-hero-subtitle">
+              {subtitle}
+            </p>
 
-          <div className="flex flex-wrap gap-4 mb-12">
-            <Button 
-              size="lg" 
-              className="px-8 gap-2" 
-              onClick={handleBookClick}
-              data-testid="button-hero-book"
-            >
-              GET YOUR QUOTE
-              <ArrowRight className="h-4 w-4" />
-            </Button>
-          </div>
+            <div className="flex flex-wrap gap-4 mb-12">
+              <Button 
+                size="lg" 
+                className="px-8 gap-2" 
+                onClick={handleBookClick}
+                data-testid="button-hero-book"
+              >
+                GET YOUR QUOTE
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
 
-          <div className="flex flex-wrap gap-6">
-            <div className="flex items-center gap-2 text-white/80">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span className="text-sm">Streak-free guarantee</span>
-            </div>
-            <div className="flex items-center gap-2 text-white/80">
-              <Shield className="h-5 w-5 text-primary" />
-              <span className="text-sm">Fully insured</span>
-            </div>
-            <div className="flex items-center gap-2 text-white/80">
-              <MapPin className="h-5 w-5 text-primary" />
-              <span className="text-sm">Bay Area local</span>
+            <div className="flex flex-wrap gap-6">
+              <div className="flex items-center gap-2 text-white/80">
+                <Sparkles className="h-5 w-5 text-primary" />
+                <span className="text-sm">Streak-free guarantee</span>
+              </div>
+              <div className="flex items-center gap-2 text-white/80">
+                <Shield className="h-5 w-5 text-primary" />
+                <span className="text-sm">Fully insured</span>
+              </div>
+              <div className="flex items-center gap-2 text-white/80">
+                <MapPin className="h-5 w-5 text-primary" />
+                <span className="text-sm">Bay Area local</span>
+              </div>
             </div>
           </div>
         </div>

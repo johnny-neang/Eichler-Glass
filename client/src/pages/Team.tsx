@@ -121,8 +121,7 @@ export default function Team() {
                         {member.initials}
                       </AvatarFallback>
                     </Avatar>
-                    <h3 className="font-semibold text-xl mb-1">{member.name}</h3>
-                    <p className="text-sm text-primary mb-4">{member.role}</p>
+                    <h3 className="font-semibold text-xl mb-4">{member.name}</h3>
                     <p className="text-sm text-muted-foreground">{member.bio}</p>
                   </CardContent>
                 </Card>
