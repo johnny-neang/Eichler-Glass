@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Layers, Sun, Square } from "lucide-react";
+import { Layers, Sun, Square, Grid3X3, Zap } from "lucide-react";
 import interiorImage from "@assets/generated_images/clean_glass_windows_interior.png";
 import skylightImage from "@assets/generated_images/skylight_natural_light.png";
 
@@ -27,9 +27,30 @@ const services: Service[] = [
     image: interiorImage,
   },
   {
-    id: "skylight",
-    title: "Skylight Specialists",
-    description: "Expert skylight cleaning brings natural light flooding back into your home. We handle all types of skylights and solar tubes.",
+    id: "screen-cleaning",
+    title: "Screen Cleaning",
+    description: "Complete screen cleaning service restores clarity and airflow. We carefully remove, clean, and reinstall all window screens.",
+    icon: Grid3X3,
+    image: interiorImage,
+  },
+  {
+    id: "track-detailing",
+    title: "Track Detailing",
+    description: "Deep cleaning of window and door tracks removes years of accumulated dirt, debris, and grime for smooth operation.",
+    icon: Layers,
+    image: interiorImage,
+  },
+  {
+    id: "solar-panel",
+    title: "Solar Panel Cleaning",
+    description: "Maximize your solar efficiency with professional panel cleaning. We safely remove dust, bird droppings, and environmental buildup.",
+    icon: Zap,
+    image: skylightImage,
+  },
+  {
+    id: "clerestory",
+    title: "Clerestory Windows",
+    description: "Specialized cleaning for high clerestory windows that define midcentury architecture. Expert access to hard-to-reach glass.",
     icon: Sun,
     image: skylightImage,
   },
@@ -48,7 +69,7 @@ export function ServiceShowcase() {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => (
             <Card key={service.id} className="overflow-hidden group" data-testid={`card-service-${service.id}`}>
               <div className="aspect-video overflow-hidden">

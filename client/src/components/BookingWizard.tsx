@@ -19,17 +19,51 @@ import {
 const SERVICE_AREAS = [
   "Castro Valley",
   "Concord",
+  "Foster City",
+  "Mountain View",
+  "Oakland",
+  "Palo Alto",
+  "San Jose",
+  "San Mateo",
+  "San Rafael",
+  "Sunnyvale",
   "Walnut Creek",
-  "Pleasant Hill",
-  "Danville",
-  "San Ramon",
-  "Dublin",
-  "Pleasanton",
-  "Livermore",
-  "Fremont",
-  "Hayward",
-  "Oakland Hills",
 ];
+
+const SLUG_TO_CITY: Record<string, string> = {
+  "castro-valley": "Castro Valley",
+  "greenridge": "Castro Valley",
+  "concord": "Concord",
+  "parkside": "Concord",
+  "rancho-del-diablo": "Concord",
+  "foster-city": "Foster City",
+  "bay-vista": "Foster City",
+  "marina-point": "Foster City",
+  "treasure-isle": "Foster City",
+  "mountain-view": "Mountain View",
+  "cuesta-park": "Mountain View",
+  "monta-loma": "Mountain View",
+  "sylvan-park": "Mountain View",
+  "oakland": "Oakland",
+  "sequoyah-hills": "Oakland",
+  "palo-alto": "Palo Alto",
+  "greenmeadow": "Palo Alto",
+  "midtown": "Palo Alto",
+  "san-jose": "San Jose",
+  "willow-glen": "San Jose",
+  "cambrian-park": "San Jose",
+  "south-san-jose": "San Jose",
+  "san-mateo": "San Mateo",
+  "san-mateo-highlands": "San Mateo",
+  "san-rafael": "San Rafael",
+  "terra-linda": "San Rafael",
+  "lucas-valley": "San Rafael",
+  "sunnyvale": "Sunnyvale",
+  "fairwood": "Sunnyvale",
+  "cherry-chase": "Sunnyvale",
+  "walnut-creek": "Walnut Creek",
+  "rancho-san-miguel": "Walnut Creek",
+};
 
 const PROPERTY_TYPES = ["Residential 1-story", "Residential 2-story"];
 
@@ -142,10 +176,12 @@ function WizardModal({
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
+  const initialLocation = initialData.city ? (SLUG_TO_CITY[initialData.city] || "") : "";
+  
   const methods = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: initialData.city || "",
+      location: initialLocation,
       firstName: "",
       lastName: "",
       email: "",

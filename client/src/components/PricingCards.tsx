@@ -1,57 +1,54 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Sparkles, Phone } from "lucide-react";
+import { Check, X, Sparkles } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
 
-interface PricingTier {
+interface PreservationPlan {
   id: string;
   name: string;
-  price: number;
-  description: string;
-  features: string[];
+  discount: string;
+  perCleaning: string;
+  features: {
+    name: string;
+    included: boolean;
+  }[];
   popular?: boolean;
 }
 
-const pricingTiers: PricingTier[] = [
+const preservationPlans: PreservationPlan[] = [
   {
-    id: "exterior",
-    name: "Exterior",
-    price: 250,
-    description: "Single story, 20-30 large glass panels, no interior access",
+    id: "bi-annual",
+    name: "Bi-Annual",
+    discount: "$50 Off",
+    perCleaning: "per cleaning",
     features: [
-      "All exterior-facing glass",
-      "Clerestory windows (exterior side)",
-      "Sliding glass doors (exterior side)",
-      "Basic exterior frame wipe",
+      { name: "Screen Cleaning", included: false },
+      { name: "7-day Rain Guarantee", included: false },
+      { name: "Hard Water Removal", included: false },
     ],
   },
   {
-    id: "interior-exterior",
-    name: "Interior + Exterior",
-    price: 450,
-    description: "Single story, atrium included, no hard stain removal",
+    id: "quarterly",
+    name: "Quarterly",
+    discount: "$100 Off",
+    perCleaning: "per cleaning",
     features: [
-      "Exterior service included",
-      "Clerestory windows (interior + exterior)",
-      "Interior side of all standard glass",
-      "Interior sliding doors",
-      "Interior frame wipe",
+      { name: "Screen Cleaning", included: true },
+      { name: "7-day Rain Guarantee", included: true },
+      { name: "Hard Water Removal", included: true },
     ],
     popular: true,
   },
   {
-    id: "full-skylight",
-    name: "Full + Skylight",
-    price: 650,
-    description: "Excludes two-story premium, hard water stain removal",
+    id: "monthly",
+    name: "Monthly",
+    discount: "$150 Off",
+    perCleaning: "per cleaning",
     features: [
-      "Exterior + interior windows",
-      "All clerestory windows",
-      "Atrium glass (int/ext)",
-      "Up to 4 skylights",
-      "Up to 10 screens",
-      "Priority scheduling",
+      { name: "Screen Cleaning", included: true },
+      { name: "7-day Rain Guarantee", included: true },
+      { name: "Hard Water Removal", included: true },
     ],
   },
 ];
@@ -63,8 +60,8 @@ interface PricingCardsProps {
 export function PricingCards({ citySlug }: PricingCardsProps) {
   const { openWizard } = useBookingWizard();
 
-  const handleSelectPackage = (tierName: string) => {
-    openWizard({ tier: tierName, city: citySlug });
+  const handleSelectPlan = (planName: string) => {
+    openWizard({ tier: planName, city: citySlug });
   };
 
   return (
@@ -72,23 +69,23 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4" data-testid="text-pricing-title">
-            Simple, Transparent Pricing
+            Preservation Plans
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Choose the package that fits your home. Book directly through our scheduling system.
+            Choose the frequency that keeps your glass sparkling year-round.
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-          {pricingTiers.map((tier) => (
+          {preservationPlans.map((plan) => (
             <Card
-              key={tier.id}
+              key={plan.id}
               className={`relative flex flex-col ${
-                tier.popular ? "border-primary ring-2 ring-primary/20" : ""
+                plan.popular ? "border-primary ring-2 ring-primary/20" : ""
               }`}
-              data-testid={`card-pricing-${tier.id}`}
+              data-testid={`card-plan-${plan.id}`}
             >
-              {tier.popular && (
+              {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge className="px-3 py-1 gap-1">
                     <Sparkles className="h-3 w-3" />
@@ -98,57 +95,42 @@ export function PricingCards({ citySlug }: PricingCardsProps) {
               )}
               
               <CardHeader className="text-center pb-4">
-                <CardTitle className="font-serif text-2xl">{tier.name}</CardTitle>
-                <CardDescription className="text-sm min-h-[40px]">{tier.description}</CardDescription>
+                <CardTitle className="font-serif text-2xl">{plan.name}</CardTitle>
+                <div className="mt-4">
+                  <span className="text-3xl font-bold text-primary">{plan.discount}</span>
+                  <p className="text-muted-foreground text-sm mt-1">{plan.perCleaning}</p>
+                </div>
               </CardHeader>
               
               <CardContent className="flex-1 flex flex-col">
-                <div className="text-center mb-6">
-                  <span className="text-4xl font-bold">${tier.price}</span>
-                  <span className="text-muted-foreground ml-1">/ service</span>
-                </div>
-                
                 <ul className="space-y-3">
-                  {tier.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
-                      <span className="text-sm">{feature}</span>
+                  {plan.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center gap-3">
+                      {feature.included ? (
+                        <Check className="h-5 w-5 text-primary shrink-0" />
+                      ) : (
+                        <X className="h-5 w-5 shrink-0" style={{ color: '#e4572e' }} />
+                      )}
+                      <span className={`text-sm ${!feature.included ? 'text-muted-foreground' : ''}`}>
+                        {feature.name}
+                      </span>
                     </li>
                   ))}
                 </ul>
               </CardContent>
               
-              <CardFooter className="pt-4 flex flex-col gap-2">
+              <CardFooter className="pt-4">
                 <Button
                   className="w-full"
-                  variant={tier.popular ? "default" : "outline"}
-                  onClick={() => handleSelectPackage(tier.name)}
-                  data-testid={`button-select-${tier.id}`}
+                  variant={plan.popular ? "default" : "outline"}
+                  onClick={() => handleSelectPlan(plan.name)}
+                  data-testid={`button-select-${plan.id}`}
                 >
-                  Select Package
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full gap-2"
-                  asChild
-                  data-testid={`button-call-${tier.id}`}
-                >
-                  <a href="tel:+15108593449">
-                    <Phone className="h-4 w-4" />
-                    Or call to book
-                  </a>
+                  Get Your Quote
                 </Button>
               </CardFooter>
             </Card>
           ))}
-        </div>
-
-        <div className="mt-12 p-6 bg-accent text-center" data-testid="panel-deposit-info">
-          <p className="text-sm text-accent-foreground">
-            <strong>Deposits may be required</strong> to secure your appointment. 
-            Configure payment collection in your Cal.com event settings.
-          </p>
         </div>
       </div>
     </section>

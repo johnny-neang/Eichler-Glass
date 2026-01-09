@@ -7,37 +7,101 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
-import { useBookingWizard } from "@/components/BookingWizard";
 import EG_4_point_atomic_star from "@assets/EG 4 point atomic star.png";
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "/services", label: "Services" },
-  { href: "/pricing", label: "Pricing" },
   { href: "/team", label: "About Us" },
-  { href: "/contact", label: "Contact" },
+  { href: "/services", label: "Services" },
 ];
 
-const cities = [
-  { slug: "bay-vista", name: "Bay Vista, Foster City" },
-  { slug: "greenridge", name: "Greenridge, Castro Valley" },
-  { slug: "marina-point", name: "Marina Point, Foster City" },
-  { slug: "parkside", name: "Parkside, Concord" },
-  { slug: "rancho-del-diablo", name: "Rancho del Diablo, Concord" },
-  { slug: "rancho-san-miguel", name: "Rancho San Miguel, Walnut Creek" },
-  { slug: "sequoyah-hills", name: "Sequoyah Hills, Oakland" },
-  { slug: "treasure-isle", name: "Treasure Isle, Foster City" },
+const neighborhoodGroups = [
+  { 
+    city: "Castro Valley", 
+    citySlug: "castro-valley",
+    neighborhoods: [{ slug: "greenridge", name: "Greenridge" }] 
+  },
+  { 
+    city: "Concord", 
+    citySlug: "concord",
+    neighborhoods: [
+      { slug: "parkside", name: "Parkside" },
+      { slug: "rancho-del-diablo", name: "Rancho del Diablo" }
+    ] 
+  },
+  { 
+    city: "Foster City", 
+    citySlug: "foster-city",
+    neighborhoods: [
+      { slug: "bay-vista", name: "Bay Vista" },
+      { slug: "marina-point", name: "Marina Point" },
+      { slug: "treasure-isle", name: "Treasure Isle" }
+    ] 
+  },
+  { 
+    city: "Mountain View", 
+    citySlug: "mountain-view",
+    neighborhoods: [
+      { slug: "cuesta-park", name: "Cuesta Park" },
+      { slug: "monta-loma", name: "Monta Loma" },
+      { slug: "sylvan-park", name: "Sylvan Park" }
+    ] 
+  },
+  { 
+    city: "Oakland", 
+    citySlug: "oakland",
+    neighborhoods: [{ slug: "sequoyah-hills", name: "Sequoyah Hills" }] 
+  },
+  { 
+    city: "Palo Alto", 
+    citySlug: "palo-alto",
+    neighborhoods: [
+      { slug: "greenmeadow", name: "Greenmeadow" },
+      { slug: "midtown", name: "Midtown" }
+    ] 
+  },
+  { 
+    city: "San Jose", 
+    citySlug: "san-jose",
+    neighborhoods: [
+      { slug: "willow-glen", name: "Willow Glen" },
+      { slug: "cambrian-park", name: "Cambrian Park" },
+      { slug: "south-san-jose", name: "South San Jose" }
+    ] 
+  },
+  { 
+    city: "San Mateo", 
+    citySlug: "san-mateo",
+    neighborhoods: [{ slug: "san-mateo-highlands", name: "San Mateo Highlands" }] 
+  },
+  { 
+    city: "San Rafael", 
+    citySlug: "san-rafael",
+    neighborhoods: [
+      { slug: "terra-linda", name: "Terra Linda" },
+      { slug: "lucas-valley", name: "Lucas Valley" }
+    ] 
+  },
+  { 
+    city: "Sunnyvale", 
+    citySlug: "sunnyvale",
+    neighborhoods: [
+      { slug: "fairwood", name: "Fairwood" },
+      { slug: "cherry-chase", name: "Cherry Chase" }
+    ] 
+  },
+  { 
+    city: "Walnut Creek", 
+    citySlug: "walnut-creek",
+    neighborhoods: [{ slug: "rancho-san-miguel", name: "Rancho San Miguel" }] 
+  },
 ];
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
-  const { openWizard } = useBookingWizard();
-
-  const handleBookClick = () => {
-    openWizard();
-  };
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
@@ -61,7 +125,7 @@ export function Navbar() {
                       ? "text-primary border-b-2 border-primary"
                       : ""
                   }
-                  data-testid={`link-nav-${link.label.toLowerCase()}`}
+                  data-testid={`link-nav-${link.label.toLowerCase().replace(/\s/g, "-")}`}
                 >
                   {link.label}
                 </Button>
@@ -70,17 +134,27 @@ export function Navbar() {
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" data-testid="button-cities-dropdown">
+                <Button variant="ghost" data-testid="button-neighborhoods-dropdown">
                   Neighborhoods <ChevronDown className="ml-1 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {cities.map((city) => (
-                  <DropdownMenuItem key={city.slug} asChild>
-                    <Link href={`/${city.slug}`} data-testid={`link-city-${city.slug}`}>
-                      {city.name}
-                    </Link>
-                  </DropdownMenuItem>
+              <DropdownMenuContent align="end" className="w-64 max-h-96 overflow-y-auto">
+                {neighborhoodGroups.map((group, index) => (
+                  <div key={group.citySlug}>
+                    {index > 0 && <DropdownMenuSeparator />}
+                    <DropdownMenuLabel>
+                      <Link href={`/${group.citySlug}`} className="hover:text-primary">
+                        {group.city}
+                      </Link>
+                    </DropdownMenuLabel>
+                    {group.neighborhoods.map((n) => (
+                      <DropdownMenuItem key={n.slug} asChild>
+                        <Link href={`/${n.slug}`} data-testid={`link-neighborhood-${n.slug}`}>
+                          {n.name}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </div>
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
@@ -89,21 +163,14 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <Button 
               variant="ghost"
-              size="icon"
-              className="hidden sm:flex"
+              className="hidden sm:flex gap-2"
               asChild
-              data-testid="button-call-now"
+              data-testid="button-call-us"
             >
               <a href="tel:+15108593449">
                 <Phone className="h-4 w-4" />
+                Call Us
               </a>
-            </Button>
-            <Button 
-              className="px-6 hidden sm:flex" 
-              onClick={handleBookClick}
-              data-testid="button-book-now"
-            >
-              Book Now
             </Button>
             <Button
               size="icon"
@@ -118,7 +185,7 @@ export function Navbar() {
         </div>
       </div>
       {mobileOpen && (
-        <div className="md:hidden border-t border-border bg-background">
+        <div className="md:hidden border-t border-border bg-background max-h-[80vh] overflow-y-auto">
           <div className="px-4 py-4 space-y-2">
             {navLinks.map((link) => (
               <Link key={link.href} href={link.href}>
@@ -126,37 +193,40 @@ export function Navbar() {
                   variant="ghost"
                   className="w-full justify-start"
                   onClick={() => setMobileOpen(false)}
-                  data-testid={`link-mobile-${link.label.toLowerCase()}`}
+                  data-testid={`link-mobile-${link.label.toLowerCase().replace(/\s/g, "-")}`}
                 >
                   {link.label}
                 </Button>
               </Link>
             ))}
             <div className="pt-2 border-t border-border">
-              <p className="text-sm text-muted-foreground px-4 py-2">Neighborhoods</p>
-              {cities.map((city) => (
-                <Link key={city.slug} href={`/${city.slug}`}>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start pl-8"
-                    onClick={() => setMobileOpen(false)}
-                    data-testid={`link-mobile-city-${city.slug}`}
-                  >
-                    {city.name}
-                  </Button>
-                </Link>
+              <p className="text-sm text-muted-foreground px-4 py-2 font-semibold">Neighborhoods</p>
+              {neighborhoodGroups.map((group) => (
+                <div key={group.citySlug} className="mb-2">
+                  <Link href={`/${group.citySlug}`}>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start font-medium text-muted-foreground"
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {group.city}
+                    </Button>
+                  </Link>
+                  {group.neighborhoods.map((n) => (
+                    <Link key={n.slug} href={`/${n.slug}`}>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start pl-8 text-sm"
+                        onClick={() => setMobileOpen(false)}
+                        data-testid={`link-mobile-neighborhood-${n.slug}`}
+                      >
+                        {n.name}
+                      </Button>
+                    </Link>
+                  ))}
+                </div>
               ))}
             </div>
-            <Button 
-              className="w-full" 
-              onClick={() => {
-                setMobileOpen(false);
-                handleBookClick();
-              }}
-              data-testid="button-mobile-book"
-            >
-              Book Now
-            </Button>
             <Button 
               variant="outline"
               className="w-full gap-2" 
@@ -165,7 +235,7 @@ export function Navbar() {
             >
               <a href="tel:+15108593449">
                 <Phone className="h-4 w-4" />
-                Call Now
+                Call Us
               </a>
             </Button>
           </div>

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Sparkles, Shield } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
 import heroImage from "@assets/generated_images/eichler_home_with_glass_windows.png";
-import starImage from "@assets/white-ec_1767099200786.png";
+import logoImage from "@assets/EG_White_Logo_Blue_Star_1767936307419.png";
 
 interface HeroProps {
   cityName?: string;
@@ -48,8 +48,8 @@ export function Hero({ cityName, citySlug }: HeroProps) {
           {!cityName ? (
             <div className="mb-6" data-testid="text-hero-title">
               <img 
-                src={starImage} 
-                alt="Light Restored and Architecture Preserved for Midcentury Modern Homes"
+                src={logoImage} 
+                alt="Eichler Glass - The Original, Reborn"
                 className="h-40 w-auto"
               />
             </div>
@@ -70,19 +70,9 @@ export function Hero({ cityName, citySlug }: HeroProps) {
               onClick={handleBookClick}
               data-testid="button-hero-book"
             >
-              Book Your Cleaning
+              GET YOUR QUOTE
               <ArrowRight className="h-4 w-4" />
             </Button>
-            <Link href={citySlug ? `/${citySlug}/pricing` : "/pricing"}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="px-8 bg-white/10 border-white/30 text-white backdrop-blur-sm"
-                data-testid="button-hero-pricing"
-              >
-                View Pricing
-              </Button>
-            </Link>
           </div>
 
           <div className="flex flex-wrap gap-6">
