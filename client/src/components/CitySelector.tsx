@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, ArrowRight } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
-import mapImage from "@assets/2_1767940266490.jpg";
+import bgImage from "@assets/service-areas-bg.jpg";
 
 interface Neighborhood {
   slug: string;
@@ -114,7 +114,7 @@ export function CitySelector() {
     <section className="py-16 md:py-24 relative overflow-hidden">
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${mapImage})` }}
+        style={{ backgroundImage: `url(${bgImage})` }}
       />
       <div className="absolute inset-0 bg-background/40" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
