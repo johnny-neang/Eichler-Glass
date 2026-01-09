@@ -1,0 +1,85 @@
+I want you to REPLACE our CTA behavior with a multi-step intake modal (wizard), and store the lead info so our team can call the customer. Have each completed lead info be emailed to: hello@eichlerglass.com title email with their name and neighborhood.
+
+WHAT TO BUILD
+1) Replace current CTA button action:
+- When user clicks any “GET YOUR QUOTE” CTA, open a full-screen (or centered) modal wizard.
+- Modal has: close “X”, Back button, Next button, and a progress indicator (steps across top).
+
+2) Wizard steps (match flow):
+Step 1: Select Location
+- Options: “Castro Valley”, “Concord”, and all of our service neighborhoods (use cards/buttons). Require one selection.
+
+Step 2: Contact Info (“Let’s get to know you!”)
+- Fields: First Name, Last Name, Email, Phone
+- Dropdown “How did you hear about us?” with options: Google, Yelp, Instagram, Referral, Other
+- Optional field: Promo Code
+- Include consent text (SMS/marketing) as small disclaimer (just text, no legal links required).
+
+Step 3: What type of property?
+- Options: Residential 1-story, Residential 2-story (cards/buttons). Require one.
+
+Step 4: What Services?
+- Multi-select options (cards):
+  - Exterior Window Cleaning
+  - Interior Window Cleaning
+  - Screen Cleaning
+  - Skylight Cleaning
+  - Solar Panel Cleaning
+- Require at least one selection.
+
+Step 5: Pick Your Frequency
+- Options:  One Time: “NO Discount, NO included screen cleaning, NO 7 day rain guarantee, NO Free hard water removal (5 panes)” Bi-Annual: “$50 Off, NO included screen cleaning, NO 7 day rain guarantee, NO Free hard water removal (5 panes)” Quarterly: “$100 Off, YES included screen cleaning, YES 7 day rain guarantee, YES Free hard water removal (5 panes)” Monthly: “$150 Off, YES included screen cleaning, YES 7 day rain guarantee, YES Free hard water removal (5 panes)” - (cards/buttons).  - Discounts in bold.
+- Require one.
+
+Step 6: Address (“You’re almost there!”)
+- Fields: Street Address, City, State (dropdown), Zip Code
+- Require completed
+
+SUBMISSION + DATA STORAGE (MOST IMPORTANT)
+- On Submit, create a “Lead” record and store it so we can call them.
+- Minimum fields to store:
+  - location
+  - first_name
+  - last_name
+  - email
+  - phone
+  - referral_source
+  - promo_code
+  - property_type
+  - services[] (array)
+  - frequency
+  - street
+  - city
+  - state
+  - zip
+  - created_at
+  - page_url (where CTA was clicked)
+- Show a success screen after submit: “Thanks — we’ll call you shortly.” + a Close button.
+
+IMPLEMENTATION REQUIREMENTS
+- Make it a working Replit project with:
+  - Frontend: existing site + modal wizard component (vanilla JS or React is fine; choose the simplest to integrate).
+  - Backend: a small API endpoint to receive the lead and save it.
+- Storage options (pick ONE and implement fully):
+  A) SQLite (preferred): store in a local SQLite DB with a Leads table.
+  OR
+  B) JSON file storage (only if SQLite is too heavy).
+- Provide an admin-only page at /admin/leads that lists leads in a simple table (newest first) so we can copy/paste or click-to-call.
+  - Protect it with a basic password (env var ADMIN_PASSWORD) or simple auth guard.
+
+UX / VALIDATION
+- Disable Next until required fields in the current step are valid.
+- Validate email format and phone length (basic).
+- Persist wizard state if user goes Back/Next.
+- If user closes the modal, confirm “Are you sure? Your info will be lost.” (optional but nice).
+
+INTEGRATION NOTES
+- Assume there are multiple CTA buttons; attach the modal open handler to all of them (e.g., by class .cta-quote or by button text).
+- Keep the code modular so we can tweak steps later.
+
+DELIVERABLES
+- Provide the full working code and clear instructions:
+  - how to run locally in Replit
+  - where to set ADMIN_PASSWORD
+  - how to view leads at /admin/leads
+  - where the CTA hook is wired in
