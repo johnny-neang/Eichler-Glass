@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, Phone } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
+import heroImage from "@assets/eichler_website_background_(1)_1767941346431.jpg";
 
 const benefits = [
   "Specialized in Eichler and midcentury modern homes",
@@ -27,13 +28,17 @@ export default function Services() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        <section className="py-16 md:py-24 bg-muted/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section 
+          className="relative py-24 md:py-32 min-h-[60vh] flex items-center"
+          style={{ backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl">
-              <h1 className="font-serif text-4xl md:text-5xl font-bold mb-6" data-testid="text-services-page-title">
+              <h1 className="font-serif text-4xl md:text-5xl font-bold mb-6 text-white" data-testid="text-services-page-title">
                 Professional Glass Cleaning Services
               </h1>
-              <p className="text-muted-foreground text-lg mb-8">
+              <p className="text-white/90 text-lg mb-8">
                 We specialize in the unique glass configurations of Eichler and midcentury 
                 modern homes. From floor-to-ceiling windows to skylights, we bring 
                 crystal-clear results every time.
@@ -45,13 +50,13 @@ export default function Services() {
                   onClick={handleBookClick}
                   data-testid="button-services-book"
                 >
-                  Book Now
+                  Get Your Quote
                   <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button 
                   size="lg" 
                   variant="outline"
-                  className="gap-2" 
+                  className="gap-2 text-white border-white/50 bg-white/10 backdrop-blur-sm hover:bg-white/20" 
                   asChild
                   data-testid="button-services-call"
                 >
