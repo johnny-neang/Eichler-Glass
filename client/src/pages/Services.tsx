@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Check, Phone } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
-import heroImage from "@assets/eichler_website_background_(1)_1767941346431.jpg";
+import heroImage from "@assets/services-hero.jpg";
 
 const benefits = [
   "Specialized in Eichler and midcentury modern homes",
