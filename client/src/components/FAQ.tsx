@@ -31,6 +31,10 @@ const faqs: FAQItem[] = [
     question: "Do you clean screens and tracks?",
     answer: "Yes! Our Interior + Exterior and Full packages include screen cleaning and track/sill cleaning. This is essential for maintaining the full beauty of your windows.",
   },
+  {
+    question: "What if it rains after my window cleaning?",
+    answer: "We offer a 7-day Rain Guarantee with our services. If it rains just after your windows have been cleaned, give us a call. We will come back and ensure your windows remain spotless at no extra cost.",
+  },
 ];
 
 interface FAQProps {

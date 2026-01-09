@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, ArrowRight } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
+import mapImage from "@assets/Untitled_design_(1)_1767939305947.png";
 
 interface Neighborhood {
   slug: string;
@@ -110,8 +111,13 @@ export function CitySelector() {
   const { openWizard } = useBookingWizard();
 
   return (
-    <section className="py-16 md:py-24 bg-muted/50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-16 md:py-24 relative">
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-20"
+        style={{ backgroundImage: `url(${mapImage})` }}
+      />
+      <div className="absolute inset-0 bg-background/80" />
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4" data-testid="text-cities-title">
             Service Areas

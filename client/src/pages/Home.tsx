@@ -30,7 +30,7 @@ export default function Home() {
               Ready for Crystal Clear Glass?
             </h2>
             <p className="text-primary-foreground/90 text-lg mb-8 max-w-2xl mx-auto">
-              Get your free quote today and see why Bay Area homeowners trust Eichler Glass for their midcentury modern homes.
+              Get your free quote today and see why Bay Area homeowners trust Eichler Glass to maintain the continuity and seamless transition between your indoor and outdoor living.
             </p>
             <Button 
               size="lg" 
