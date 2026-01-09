@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, MapPin, Sparkles, Shield } from "lucide-react";
-import { useCalBooking } from "@/hooks/useCalBooking";
+import { useBookingWizard } from "@/components/BookingWizard";
 import heroImage from "@assets/generated_images/eichler_home_with_glass_windows.png";
 import starImage from "@assets/white-ec_1767099200786.png";
 
@@ -11,7 +11,7 @@ interface HeroProps {
 }
 
 export function Hero({ cityName, citySlug }: HeroProps) {
-  const { openCalModal } = useCalBooking();
+  const { openWizard } = useBookingWizard();
   
   const title = cityName
     ? `Premium Glass Cleaning in ${cityName}`
@@ -22,7 +22,7 @@ export function Hero({ cityName, citySlug }: HeroProps) {
     : "Professional glass cleaning services for Eichler homes throughout the Bay Area. Interior, exterior, and skylight specialists.";
 
   const handleBookClick = () => {
-    openCalModal({ city: citySlug });
+    openWizard({ city: citySlug });
   };
 
   return (

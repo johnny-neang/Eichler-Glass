@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import { ArrowRight, Check, Phone } from "lucide-react";
-import { useCalBooking } from "@/hooks/useCalBooking";
+import { useBookingWizard } from "@/components/BookingWizard";
 
 const benefits = [
   "Specialized in Eichler and midcentury modern homes",
@@ -18,10 +18,10 @@ const benefits = [
 ];
 
 export default function Services() {
-  const { openCalModal } = useCalBooking();
+  const { openWizard } = useBookingWizard();
 
   const handleBookClick = () => {
-    openCalModal();
+    openWizard();
   };
 
   return (

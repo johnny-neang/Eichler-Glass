@@ -28,7 +28,7 @@ export default function Terms() {
             <section>
               <h2 className="font-serif text-2xl font-semibold mb-4">3. Booking and Reservations</h2>
               <p className="text-foreground leading-relaxed">
-                When you book a service, you agree to provide accurate and complete information. A deposit may be required to confirm your appointment. This deposit is applied toward your final invoice. Bookings are confirmed via email and calendar scheduling through our Cal.com integration.
+                When you book a service, you agree to provide accurate and complete information. A deposit may be required to confirm your appointment. This deposit is applied toward your final invoice. Bookings are confirmed via email.
               </p>
             </section>
 

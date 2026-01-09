@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles, Phone } from "lucide-react";
-import { useCalBooking } from "@/hooks/useCalBooking";
+import { useBookingWizard } from "@/components/BookingWizard";
 
 interface PricingTier {
   id: string;
@@ -61,10 +61,10 @@ interface PricingCardsProps {
 }
 
 export function PricingCards({ citySlug }: PricingCardsProps) {
-  const { openCalModal } = useCalBooking();
+  const { openWizard } = useBookingWizard();
 
   const handleSelectPackage = (tierName: string) => {
-    openCalModal({ tier: tierName, city: citySlug });
+    openWizard({ tier: tierName, city: citySlug });
   };
 
   return (

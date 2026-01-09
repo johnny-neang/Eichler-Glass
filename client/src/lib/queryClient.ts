@@ -1,11 +1,30 @@
-// Simplified - no backend API needed
-// This file is kept for compatibility but the app now uses Cal.com for all bookings
+import { QueryClient } from "@tanstack/react-query";
 
 export async function apiRequest(
   method: string,
   url: string,
   data?: unknown
 ): Promise<Response> {
-  console.log("API request attempted but backend is not available:", { method, url, data });
-  throw new Error("Backend is not available - use Cal.com for bookings");
+  const options: RequestInit = {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  if (data) {
+    options.body = JSON.stringify(data);
+  }
+
+  const response = await fetch(url, options);
+  return response;
 }
+
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+    },
+  },
+});

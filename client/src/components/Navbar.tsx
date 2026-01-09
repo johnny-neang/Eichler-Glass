@@ -8,9 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useCalBooking } from "@/hooks/useCalBooking";
-import logoImage from "@assets/EG_Black_Logo_Blue_Star_(no_tagline)_1767087626609.png";
-
+import { useBookingWizard } from "@/components/BookingWizard";
 import EG_4_point_atomic_star from "@assets/EG 4 point atomic star.png";
 
 const navLinks = [
@@ -35,10 +33,10 @@ const cities = [
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
-  const { openCalModal } = useCalBooking();
+  const { openWizard } = useBookingWizard();
 
   const handleBookClick = () => {
-    openCalModal();
+    openWizard();
   };
 
   return (
