@@ -119,12 +119,14 @@ export function CitySelector() {
       <div className="absolute inset-0 bg-background/40" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4" data-testid="text-cities-title">
-            Service Areas
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            We proudly serve Eichler and midcentury modern homes throughout the Bay Area.
-          </p>
+          <div className="inline-block bg-background/90 backdrop-blur-sm px-8 py-6">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4" data-testid="text-cities-title">
+              Service Areas
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              We proudly serve Eichler and midcentury modern homes throughout the Bay Area.
+            </p>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -165,17 +167,19 @@ export function CitySelector() {
         </div>
 
         <div className="mt-12 text-center">
-          <p className="text-muted-foreground mb-4">
-            Don't see your neighborhood? We may still serve your area.
-          </p>
-          <Button 
-            variant="outline" 
-            onClick={() => openWizard()}
-            data-testid="button-contact-location"
-          >
-            Get Your Quote
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="inline-block bg-background/90 backdrop-blur-sm px-8 py-6">
+            <p className="text-muted-foreground mb-4">
+              Don't see your neighborhood? We may still serve your area.
+            </p>
+            <Button 
+              variant="outline" 
+              onClick={() => openWizard()}
+              data-testid="button-contact-location"
+            >
+              Get Your Quote
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
