@@ -54,9 +54,22 @@ The design system enforces a midcentury editorial aesthetic:
 - **Team** (`/team`) - Team information
 
 ### City Landing Pages
-- **City Landing** (`/:city`) - City-specific landing pages (e.g., `/castro-valley`, `/walnut-creek`)
+- **City Landing** (`/:city`) - City-specific landing pages (e.g., `/castro-valley`, `/walnut-creek`, `/willow-glen`)
 - **City Book** (`/:city/book`) - City-specific booking page
 - **City Pricing** (`/:city/pricing`) - City-specific pricing page
+
+### Service Areas (11 cities, 30+ neighborhoods)
+- Castro Valley (Greenridge)
+- Concord (Parkside, Rancho del Diablo)
+- Foster City (Bay Vista, Marina Point, Treasure Isle)
+- Mountain View (Cuesta Park, Monta Loma, Sylvan Park)
+- Oakland (Sequoyah Hills)
+- Palo Alto (Greenmeadow, Midtown)
+- San Jose (Willow Glen, Cambrian Park, South San Jose)
+- San Mateo (San Mateo Highlands)
+- San Rafael (Terra Linda, Lucas Valley)
+- Sunnyvale (Fairwood, Cherry Chase)
+- Walnut Creek (Rancho San Miguel)
 
 ### Legal & Policy Pages
 - **Privacy Policy** (`/privacy`) - Comprehensive privacy policy
