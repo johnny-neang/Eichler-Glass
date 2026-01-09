@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, ArrowRight } from "lucide-react";
 import { useBookingWizard } from "@/components/BookingWizard";
-import mapImage from "@assets/Untitled_design_(1)_1767939305947.png";
+import mapImage from "@assets/2_1767940266490.jpg";
 
 interface Neighborhood {
   slug: string;
@@ -116,7 +116,7 @@ export function CitySelector() {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${mapImage})` }}
       />
-      <div className="absolute inset-0 bg-background/60" />
+      <div className="absolute inset-0 bg-background/40" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4" data-testid="text-cities-title">
