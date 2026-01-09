@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Layers, Sun, Square, Grid3X3, Zap } from "lucide-react";
-import interiorImage from "@assets/generated_images/clean_glass_windows_interior.png";
+import interiorImage from "@assets/interior-glass.jpg";
+import genericServiceImage from "@assets/generated_images/clean_glass_windows_interior.png";
 import skylightImage from "@assets/generated_images/skylight_natural_light.png";
 
 interface Service {
@@ -24,21 +25,21 @@ const services: Service[] = [
     title: "Exterior Glass Cleaning",
     description: "Professional exterior cleaning tackles weather residue, hard water stains, and environmental deposits. Safe techniques for all heights.",
     icon: Layers,
-    image: interiorImage,
+    image: genericServiceImage,
   },
   {
     id: "screen-cleaning",
     title: "Screen Cleaning",
     description: "Complete screen cleaning service restores clarity and airflow. We carefully remove, clean, and reinstall all window screens.",
     icon: Grid3X3,
-    image: interiorImage,
+    image: genericServiceImage,
   },
   {
     id: "track-detailing",
     title: "Track Detailing",
     description: "Deep cleaning of window and door tracks removes years of accumulated dirt, debris, and grime for smooth operation.",
     icon: Layers,
-    image: interiorImage,
+    image: genericServiceImage,
   },
   {
     id: "solar-panel",
