@@ -6,6 +6,7 @@ import genericServiceImage from "@assets/generated_images/clean_glass_windows_in
 import skylightImage from "@assets/generated_images/skylight_natural_light.png";
 import trackDetailingImage from "@assets/track-detailing.webp";
 import clerestoryImage from "@assets/clerestory-windows.jpg";
+import screenCleaningImage from "@assets/screen-cleaning.webp";
 
 interface Service {
   id: string;
@@ -13,6 +14,7 @@ interface Service {
   description: string;
   icon: typeof Layers;
   image: string;
+  objectPosition?: string;
 }
 
 const services: Service[] = [
@@ -35,7 +37,8 @@ const services: Service[] = [
     title: "Screen Cleaning",
     description: "Complete screen cleaning service restores clarity and airflow. We carefully remove, clean, and reinstall all window screens.",
     icon: Grid3X3,
-    image: genericServiceImage,
+    image: screenCleaningImage,
+    objectPosition: "center 60%",
   },
   {
     id: "track-detailing",
@@ -81,6 +84,7 @@ export function ServiceShowcase() {
                   src={service.image}
                   alt={service.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  style={service.objectPosition ? { objectPosition: service.objectPosition } : undefined}
                 />
               </div>
               <CardContent className="p-6">
