@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { MapPin, Home, Sparkles, ArrowRight } from "lucide-react";
+import heroImage from "@assets/about-hero.jpg";
 
 const teamMembers = [
   {
@@ -48,13 +49,17 @@ export default function Team() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-1">
-        <section className="py-16 md:py-24 bg-muted/30">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4" data-testid="text-team-title">
+        <section 
+          className="relative py-24 md:py-32 min-h-[50vh] flex items-center"
+          style={{ backgroundImage: `url(${heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+        >
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div className="text-center">
+              <h1 className="font-serif text-4xl md:text-5xl font-bold mb-4 text-white" data-testid="text-team-title">
                 About Us
               </h1>
-              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              <p className="text-white/90 text-lg max-w-2xl mx-auto">
                 Your neighbors, dedicated to preserving the beauty of midcentury modern homes.
               </p>
             </div>
