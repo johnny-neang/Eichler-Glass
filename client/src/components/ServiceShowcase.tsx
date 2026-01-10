@@ -4,6 +4,7 @@ import interiorImage from "@assets/interior-glass.jpg";
 import exteriorImage from "@assets/exterior-glass.jpg";
 import genericServiceImage from "@assets/generated_images/clean_glass_windows_interior.png";
 import skylightImage from "@assets/generated_images/skylight_natural_light.png";
+import trackDetailingImage from "@assets/track-detailing.webp";
 
 interface Service {
   id: string;
@@ -40,7 +41,7 @@ const services: Service[] = [
     title: "Track Detailing",
     description: "Deep cleaning of window and door tracks removes years of accumulated dirt, debris, and grime for smooth operation.",
     icon: Layers,
-    image: genericServiceImage,
+    image: trackDetailingImage,
   },
   {
     id: "solar-panel",
