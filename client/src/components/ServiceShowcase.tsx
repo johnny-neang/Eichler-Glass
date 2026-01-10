@@ -7,6 +7,7 @@ import skylightImage from "@assets/generated_images/skylight_natural_light.png";
 import trackDetailingImage from "@assets/track-detailing.webp";
 import clerestoryImage from "@assets/clerestory-windows.jpg";
 import screenCleaningImage from "@assets/screen-cleaning.webp";
+import solarPanelImage from "@assets/solar-panel.jpg";
 
 interface Service {
   id: string;
@@ -52,7 +53,8 @@ const services: Service[] = [
     title: "Solar Panel Cleaning",
     description: "Maximize your solar efficiency with professional panel cleaning. We safely remove dust, bird droppings, and environmental buildup.",
     icon: Zap,
-    image: skylightImage,
+    image: solarPanelImage,
+    objectPosition: "left center",
   },
   {
     id: "clerestory",
