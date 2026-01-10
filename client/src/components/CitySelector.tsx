@@ -116,70 +116,62 @@ export function CitySelector() {
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${bgImage})` }}
       />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+      <div className="absolute inset-0 bg-black/60" />
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <div className="inline-block bg-background/90 backdrop-blur-sm px-8 py-6">
-            <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4" data-testid="text-cities-title">
-              Service Areas
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              We proudly serve Eichler and midcentury modern homes throughout the Bay Area.
-            </p>
-          </div>
+        <div className="text-center mb-8">
+          <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4 text-white" data-testid="text-cities-title">
+            Service Areas
+          </h2>
+          <p className="text-white/80 text-lg max-w-2xl mx-auto">
+            We proudly serve Eichler and midcentury modern homes throughout the Bay Area.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
           {cityGroups.map((group) => (
             <Card
               key={group.citySlug}
-              className="group hover-elevate cursor-pointer h-full transition-all duration-200"
+              className="group hover-elevate cursor-pointer transition-all duration-200 bg-black/30 border-white/20"
               data-testid={`card-city-${group.citySlug}`}
             >
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 text-primary shrink-0">
-                    <MapPin className="h-6 w-6" />
+              <CardContent className="p-3">
+                <Link href={`/${group.citySlug}`}>
+                  <div className="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary shrink-0" />
+                    <h3 className="font-medium text-sm text-white group-hover:text-primary transition-colors">
+                      {group.city}
+                    </h3>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <Link href={`/${group.citySlug}`}>
-                      <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">
-                        {group.city}
-                      </h3>
-                    </Link>
-                    <ul className="space-y-1">
-                      {group.neighborhoods.map((neighborhood) => (
-                        <li key={neighborhood.slug}>
-                          <Link 
-                            href={`/${neighborhood.slug}`}
-                            className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                          >
-                            {neighborhood.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
+                </Link>
+                <ul className="mt-1 ml-6 space-y-0.5">
+                  {group.neighborhoods.map((neighborhood) => (
+                    <li key={neighborhood.slug}>
+                      <Link 
+                        href={`/${neighborhood.slug}`}
+                        className="text-xs text-white/70 hover:text-primary transition-colors"
+                      >
+                        {neighborhood.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
               </CardContent>
             </Card>
           ))}
         </div>
 
-        <div className="mt-12 text-center">
-          <div className="inline-block bg-background/90 backdrop-blur-sm px-8 py-6">
-            <p className="text-muted-foreground mb-4">
-              Don't see your neighborhood? We may still serve your area.
-            </p>
-            <Button 
-              variant="outline" 
-              onClick={() => openWizard()}
-              data-testid="button-contact-location"
-            >
-              Get Your Quote
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </div>
+        <div className="mt-8 text-center">
+          <p className="text-white/80 mb-4">
+            Don't see your neighborhood? We may still serve your area.
+          </p>
+          <Button 
+            onClick={() => openWizard()}
+            data-testid="button-contact-location"
+            className="gap-2"
+          >
+            GET YOUR QUOTE
+            <ArrowRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </section>

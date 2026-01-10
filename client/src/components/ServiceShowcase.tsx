@@ -1,6 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Layers, Sun, Square, Grid3X3, Zap } from "lucide-react";
 import interiorImage from "@assets/interior-glass.jpg";
+import exteriorImage from "@assets/exterior-glass.jpg";
 import genericServiceImage from "@assets/generated_images/clean_glass_windows_interior.png";
 import skylightImage from "@assets/generated_images/skylight_natural_light.png";
 
@@ -25,7 +26,7 @@ const services: Service[] = [
     title: "Exterior Glass Cleaning",
     description: "Professional exterior cleaning tackles weather residue, hard water stains, and environmental deposits. Safe techniques for all heights.",
     icon: Layers,
-    image: genericServiceImage,
+    image: exteriorImage,
   },
   {
     id: "screen-cleaning",

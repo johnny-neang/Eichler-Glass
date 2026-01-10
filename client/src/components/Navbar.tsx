@@ -162,7 +162,6 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <Button 
-              variant="ghost"
               className="hidden sm:flex gap-2"
               asChild
               data-testid="button-call-us"
@@ -228,7 +227,6 @@ export function Navbar() {
               ))}
             </div>
             <Button 
-              variant="outline"
               className="w-full gap-2" 
               asChild
               data-testid="button-mobile-call"

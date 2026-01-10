@@ -75,34 +75,27 @@ const SERVICES = [
   "Solar Panel Cleaning",
 ];
 
-const FREQUENCIES = [
+const PRESERVATION_PLANS = [
   {
-    name: "One Time",
-    discount: "NO Discount",
-    screens: false,
-    rainGuarantee: false,
-    hardWater: false,
+    name: "One-Time",
+    discount: null,
+    features: ["No free screen cleaning", "No hard water removal", "No rain guarantee"],
   },
   {
     name: "Bi-Annual",
     discount: "$50 Off",
-    screens: false,
-    rainGuarantee: false,
-    hardWater: false,
+    features: ["Free screen cleaning", "7-day rain guarantee"],
   },
   {
     name: "Quarterly",
     discount: "$100 Off",
-    screens: true,
-    rainGuarantee: true,
-    hardWater: true,
+    features: ["Free screen cleaning", "Free hard water removal", "7-day rain guarantee"],
   },
   {
     name: "Monthly",
     discount: "$150 Off",
-    screens: true,
-    rainGuarantee: true,
-    hardWater: true,
+    features: ["Free screen cleaning", "Free hard water removal", "7-day rain guarantee"],
+    popular: true,
   },
 ];
 
@@ -600,27 +593,36 @@ function StepFrequency({
 }) {
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-2">Pick Your Frequency</h2>
+      <h2 className="text-xl font-semibold mb-2">Choose Your Preservation Plan</h2>
       <p className="text-muted-foreground mb-6">More frequent cleanings mean bigger savings.</p>
-      <div className="grid gap-3">
-        {FREQUENCIES.map((freq) => (
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {PRESERVATION_PLANS.map((plan) => (
           <button
-            key={freq.name}
+            key={plan.name}
             type="button"
-            onClick={() => onChange(freq.name)}
-            className={`p-4 border text-left hover-elevate ${
-              value === freq.name ? "border-primary bg-primary/5" : "border-border"
-            }`}
-            data-testid={`button-frequency-${freq.name.toLowerCase().replace(/\s/g, "-")}`}
+            onClick={() => onChange(plan.name)}
+            className={`p-4 border text-left hover-elevate flex flex-col h-full relative ${
+              value === plan.name ? "border-primary bg-primary/5" : "border-border"
+            } ${'popular' in plan && plan.popular ? "ring-2 ring-primary" : ""}`}
+            data-testid={`button-frequency-${plan.name.toLowerCase().replace(/\s/g, "-")}`}
           >
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-medium">{freq.name}</span>
-              <span className="text-primary font-semibold">{freq.discount}</span>
+            {'popular' in plan && plan.popular && (
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-2 py-0.5 font-medium">
+                BEST VALUE
+              </div>
+            )}
+            <div className="text-center mb-3">
+              <span className="font-semibold text-base">{plan.name}</span>
             </div>
-            <div className="text-sm text-muted-foreground grid grid-cols-2 gap-1">
-              <span>{freq.screens ? "Included screen cleaning" : "NO screen cleaning"}</span>
-              <span>{freq.rainGuarantee ? "7-day rain guarantee" : "NO rain guarantee"}</span>
-              <span>{freq.hardWater ? "Free hard water removal" : "NO hard water removal"}</span>
+            {plan.discount && (
+              <div className="text-center mb-3">
+                <span className="text-primary font-bold text-lg">{plan.discount}</span>
+              </div>
+            )}
+            <div className="text-xs text-muted-foreground space-y-1 flex-1">
+              {plan.features.map((feature, idx) => (
+                <div key={idx}>{feature}</div>
+              ))}
             </div>
           </button>
         ))}

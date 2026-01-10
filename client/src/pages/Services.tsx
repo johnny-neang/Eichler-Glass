@@ -55,8 +55,7 @@ export default function Services() {
                 </Button>
                 <Button 
                   size="lg" 
-                  variant="outline"
-                  className="gap-2 text-white border-white/50 bg-white/10 backdrop-blur-sm hover:bg-white/20" 
+                  className="gap-2" 
                   asChild
                   data-testid="button-services-call"
                 >
@@ -110,7 +109,6 @@ export default function Services() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button 
-                  variant="outline"
                   className="w-full gap-2" 
                   asChild
                   data-testid="button-cta-call"
