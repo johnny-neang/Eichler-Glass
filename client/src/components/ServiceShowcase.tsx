@@ -5,6 +5,7 @@ import exteriorImage from "@assets/exterior-glass.jpg";
 import genericServiceImage from "@assets/generated_images/clean_glass_windows_interior.png";
 import skylightImage from "@assets/generated_images/skylight_natural_light.png";
 import trackDetailingImage from "@assets/track-detailing.webp";
+import clerestoryImage from "@assets/clerestory-windows.jpg";
 
 interface Service {
   id: string;
@@ -55,7 +56,7 @@ const services: Service[] = [
     title: "Clerestory Windows",
     description: "Specialized cleaning for high clerestory windows that define midcentury architecture. Expert access to hard-to-reach glass.",
     icon: Sun,
-    image: skylightImage,
+    image: clerestoryImage,
   },
 ];
 
