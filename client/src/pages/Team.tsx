@@ -2,7 +2,9 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MapPin, Home, Sparkles, ArrowRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MapPin, Home, Sparkles, ArrowRight, Phone } from "lucide-react";
+import { useLocation } from "wouter";
 import heroImage from "@assets/about-hero.jpg";
 
 const teamMembers = [
@@ -173,6 +175,41 @@ export default function Team() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-16 md:py-24 bg-primary">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
+              Ready to Work With Us?
+            </h2>
+            <p className="text-primary-foreground/90 text-lg mb-8 max-w-2xl mx-auto">
+              Get your free quote today and experience the difference that dedicated, local professionals make.
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button 
+                size="lg" 
+                variant="secondary"
+                className="gap-2"
+                onClick={() => window.dispatchEvent(new CustomEvent('openBookingWizard'))}
+                data-testid="button-about-cta-quote"
+              >
+                Get Your Quote
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+              <Button 
+                size="lg" 
+                variant="secondary"
+                className="gap-2"
+                asChild
+                data-testid="button-about-cta-call"
+              >
+                <a href="tel:+15108593449">
+                  <Phone className="h-4 w-4" />
+                  Call Now
+                </a>
+              </Button>
             </div>
           </div>
         </section>
