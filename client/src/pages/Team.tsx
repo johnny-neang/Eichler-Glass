@@ -108,35 +108,6 @@ export default function Team() {
           </div>
         </section>
 
-        <section className="py-16 md:py-24 bg-muted/50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="font-serif text-3xl md:text-4xl font-bold mb-4" data-testid="text-team-members-title">
-                Meet the Team
-              </h2>
-              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-                Your neighbors, committed to excellence in every pane.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {teamMembers.map((member) => (
-                <Card key={member.name} className="text-center" data-testid={`card-team-${member.initials.toLowerCase()}`}>
-                  <CardContent className="pt-8 pb-6">
-                    <Avatar className="h-24 w-24 mx-auto mb-4">
-                      <AvatarFallback className="text-2xl bg-primary/10 text-primary">
-                        {member.initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <h3 className="font-semibold text-xl mb-4">{member.name}</h3>
-                    <p className="text-sm text-muted-foreground">{member.bio}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section className="py-16 md:py-24 bg-background">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-12">
@@ -182,10 +153,10 @@ export default function Team() {
         <section className="py-16 md:py-24 bg-primary">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h2 className="font-serif text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
-              Ready to Work With Us?
+              Ready for Crystal Clear Glass?
             </h2>
             <p className="text-primary-foreground/90 text-lg mb-8 max-w-2xl mx-auto">
-              Get your free quote today and experience the difference that dedicated, local professionals make.
+              Get your free quote today and see why Bay Area homeowners trust Eichler Glass to maintain the continuity and seamless transition between your indoor and outdoor living.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button 

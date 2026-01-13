@@ -84,18 +84,18 @@ const PRESERVATION_PLANS = [
   {
     name: "Bi-Annual",
     discount: "$50 Off",
-    features: ["Free screen cleaning", "7-day rain guarantee"],
+    features: ["Free screen cleaning", "Free hard water removal", "7-day rain guarantee"],
   },
   {
     name: "Quarterly",
     discount: "$100 Off",
     features: ["Free screen cleaning", "Free hard water removal", "7-day rain guarantee"],
+    popular: true,
   },
   {
     name: "Monthly",
     discount: "$150 Off",
     features: ["Free screen cleaning", "Free hard water removal", "7-day rain guarantee"],
-    popular: true,
   },
 ];
 
@@ -608,17 +608,17 @@ function StepFrequency({
           >
             {'popular' in plan && plan.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-xs px-2 py-0.5 font-medium">
-                BEST VALUE
+                MOST POPULAR
               </div>
             )}
             <div className="text-center mb-3">
               <span className="font-semibold text-base">{plan.name}</span>
             </div>
-            {plan.discount && (
-              <div className="text-center mb-3">
+            <div className="text-center mb-3 min-h-[28px]">
+              {plan.discount && (
                 <span className="text-primary font-bold text-lg">{plan.discount}</span>
-              </div>
-            )}
+              )}
+            </div>
             <div className="text-xs text-muted-foreground space-y-1 flex-1">
               {plan.features.map((feature, idx) => (
                 <div key={idx}>{feature}</div>
