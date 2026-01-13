@@ -3,6 +3,7 @@
 ## Overview
 
 Eichler Glass is a static marketing website for premium glass cleaning services targeting Eichler and midcentury modern homes in the Bay Area. The platform features city-localized landing pages and Cal.com integration for scheduling and payments. All booking and payment processing is handled through Cal.com.
+Website URL: https://www.eichlerglass.com/
 
 ## User Preferences
 
