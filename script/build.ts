@@ -11,15 +11,9 @@ async function build() {
     bundle: true,
     platform: "node",
     target: "node20",
-    format: "cjs",
-    outfile: "dist/index.cjs",
-    external: [
-      "pg-native",
-      "better-sqlite3",
-      "@neondatabase/serverless",
-      "lightningcss",
-      "vite",
-    ],
+    format: "esm",
+    outfile: "dist/index.mjs",
+    packages: "external",
   });
 
   console.log("Build complete!");
