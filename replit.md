@@ -2,7 +2,7 @@
 
 ## Overview
 
-Eichler Glass is a static marketing website for premium glass cleaning services targeting Eichler and midcentury modern homes in the Bay Area. The platform features city-localized landing pages and Cal.com integration for scheduling and payments. All booking and payment processing is handled through Cal.com.
+Eichler Glass is a marketing website for premium glass cleaning services targeting Eichler and midcentury modern homes in the Bay Area. The platform features a 6-step booking wizard for lead capture, city-localized landing pages, and email notifications via Mailjet. The app includes a password-protected admin dashboard for lead management.
 Website URL: https://www.eichlerglass.com/
 
 ## User Preferences
@@ -20,7 +20,7 @@ Preferred communication style: Simple, everyday language.
 
 ### Build System
 - **Development**: Vite dev server with HMR on port 5000
-- **Production**: Static build to `dist/public` - can be deployed to any static hosting
+- **Production**: Autoscale deployment with Express backend serving API routes and static frontend
 - **Path Aliases**: `@/` for client source, `@assets/` for static assets
 
 ### Design System Implementation
