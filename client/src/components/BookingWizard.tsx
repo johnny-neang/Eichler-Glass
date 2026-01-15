@@ -315,7 +315,7 @@ function WizardModal({
         </div>
 
         <FormProvider {...methods}>
-          <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="p-6" noValidate>
             {step === 0 && (
               <StepLocation 
                 value={formValues.location} 
@@ -433,6 +433,7 @@ function StepContact({
           <Label htmlFor="firstName">First Name *</Label>
           <Input 
             id="firstName" 
+            autoComplete="given-name"
             {...register("firstName")} 
             data-testid="input-first-name"
           />
@@ -444,6 +445,7 @@ function StepContact({
           <Label htmlFor="lastName">Last Name *</Label>
           <Input 
             id="lastName" 
+            autoComplete="family-name"
             {...register("lastName")} 
             data-testid="input-last-name"
           />
@@ -458,6 +460,7 @@ function StepContact({
         <Input 
           id="email" 
           type="email" 
+          autoComplete="email"
           {...register("email")} 
           data-testid="input-email"
         />
@@ -470,7 +473,9 @@ function StepContact({
         <Label htmlFor="phone">Phone *</Label>
         <Input 
           id="phone" 
-          type="tel" 
+          type="text"
+          inputMode="tel"
+          autoComplete="tel"
           {...register("phone")} 
           data-testid="input-phone"
         />
@@ -658,6 +663,7 @@ function StepAddress({
         <Label htmlFor="street">Street Address *</Label>
         <Input 
           id="street" 
+          autoComplete="street-address"
           {...register("street")} 
           data-testid="input-street"
         />
@@ -671,6 +677,7 @@ function StepAddress({
           <Label htmlFor="city">City *</Label>
           <Input 
             id="city" 
+            autoComplete="address-level2"
             {...register("city")} 
             data-testid="input-city"
           />
@@ -702,6 +709,8 @@ function StepAddress({
         <Label htmlFor="zip">ZIP Code *</Label>
         <Input 
           id="zip" 
+          inputMode="numeric"
+          autoComplete="postal-code"
           {...register("zip")} 
           data-testid="input-zip"
         />
