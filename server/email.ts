@@ -1,12 +1,27 @@
 import Mailjet from "node-mailjet";
 import type { Lead } from "../shared/schema.js";
 
-const mailjet = new Mailjet({
-  apiKey: process.env.MJ_APIKEY_PUBLIC,
-  apiSecret: process.env.MJ_APIKEY_PRIVATE,
-});
+// Lazily create the Mailjet client so a missing/incomplete API key doesn't
+// crash the whole serverless function at import time. Returns null when the
+// credentials aren't configured, in which case we skip sending.
+function getMailjetClient(): Mailjet | null {
+  const apiKey = process.env.MJ_APIKEY_PUBLIC;
+  const apiSecret = process.env.MJ_APIKEY_PRIVATE;
+  if (!apiKey || !apiSecret) {
+    return null;
+  }
+  return new Mailjet({ apiKey, apiSecret });
+}
 
 export async function sendLeadNotification(lead: Lead): Promise<boolean> {
+  const mailjet = getMailjetClient();
+  if (!mailjet) {
+    console.warn(
+      "Mailjet credentials not configured; skipping lead email notification.",
+    );
+    return false;
+  }
+
   const senderEmail = process.env.MJ_SENDER_EMAIL || "hello@eichlerglass.com";
   
   const servicesFormatted = lead.services.join(", ");
