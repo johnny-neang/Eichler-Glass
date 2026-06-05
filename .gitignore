@@ -7,3 +7,4 @@ vite.config.ts.*
 .vercel
 .env
 .env.*
+!.env.example
