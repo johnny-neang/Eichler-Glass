@@ -1,6 +1,6 @@
 import express from "express";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
-import { registerRoutes } from "../server/routes";
+import { registerRoutes } from "../server/routes.js";
 
 // Single Express app reused across warm serverless invocations on Vercel.
 // All /api/* requests are rewritten to this function (see vercel.json), and

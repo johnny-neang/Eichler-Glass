@@ -1,7 +1,7 @@
 import type { Express, Request, Response, NextFunction } from "express";
-import { storage } from "./storage";
-import { insertLeadSchema } from "../shared/schema";
-import { sendLeadNotification } from "./email";
+import { storage } from "./storage.js";
+import { insertLeadSchema } from "../shared/schema.js";
+import { sendLeadNotification } from "./email.js";
 import { ZodError } from "zod";
 import { fromZodError } from "zod-validation-error";
 

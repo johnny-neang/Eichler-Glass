@@ -1,5 +1,5 @@
-import { db } from "./db";
-import { leads, InsertLead, Lead } from "../shared/schema";
+import { db } from "./db.js";
+import { leads, InsertLead, Lead } from "../shared/schema.js";
 import { desc, eq } from "drizzle-orm";
 
 export interface IStorage {

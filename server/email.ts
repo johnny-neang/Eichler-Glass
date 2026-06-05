@@ -1,5 +1,5 @@
 import Mailjet from "node-mailjet";
-import type { Lead } from "../shared/schema";
+import type { Lead } from "../shared/schema.js";
 
 const mailjet = new Mailjet({
   apiKey: process.env.MJ_APIKEY_PUBLIC,
